@@ -1,0 +1,14 @@
+# Introduction {.unnumbered}
+
+Ceci est un tutoriel d'introduction à l'analyse de réseau avec Python centré sur le seul module NetworkX. Ce module étant très riche, toutes les fonctions ne sont pas évoquées ici. 
+
+Ce tutoriel s'adresse aux personnes :
+
+- ayant une connaissance correcte de l'analyse de réseau. Si vous êtes débutante[^1], je renvoie au petit guide pratique d'initiation à l'analyse de réseau [disponible en ligne](https://beauguitte.github.io/analyse-de-reseau-en-shs/) (@beauguitte23) ;
+- ayant l'habitude d'un logiciel autre, que ce logiciel soit à interface graphique (Cytoscape, Gephi, Pajek, Tulip, etc.) ou non (R) ;
+- curieuses de savoir ce qu'il est possible de faire avec Python.
+
+Je débute en Python donc le code que je propose n'est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne...
+
+
+[^1]: Je n'utilise pas l'écriture épicène, j'écris le plus souvent au féminin et utilise l'accord de proximité.

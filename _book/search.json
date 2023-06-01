@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "",
+    "text": "Je n’utilise pas l’écriture épicène, j’écris le plus souvent au féminin et utilise l’accord de proximité.↩︎"
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "See Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, D. E. (1984). Literate programming. Comput. J., 27(2), 97–111. https://doi.org/10.1093/comjnl/27.2.97"
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "Bibliographie",
+    "section": "",
+    "text": "Beauguitte, L. (2023). L’analyse de réseau en sciences\nsociales. Petit guide pratique. Groupe fmr. https://hal.science/hal-04052709"
+  },
+  {
+    "objectID": "C4_partitions.html#blockmodel",
+    "href": "C4_partitions.html#blockmodel",
+    "title": "4  Partitions",
+    "section": "4.2 Blockmodel",
+    "text": "4.2 Blockmodel"
+  },
+  {
+    "objectID": "C4_partitions.html#détection-de-communautés",
+    "href": "C4_partitions.html#détection-de-communautés",
+    "title": "4  Partitions",
+    "section": "4.3 Détection de communautés",
+    "text": "4.3 Détection de communautés"
+  },
+  {
+    "objectID": "C3_mesurer.html#mesures-locales",
+    "href": "C3_mesurer.html#mesures-locales",
+    "title": "3  Mesures",
+    "section": "3.2 Mesures locales",
+    "text": "3.2 Mesures locales"
+  },
+  {
+    "objectID": "conclusion.html#avec-python",
+    "href": "conclusion.html#avec-python",
+    "title": "7  Pour aller plus loin",
+    "section": "7.2 Avec Python",
+    "text": "7.2 Avec Python"
+  }
+]

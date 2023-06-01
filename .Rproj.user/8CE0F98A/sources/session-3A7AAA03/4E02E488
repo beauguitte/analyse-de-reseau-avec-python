@@ -1,0 +1,31 @@
+{
+    "id": "4E02E488",
+    "path": "~/AR_Networkx/C2_filtrer.qmd",
+    "project_path": "C2_filtrer.qmd",
+    "type": "quarto_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1685599635722.0,
+    "source_on_save": true,
+    "relative_order": 4,
+    "properties": {
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "source_window_id": "",
+        "Source": "Source",
+        "docOutlineVisible": "1",
+        "rmdVisualCollapsedChunks": "",
+        "cursorPosition": "0,23",
+        "scrollLine": "0",
+        "rmdVisualModeLocation": "2:0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1685599650,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1685599650677,
+    "read_only": false,
+    "read_only_alternatives": []
+}
