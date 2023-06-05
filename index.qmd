@@ -1,14 +1,50 @@
 # Introduction {.unnumbered}
 
-Ceci est un tutoriel d'introduction à l'analyse de réseau avec Python centré sur le seul module NetworkX. Ce module étant très riche, toutes les fonctions ne sont pas évoquées ici. 
+Ceci est un tutoriel d'introduction à l'analyse de réseau avec Python centré sur le seul module NetworkX. Ce module étant très riche, toutes les fonctions ne sont pas évoquées ici.
 
 Ce tutoriel s'adresse aux personnes :
 
-- ayant une connaissance correcte de l'analyse de réseau. Si vous êtes débutante[^1], je renvoie au petit guide pratique d'initiation à l'analyse de réseau [disponible en ligne](https://beauguitte.github.io/analyse-de-reseau-en-shs/) (@beauguitte23) ;
-- ayant l'habitude d'un logiciel autre, que ce logiciel soit à interface graphique (Cytoscape, Gephi, Pajek, Tulip, etc.) ou non (R) ;
-- curieuses de savoir ce qu'il est possible de faire avec Python.
+-   ayant une connaissance correcte de l'analyse de réseau. Si vous êtes débutante[^index-1], je renvoie au petit guide pratique d'initiation à l'analyse de réseau [disponible en ligne](https://beauguitte.github.io/analyse-de-reseau-en-shs/) (@beauguitte23) ;
+-   ayant l'habitude d'un logiciel autre, que ce logiciel soit à interface graphique (Cytoscape, Gephi, Pajek, Tulip, etc.) ou non (R) ;
+-   curieuses de savoir ce qu'il est possible de faire avec Python.
+
+[^index-1]: Je n'utilise pas l'écriture épicène, j'écris le plus souvent au féminin et utilise l'accord de proximité.
 
 Je débute en Python donc le code que je propose n'est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne...
 
+Le principal module d'analyse de réseau en Python est `NetworkX` (@networkx08). Le module `igraph`, couramment utilisé pour l'analyse de réseau avec R, est également utilisable en Python mais semble moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.
 
-[^1]: Je n'utilise pas l'écriture épicène, j'écris le plus souvent au féminin et utilise l'accord de proximité.
+Ce document ne prétend pas être exhaustif mais vise à présenter les points suivants :
+
+-   importer ses données (sommets et liens avec attributs)
+-   manipuler l'objet graphe ;
+-   analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;
+-   visualiser son réseau ;
+-   atouts et limites du module NetworkX.
+
+Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?...) à venir.
+
+## Installer Python
+
+## Documentation et installation du module
+
+La page du module **NetworkX, Network Analysis with Python**, <https://networkx.org/>, permet d'accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l'on va vouloir réaliser une opération précise, surtout si on n'est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir [stackoverflow](https://stackoverflow.com) est presque obligatoire.
+
+```{python}
+# installer le module
+# pip install networkx
+
+# charger les modules utiles
+import pandas as pd                # manipulation de tableaux
+import networkx as nx              # analyse de réseau
+import numpy as np                 # statistiques
+import matplotlib.pyplot as plt    # visualisation
+
+# aide sur une fonction
+# ?nom_module.nom_fonction
+?nx.find_cliques
+?pd.DataFrame.set_index
+
+```
+
+Le nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est "deprecated and will be removed".

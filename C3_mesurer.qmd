@@ -1,5 +1,23 @@
 # Mesures
 
+```{python}
+#| echo: false
+import pandas as pd                # manipulation de tableaux
+import networkx as nx              # analyse de réseau
+import numpy as np                 # statistiques
+import matplotlib.pyplot as plt    # visualisation
+sommets = pd.read_csv("data/som_d13.csv", sep = ";")
+liens = pd.read_csv("data/liens_d13.csv", sep = ";")
+sommets[['CODGEO']] = sommets[['CODGEO']].astype('string')
+sommets[['MARS']] = sommets[['MARS']].astype('bool')
+liens[['Origine']] = liens[['Origine']].astype('string')
+liens[['Arrivee']] = liens[['Arrivee']].astype('string')
+G = nx.from_pandas_edgelist(liens,source = "Origine",target = "Arrivee", edge_attr="weight",create_using=nx.DiGraph()) 
+CC = sorted(nx.weakly_connected_components(G),key=len,reverse=True) 
+G0 = G.subgraph(CC[0])
+G0u = nx.to_undirected(G0)
+```
+
 ## Mesures globales
 
 ## Mesures locales

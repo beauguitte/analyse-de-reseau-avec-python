@@ -1,1 +1,176 @@
 # Filtrer, sélectionner
+
+```{python}
+#| echo: false
+import pandas as pd                # manipulation de tableaux
+import networkx as nx              # analyse de réseau
+import numpy as np                 # statistiques
+import matplotlib.pyplot as plt    # visualisation
+
+sommets = pd.read_csv("data/som_d13.csv", sep = ";")
+liens = pd.read_csv("data/liens_d13.csv", sep = ";")
+sommets[['CODGEO']] = sommets[['CODGEO']].astype('string')
+sommets[['MARS']] = sommets[['MARS']].astype('bool')
+liens[['Origine']] = liens[['Origine']].astype('string')
+liens[['Arrivee']] = liens[['Arrivee']].astype('string')
+G = nx.from_pandas_edgelist(liens,source = "Origine",target = "Arrivee", edge_attr="weight",create_using=nx.DiGraph()) 
+
+```
+
+
+
+### Extraire les composantes connexes
+
+La visualisation montre un réseau non connexe. Le morceau de code qui suit décrit les différentes composantes du réseau et extrait la principale composante connexe. Le réseau étant orienté, on cherche une connexité faible (`weakly_connected_components`) ; si le réseau était non orienté, on utiliserait la fonction `connected_components`.
+
+La logique est souvent similaire : on crée une liste correspondant au résultat ordonné d'une mesure puis on sélectionne des éléments de cette liste. Le numéro 0 entre crochets correspond au premier élément (Python numérote les éléments de 0 à **n** et non de 1 à **n**).
+
+```{python}
+# liste ordonnée des composantes connexes
+CC = sorted(nx.weakly_connected_components(G),
+            key=len,                            # clé de tri - len = longueur
+            reverse=True)                       # ordre décroissant
+print("Nombre de composantes", len(CC))
+
+# nombre de sommets par composantes
+print("Nombre de sommets par composantes",
+      [len(c) for c in sorted(nx.weakly_connected_components(G),
+       key=len,
+       reverse=True)])
+
+# sélection de la composante connexe principale
+G0 = G.subgraph(CC[0])
+
+# création d'une version non orientée
+G0u = nx.to_undirected(G0)
+```
+
+Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée, : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l'intensité du lien *ij* dans la version non orientée semble correspondre à l'intensité du lien *ij* dans la version orientée.
+
+<!-- Il est possible d'avoir des intensités négatives - ce qui n'est pas le cas ici. nx.is_negatively_weighted(G0u)  #False -->
+
+```{python}
+nx.is_weighted(G0u)             #True
+
+print("lien ij :", G0["13001"]["13201"]['weight'])
+print("lien ji :", G0["13201"]["13001"]['weight'])
+print("lien ij non orienté : ", G0u["13001"]["13201"]['weight'])
+
+# afficher le poids entre i et j dans les deux cas
+
+```
+
+### Filtrage
+
+Les données sont importées, la plus grande composante connexe a été extraite. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux optiions sont possibles : supprimer liens ou sommets selon un critère donné (`remove_edges_from()`, `remove_nodes_from`) ; sélectionner liens ou sommets selon un critère donné (`subgraph()`). 
+
+Si je souhaite travailler uniquement sur le cas marseillais :
+
+```{python}
+# filtrage des sommets (1)
+# sélection des sommets satisfaisant la condition
+#Mars = [n for n,v in G.nodes(data=True) if v['MARS'] == True]  
+
+# création d'un sous-graphe
+#Gmars = G.subgraph(Mars)
+
+# visualisation
+#nx.draw_kamada_kawai(Gmars, with_labels=True)
+```
+
+On obtient le même résultat avec l'opération consistant à supprimer les sommets des communes hors Marseille :
+
+```{python}
+# filtrage des sommets (2)
+# sélection des sommets hors Marseille
+#nonmars = [n for n,v in G.nodes(data=True) if v['MARS'] == False] 
+
+# copier le réseau de départ
+#Gmars2 = G
+
+# supprimer les communes hors Marseille
+#Gmars2.remove_nodes_from(nonmars)
+
+# visualisation
+#nx.draw_kamada_kawai(Gmars2,
+#                     with_labels=True)
+```
+
+Si je souhaite travailler uniquement sur les flux les plus importants :
+
+```{python}
+# filtrer les liens
+# paramètres statistiques
+liens.describe()
+
+# fixer un seuil (ici la médiane)
+seuil = 212
+
+# identifier les liens sous ce seuil, récupérer les identifiants
+long_edges = list(filter(lambda e: e[2] < seuil, (e for e in G.edges.data('weight'))))
+le_ids = list(e[:2] for e in long_edges)
+
+# créer une copie du réseau de départ
+Gsup = G
+
+# supprimer les liens identifiés
+Gsup.remove_edges_from(le_ids)
+
+# ordre, taille et visualisation
+print("Nb de sommets : ", nx.number_of_nodes(Gsup))
+print("Nb de liens : ", nx.number_of_edges(Gsup))
+
+nx.draw_kamada_kawai(Gsup, with_labels=True)
+```
+
+Le fait de ne conserver que les liens entraîne la suppression des sommets devenant isolés. Le nombre de liens a très logiquement été divisé par deux dans la mesure où le seuil choisi ici est la médiane.
+
+Si dans un réseau donné, j'ai des sommets isolés que je souhaite éliminer, j'utilise la fonction `remove_nodes_from`.
+
+Soit un réseau aléatoire de 20 sommets contenant des isolés.
+
+```{python}
+# générer un réseau aléatoire avec 2 isolés
+rg = nx.gnp_random_graph(20, 0.05, seed = 1)
+print("Nb de sommets (isolés compris) : ", nx.number_of_nodes(rg))
+
+# liste des sommets avec un degré nul
+isoles = [node for node,degree in dict(rg.degree()).items() if degree < 1]
+
+# suppression des sommets concernés
+rg.remove_nodes_from(isoles)
+print("Nb de sommets  (isolés exclus) : ", nx.number_of_nodes(rg))
+```
+
+### Agrégation
+
+Il peut être intéressant d'agréger différents sommets. La fonction `contracted_nodes` prend en argument le réseau étudié et les deux sommets à fusionner, l'option `self_loops ` permet de contrôler la création d'une boucle et l'option `copy` permet de créer un nouveau réseau sans écraser le premier.
+
+Si je veux fusionner deux arrondissements marseillais, j'utilise le script suivant. Les lignes suivantes permettent de lister les liens entrants et sortants du sommet résultat de la fusion et de vérifier la présence (ici souhaitée) de la boucle.
+
+```{python}
+
+GA = nx.contracted_nodes(G, '13215', '13216', self_loops=True, copy=True)
+GA.in_edges('13215')   # liste des liens entrants
+GA.out_edges('13215')  # liste des liens sortants
+
+```
+
+
+Autre fonction d'agrégation, `snap_aggregation` agrége l'ensemble des sommets voisins partageant un même modalité. Le script ci-dessous crée un réseau où un sommet agrégé correspond à l'un des cas de figures suivants :
+
+- communes hors Marseille liées entre elles et non liées à un arrondissement marseillais ;
+- communes hors Marseille liées entre elles et liées à un arrondissement marseillais ;
+- arrondissements marseillais liés entre eux et non liés à des communes extérieures ;
+- arrondissements marseillais liés entre eux et liés à des communes extérieures.
+
+Dans la mesure où il ne semble pas aisément possible de savoir quels sommets agrégés forment les super sommets (en tout cas, je n'ai pas encore trouvé l'information), peut-être est-il plus prudent d'effectuer ce type de manipulations en amont, sur le tableau de données initial.
+
+```{python}
+# node_attributes = ('MARS',)
+# GA = nx.snap_aggregation(G, node_attributes = node_attributes)  
+# print("Nb de sommets : ", nx.number_of_nodes(GA))
+# print("Nb de liens : ", nx.number_of_edges(GA))
+# nx.draw_kamada_kawai(GA, with_labels=False)
+
+```

@@ -1,0 +1,449 @@
+
+
+## Caractériser le réseau
+
+Selon les indicateurs, la version orientée ou non orientée du réseau est utilisée. Lorsque l'intensité des liens est susceptible de modifier le résultat, les différentes options sont commentées.
+
+Les formules sont toutes ou presque adaptées à des réseaux simples (absence de boucle et de liens multiples). Si le réseau étudié contient des boucles et/ou des liens multiples, certaines mesures sont susceptibles de donner des résultats inhabituels (densité ou degré normalisé supérieurs à 1 par exemple).
+
+### Mesures sur le réseau
+
+La densité s'obtient avec la fonction `density`. 
+
+```{python}
+print("densité (orienté) : ", round(nx.density(G0), 2))
+print("densité (non orienté) :", round(nx.density(G0u), 2))
+```
+
+Calculer le diamètre n'est possible que sur un réseau connexe. Si le réseau est orienté, le réseau doit être fortement connexe pour que le diamètre puisse être calculé. Ici, le calcul est fait sur la version non orientée de la principale composante connexe. Il est possible de calculer un diamètre pondéré, correspondant au diamèter ayant l'intensité totale la plus faible avec l'argument `weight`.
+
+L'inverse du diamètre, le rayon, est l'excentricité minimale du réseau (distance la plus courte entre deux sommets quelconques au sein du réseau) et s'obtient avec la fonction `radius`. Le réseau doit être connexe (fortement connexe si orienté) pour que l'indicateur puisse être calculé.
+
+```{python}
+# calcul du diamètre
+print("diamètre de la CC principale (orientation des liens non prise en compte) : ", nx.diameter(G0u))
+
+# diamètre pondéré
+print("diamètre pondéré : ", nx.diameter(G0u, weight = 'weight'))
+
+# rayon du graphe
+print("rayon de la CC principale (non orientée) : ", nx.radius(G0u))
+```
+
+Il ne semble pas exister de fonction permettant de récupérer la liste des liens du diamètre (voir [ce sujet](https://stackoverflow.com/questions/64732486/networkx-diameter-gives-13-want-to-find-what-are-those-nodes-or-distance) sur stackoverflow, je n'ai pas encore testé la solution proposée).
+
+La transitivité globale s'obtient avec la fonction `transitivity()`, la transitivité moyenne avec `average_clustering()` :
+
+```{python}
+print("Transitivité globale (orienté) : ", round(nx.transitivity(G0), 2))
+print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(G0), 2))
+print("Transitivité globale (non orienté) : ", round(nx.transitivity(G0u), 2))
+print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(G0u), 2))
+```
+
+Les résultats étant différents pour la version orientée et non orientée, l'orientation des liens est prise en compte mais l'aide ne précise pas comment. 
+
+Toutes les mesures portant sur les sommets peuvent être représentées et moyennées afin de caractériser le réseau dans son ensemble. La fonction  `degree_histogram()` ne fournit pas l'ihstogramme de la distrivbution des degrés mais la liste des fréquences de ces degrés ; elle ne prend pas en compte l'orientation des liens. Pour représenter cette distribution, plusieurs otions sont possibles selon que l'on souhaite une représentation sous forme de loi de puissance ou différencier degré entrant et sortant.
+
+```{python}
+# degré total - échelle log - log
+degree_freq = nx.degree_histogram(G0)
+degrees = range(len(degree_freq))
+plt.loglog(degrees, degree_freq,'go-') 
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
+```
+
+<!-- to do next avec matplotlib : juxtaposer les deux figures -->
+
+```{python}
+# autre option qui permet de différencier in et out
+degree_in = sorted((d for n, d in G0.in_degree()), reverse=True)
+plt.bar(*np.unique(degree_in, return_counts=True))
+plt.title("Degrés entrants")
+plt.xlabel("Degré")
+plt.ylabel("Fréquence")
+```
+
+```{python}
+degree_out = sorted((d for n, d in G0.out_degree()), reverse=True)
+plt.bar(*np.unique(degree_out, return_counts=True))
+plt.title("Degrés sortants")
+plt.xlabel("Degré")
+plt.ylabel("Fréquence")
+```
+
+Pour examiner les paramètres statistiques des indicateurs portant sur les sommets (degré moyen par exemple), le plus simple est de créer un objet correspondant à cette mesure puis d'utiliser la fonction describe du module pandas. **TO CONTROL**.
+
+Les mesures listées précédemment sont très classiques. Celles qui suivent le sont à ma connaissance moins :
+
+- indice de Wiener : la fonction `wiener_index` renvoie la somme des plus courts chemins entre toute paire de sommets. Le réseau doit être fortement connexe sinon le résultat est logiquement Inf. Cette somme peut être pondérée à l'aide de l'argument `weight` ;
+- mesures d'assortativité (tendance d'un sommet à être connecté avec des sommets ayant un degré similaire) : quatre mesures différentes peuvent être calculées si le réseau est orienté, une seule si le réseau ne l'est pas ;
+
+```{python}
+# réseau orienté - relation degré in - degré in
+print("assortativité in-in : ", 
+      round(nx.degree_assortativity_coefficient(G0, x="in", y='in'),3))
+
+# réseau orienté - relation degré in - degré out
+print("assortativité in-out : ", 
+      round(nx.degree_assortativity_coefficient(G0, x="in", y='out'),3))
+
+# réseau orienté - relation degré out - degré in
+print("assortativité out-in : ", 
+      round(nx.degree_assortativity_coefficient(G0, x="out", y='in'),3))
+
+# réseau orienté - relation degré out - degré out
+print("assortativité out-out : ", 
+      round(nx.degree_assortativity_coefficient(G0, x="out", y='out'),3))
+
+# réseau non orienté
+print("assortativité globale (non orienté) : ", round(nx.degree_assortativity_coefficient(G0u),3))
+
+```
+
+Cette mesure peut également être calculée pour un attribut donné à l'aide de la fonction `nx.numeric_assortativity_coefficient`. Par exemple, si je veux savoir si les communes marseillaises ont davantage tendance à être connectées entre elles :
+
+```{python}
+#| eval: false
+nx.numeric_assortativity_coefficient(G0u, "MARS")
+```
+
+D'autres mesures permettent d'examiner la structure du réseau :
+
+- identification des isthmes [^2] (fonction `bridges`) ;
+- identification des points d'articulation [^3] (fonction `articulation_points`).
+
+[^2]: Un isthme (*bridge*) est un lien dont la suppression crée une nouvelle composante connexe.
+[^3]: Un point d'articulation (*cut-point*, *cut-vertex* ou *articulation point*) est un sommet dont la suppression crée une nouvelle composante connexe.
+
+Ces deux fonctions ne peuvent s'appliquer qu'à des réseaux non orientés.
+
+```{python}
+# nombre d'isthmes
+print("nb isthmes : ", len(list(nx.bridges(G0u))))
+
+# liste des isthmes
+print("isthmes : ",list(nx.bridges(G0u)))
+
+# nombre de points d'articulation
+print("nb points d'articulation : ", len(list(nx.articulation_points(G0u))))
+
+# liste des points d'articulation
+print("points d'articulation : ", list(nx.articulation_points(G0u)))
+```
+
+Le module NetworkX intégre de nombreuses mesures directement issues de la théorie des graphes[^4] et de l'étude des flots (optimisation de flux dans un réseau). Toutes ces mesures ne sont pas détaillées ici, j'en indique seulement une poignée.
+
+[^4]: En première approche, voir les définitions sur cette [page wikipedia](https://en.wikipedia.org/wiki/Distance_(graph_theory)).
+
+Dans un réseau connexe, il est possible de rechercher le barycentre du réseau, à savoir le sous-graphe minimisant la distance entre le ou les sommets de ce sous-graphe et les autres sommets du réseau. La distance peut être valuée.
+
+```` {python}
+print("barycentre : ", nx.barycenter(G0u))
+print("barycentre (valué) : ", nx.barycenter(G0u, weight='weight'))
+```
+
+Notion proche, le centre du réseau désigne le ou les sommets dont l'excentricité est égale au rayon. Inversement, la périphérie regroupe les sommets dont l'excentricité est égale au diamètre. Comme pour le barycentre, le réseau étudié doit être connexe.
+
+```{python}
+print("centre du réseau : ", nx.center(G0u))
+print("périphérie du réseau : ", nx.periphery(G0u))
+```
+
+### Mesures sur les sommets et les liens
+
+Les mesures de centralité disponibles sont très nombreuses (cf [cette page](https://networkx.org/documentation/stable/reference/algorithms/centrality.html)) et je ne les présente pas toutes ici. On trouve évidemment toutes les fonctions classiques que je me contente de lister dans le morceau de code qui suit [^1] ; je détaille ensuite les mesures plus rares.
+
+La normalisation du degré se fait en divisant le degré des sommets par le degré maximal dans un graphe simple. Si le réseau étudié contient des boucles et/ou des liens multiples, le degré normalisé peut dépasser un.
+
+[^1]: Je n'exécute pas le code donc les résultats n'apparaissent pas sur cette page mais je vous promets que le code fonctionne.
+
+**Degré**
+
+```{python}
+#| eval: false
+
+# degré
+G0u.degree()
+
+#degré entrant, sortant
+G0.in_degree()
+G0.out_degree()
+
+#degré pondéré entrant
+G0.in_degree(weight = "weight")
+
+#degré moyen des sommets voisins (simple et pondéré)
+nx.average_neighbor_degree(G0)
+nx.average_neighbor_degree(G, weight="weight")
+
+# degrés entrant et sortant normalisés
+nx.in_degree_centrality(G0)
+nx.out_degree_centrality(G0)
+```
+
+Pour transformer une mesure en attribut des sommets, on utilise la syntaxe suivante : **TO CONTROL**
+
+```{python}
+deg = nx.degree(G0u)
+nx.set_node_attributes(G0u, 'degree', deg)
+print("attribut des sommets : ", list(list(G0u.nodes(data=True))[0][-1].keys()))
+
+```
+
+<!-- - nx.generalized_degree() : pour multigraph -->
+<!-- to dig : - nx.average_degree_connectivity() -->
+
+**Intermédiarité et proximité**
+
+Je ne commente pas les lignes qui suivent car ces mesures sont disponibles dans tous les logiciels d'analyse de réseau.
+
+```{python}
+#| echo: false
+#| eval: false
+
+# intermédiarité
+nx.betweenness_centrality(G0)
+
+# intermédiarité des liens
+nx.edge_betweenness_centrality(G0)
+
+# proximité
+nx.closeness_centrality(G0)
+```
+
+Le module NetworkX propose des mesures plus spécifiques comme la `closeness_vitality` qui mesure le changement dans la somme des plus courtes distances entre sommets si l'on supprime le sommet en question - le réseau mesuré doit être fortement connexe.
+
+Les centralités prenant en compte les centralités des voisins sont nombreuses. On dispose notamment de 
+
+- `eigenvector_centrality`
+- `voterank`
+- `katz_centrality`
+
+Contrainte de Burt `constraint` (réseau orienté ou non orienté)
+
+`rich-club coefficient` : rich_club_coefficient(G0u) - réseau doit être simple (ni boucle ni liens multiples), non orienté, l'intensité éventuelle des liens n'est pas prise en compte.
+
+Transitivité `clustering` - plusieurs options possibles pour prendre en compte la valuation des liens ; peut se calculer pour les réseaux orientés et non orientés.
+
+Liée à la précédente et intéressante, la fonction `triangles` liste pour chaque sommet le nombre de triades fermées dont il est membre (réseau non orienté uniquement).
+Nombre de triangles `nx.triangles`
+
+## Sous-groupes et partitions
+
+### Triades
+
+La fonction `triadic_census`, utilisable seulement sur un réseau orienté, renvoie les traides suivant la classification dite MAN, soit une suite de 3 nombres donnant le nombre de triades nulles, asymétriques et mutuelles.
+
+### Cliques et k-cores
+
+Cliques (uniquement pour réseaux non orientés). Même logique qu'`igraph` : renvoie tous les sous-graphes complets d'ordre 2, 3 ..., n ; seul le dernier sous-graphe étant maximal.
+
+```{python}
+#recherche des cliques
+cl = list(nx.find_cliques(G0u))
+#print("cliques %s" % cl)
+
+# nombre de cliques
+print("Nombre de `cliques' : ", sum(1 for c in nx.find_cliques(G0u)))
+
+# ordre de la plus grande 
+print("Ordre de la plus grande : ", max(len(c) for c in nx.find_cliques(G0u)))
+
+# composition de la plus grande
+print("Composition de la plus grande clique \n", max(nx.find_cliques(G0u), key=len))
+
+```
+
+
+### Détection de communautés
+
+## Visualiser le réseau
+
+### Choisir l'algorithme de visualisation
+
+Attention, si vous testez plusieurs algorithmes de visualisation en même temps, par défaut networkX les superpose dans la même fenêtre, ce qui ne donne pas exactement le résultat escompté.
+
+```{python}
+import networkx as nx
+
+#graphe de Petersen
+#pour les plus curieuses : https://fr.wikipedia.org/wiki/Graphe_de_Petersen
+G = nx.petersen_graph()
+
+#5 représentations superposées
+nx.draw(G)
+nx.draw_random(G)
+nx.draw_shell(G)
+nx.draw_spectral(G)
+nx.draw_spring(G)
+```
+
+### Modifier l'apparence
+
+taille, couleur et forme des sommets et des liens, apparence des labels
+
+Changer l'apparence des sommets et/ou des liens en fonction d'un attribut, que cet attribut soit exogène (variable attributaire originale) ou endogène (lié à la structure du réseau), suppose de créer un dictionnaire affectant pour chaque sommet ou lien la modalité souhaitée. Une fois le dictionnaire créé, il est possible de le mobiliser.
+
+Dans le premier exemple ci-dessous, la taille du sommet est fonction de la population (variable exogène) et l'intensité des liens est fonction de l'intensité de la relation (somme des liens $ij$ - $ji$).
+
+```{python}
+import matplotlib.pyplot as plt
+
+# création du dictionnaire pour les degrés
+d = dict(G0u.degree)
+
+# création d'une liste des intensités
+weights = [G0u[u][v]['weight'] for u,v in G0u.edges]
+
+nx.draw_spring(G0u, 
+               node_color = 'orange',                    # couleur des sommets
+               alpha = 0.8,                              # transparence
+               nodelist=d.keys(),                        
+               node_size = [v * 20 for v in d.values()], # taille des sommets
+               edge_cmap=plt.cm.Blues,                   # palette de couleurs
+               edge_color=weights,                       # couleur des liens
+               width=4)                                  # épaisseur des liens
+```
+
+Si je veux faire varier l'épaisseur du lien en fonction de l'intensité, j'inverse les paramètres.
+
+```{python}
+nx.draw_spring(G0u, 
+               node_color = 'orange', 
+               alpha = 0.8,
+               nodelist=d.keys(), 
+               node_size = [v * 20 for v in d.values()], 
+               edge_color = "blue",
+               width = weights)
+```
+
+Le résultat étant particulièrement laid, il est nécessaire d'adapter l'épaisseur des liens. Les manipulations de listes dans Python ne permettent pas d'agir directement avec des arguments du type `width = log(weights)` comme dans R, il faut donc agir sur chaque élément de la liste.
+
+```{python}
+# diviser les intensités par 50
+weigh2 = [i/50 for i in weights]
+
+nx.draw_spring(G0u, 
+               node_color = 'orange', 
+               alpha = 0.8,
+               nodelist=d.keys(), 
+               node_size = [v * 20 for v in d.values()], 
+               edge_cmap=plt.cm.Blues,
+               edge_color = weights,
+               width=weigh2)
+```
+
+### Mettre en évidence des groupes de sommets ou de liens
+
+ex : visualiser le diamètre
+
+ex. visualiser des communautés
+
+Liste de fonctions sur un graphe g g.nodes, g.edges, g.adj\[\], g.degree
+
+Filtrer sommets et/ou liens
+
+g.remove_node() et g.remove_nodes_from() g.remove_edge() et g.remove_edges.from()
+
+Réseau orienté , DiGraph.predecessors, DiGraph.successors
+
+### Visualisation
+
+NetworkX est dédié à l'analyse ; pour la visualisation, on utilise Matplotlib. Les nombreux paramètres qu'il est possible d'inidiquer sont listés sur [cette page](https://networkx.org/documentation/stable/reference/generated/networkx.drawing.nx_pylab.draw_networkx.html#networkx.drawing.nx_pylab.draw_networkx). Plusieurs exemples sont [disponibles ici](https://networkx.org/documentation/latest/auto_examples/index.html).
+
+```{python}
+import networkx as nx
+import matplotlib.pyplot as plt
+
+G = nx.petersen_graph()
+#subax1 = plt.subplot(121)
+nx.draw(G, with_labels=True, font_weight='bold')
+
+#nx.draw_planar(G, with_labels=True)
+#plt.show()
+```
+
+Différents algorithmes de placement des sommet sont proposés.
+
+nx.draw_random, nx.draw_shell, nx.draw_spectral, nx.draw_spring,
+
+```{python}
+import networkx as nx
+import matplotlib.pyplot as plt
+
+G = nx.karate_club_graph()
+
+#print("Node Degree")
+#for v in G:
+#    print(f"{v:4} {G.degree(v):6}")
+
+nx.draw_circular(G, with_labels=True)
+plt.show()
+
+nx.draw_kamada_kawai(G, with_labels=True)
+
+```
+
+````{=html}
+<!-- ## Analyse de réseau avec igraph
+
+[https://python.igraph.org/en/latest/tutorial.html](https://python.igraph.org/en/latest/tutorial.html)
+
+```{python}
+#import igraph as ig
+
+#création d'un réseau
+
+```
+
+Mesures - https://python.igraph.org/en/latest/analysis.html#degrees
+
+Fonction g.degree(), g.edge_betweenness()
+Graph.knn() computes the average degree of the neighbors.
+g.get_adjacency() -->
+````
+
+```{=html}
+<!-- ## Autres modules 
+
+source : [Awesome Network Analysis](https://github.com/briatte/awesome-network-analysis#python)
+
+[npartite](https://github.com/ike002jp/npartite) - Python algorithms for community detection in n-partite networks. - non trouvé dans pypi.org -  may 2020
+
+[python-louvain](https://perso.crans.org/aynaud/communities/) - A solid implementation of Louvain community detection algorithm. -  lien mort vers repository
+
+[scipy.sparse.csgraph](https://docs.scipy.org/doc/scipy/reference/sparse.csgraph.html#module-scipy.sparse.csgraph) - Fast graph algorithms based on sparse matrix representations.
+
+[tnetwork](https://github.com/Yquetzal/tnetwork) - Python library for temporal networks, and dynamic community detection in particular. - mar 22 (Cazabet) tuto : https://tnetwork.readthedocs.io/en/latest/tutorials.html
+
+TQ (Temporal Quantities) - Python 3 library for temporal network analysis. lien mort
+
+[uunet](http://multilayer.it.uu.se/software.html) - Tools for multilayer social networks.  (équivalent multinet)
+
+[webweb](https://webwebpage.github.io/) - MATLAB/Python library to produce interactive network visualizations with d3.js
+
+[PySAL](http://pysal.org/pysal/) : Python Spatial Analysis Library (Autocorrélation spatiale, analyse des inégalités, ségrégation, analyse de réseaux, etc.) -->
+```
+```{=html}
+<!--- ### graph-tools
+
+Package peu utilisé et maintenu par une seule personne. Version Python du logiciel [GraphViz](https://graphviz.org/).
+
+[graph-tools](https://pypi.org/project/graph-tools/)
+
+ graph-tools provides Graph class, which supports both directed and undirected graphs with multi-edges, vertex weights, edge weights, and graph attributes. A number of graph/network generation models and graph algorithms are supported.
+
+Major features of graph-tools are:
+
+- directed/undirected graph with multi-edges, vertex weights, edge weights, and graph attributes
+- vertex operations (add, delete, degree, neighbors, random vertex, and set/get vertex attributes)
+- edge operations (add, delete, random edge, and set/get edge attributes)
+- graph operations (copy, adjacency matrix, diagonal matrix, Laplacian matrix)
+- major graph algorithms (exploration, connectivity, components, maximal component, Dijkstra, Floyd-Warshall, betweenness centrality)
+- spectral graph theory (spectral radius, spectral gap, natural connectivity, algebraic connectivity, effective_resistance, and spanning tree count)
+- a number of graph/network generation models (random graph, ER (Erdos Renyi), BA (Barabasi Albert), randomized BA, ring, tree, binary tree, BA tree, generalized BA, latent, lattice, Voronoi, DB (Degree Bounded), configuration model, random regular graph, Li-Miani graph)
+- graph import/export in DOT (GraphViz) format -->
+```
+<!--- https://networkx.org/documentation/stable/reference/algorithms/bipartite.html -->

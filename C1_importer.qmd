@@ -1,1 +1,102 @@
 # Importer ses données
+
+Le jeu de données utilisé tout au long de ce document est l'extrait concernant les Bouches-du-Rhône de la [base 2017 des mobilités scolaires intercommunales de l'INSEE](https://www.insee.fr/fr/statistiques/4509360).
+
+La table **som_d13.csv** contient les attributs suivants :
+
+-   **CODGEO** : code INSEE de la commune ;
+-   **P19_POP** : population résidente en 2019 (entiers) ;
+-   **SUPERF** : superficie (flottants) ;
+-   **SUP_QUALI** : superficie inférieure ou supérieure à la moyenne départementale (chaîne de caractères). Des données ont été volontairement supprimés pour voir comment gérer les données manquantes ;
+-   **NOM** : nom de la commune ;
+-   **MARS** : variable booléenne permettant de savoir si la commune est un arrondissement de Marseille (1) ou non (0).
+
+La table **liens_d13.csv** contient les attributs suivants :
+
+-   **Origine** : code INSEE de la commune de départ ;
+-   **Arrivee** : code INSEE de la commune d'arrivée ;
+-   **weight** : flux d'élèves entre communes (flux \> 100).
+
+Ces deux fichiers encodés en utf-8 permettent de créer un réseau simple, orienté et valué. Les réseaux autres (bimodaux, multiplexes, avec boucles) ne sont pas évoqués dans ce document.
+
+Pour l'importation et la manipulation des données, soit vous savez utiliser Python et vous n'avez pas besoin de lire les paragraphes qui suivent, soit vous débutez en Python et utiliser le module `pandas` est recommmandé.
+
+```{python}
+#| echo: false
+import pandas as pd                # manipulation de tableaux
+import networkx as nx              # analyse de réseau
+import numpy as np                 # statistiques
+import matplotlib.pyplot as plt    # visualisation
+```
+
+
+```{python}
+
+sommets = pd.read_csv("data/som_d13.csv", sep = ";")
+liens = pd.read_csv("data/liens_d13.csv", sep = ";")
+
+```
+
+Avant de transformer ces tables en un réseau, il est prudent de contrôler le typage par défaut qu'a choisi `pandas` lors de l'importation avec la fonction `dtypes`. Il faut en effet que les codes INSEE soient considérés comme des chaînes de caractères (`str`) et non comme des entiers (`int64`), et que la variable **MARS** soit considérée comme une variable booléenne (`bool`).
+
+```{python}
+print(sommets.dtypes)
+print(liens.dtypes)
+```
+
+Les lignes ci-dessous permettent de typer correctement les données.
+
+```{python}
+# typage des variables
+sommets[['CODGEO']] = sommets[['CODGEO']].astype('string')
+sommets[['MARS']] = sommets[['MARS']].astype('bool')
+
+liens[['Origine']] = liens[['Origine']].astype('string')
+liens[['Arrivee']] = liens[['Arrivee']].astype('string')
+
+```
+
+La syntaxe pour créer un réseau orienté à partir d'une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s'il existe une valuation des liens et si le graphe est orienté. Pour que le réseau soit considéré comme valué, la colonne des intensités doit s'appeler `weight` ; il n'y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction `Graph()`.
+
+```{python}
+G = nx.from_pandas_edgelist(liens,                     # data.frame des liens
+                            source = "Origine",        # nom de la colonne origine
+                            target = "Arrivee",        # nom de la colonne destination
+                            edge_attr="weight",        # attribut poids pour un réseau valué
+                            create_using=nx.DiGraph()) # création d'un réseau orienté
+
+```
+
+La gestion des attributs des sommets est un tout petit peu plus complexe et la documentation du module n'aide pas vraiment. La solution la plus simple, trouvée en ligne [à cette adresse](https://www.roelpeters.be/python-networkx-set-node-attributes-from-pandas-dataframe/), est d'utiliser la fonction `set_index` du module `pandas`. On crée un objet correspondant aux attributs des sommets, on indique quel est l'identifiant (ici `CODGEO`) et on lui demande de transformer le tableau de données en dictionnaire.
+
+```{python}
+nodes_attr = sommets.set_index('CODGEO').to_dict(orient = 'index')
+nx.set_node_attributes(G, nodes_attr)
+
+#contrôle
+G.nodes("MARS")
+``` 
+
+Plusieurs moyens permettent de contrôler que l'importation s'est bien déroulée :
+
+-   afficher l'ordre (nombre de sommets) ;
+-   afficher la taille (nombre de liens) ;
+-   contrôler les caractéristiques du réseau ;
+-   visualiser le réseau obtenu.
+
+```{python}
+print("Ordre", nx.number_of_nodes(G), " sommets")
+print("Taille", nx.number_of_edges(G), " liens")
+print("Réseau orienté ?", nx.is_directed(G))
+
+# attribut des liens
+print("attribut des liens : ", list(list(G.edges(data=True))[0][-1].keys()))
+
+# attributs des sommets
+print("attribut des sommets : ", list(list(G.nodes(data=True))[0][-1].keys()))
+
+# visualisation basique
+nx.draw(G, with_labels=False)
+```
+
+*Je ne suis pas capable à ce stade d'expliquer la syntaxe des lignes permettant d'accéder aux attributs.*
