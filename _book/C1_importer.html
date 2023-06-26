@@ -276,7 +276,8 @@ dtype: object</code></pre>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>liens[[<span class="st">'Origine'</span>]] <span class="op">=</span> liens[[<span class="st">'Origine'</span>]].astype(<span class="st">'string'</span>)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>liens[[<span class="st">'Arrivee'</span>]] <span class="op">=</span> liens[[<span class="st">'Arrivee'</span>]].astype(<span class="st">'string'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>La syntaxe pour créer un réseau orienté à partir d’une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s’il existe une valuation des liens et si le graphe est orienté. Pour que le réseau soit considéré comme valué, la colonne des intensités doit s’appeler <code>weight</code> ; il n’y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction <code>Graph()</code>.</p>
+<p>La syntaxe pour créer un réseau orienté à partir d’une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s’il existe une valuation des liens et si le graphe est orienté.</p>
+<p>Pour que le réseau soit considéré comme valué, la colonne des intensités doit s’appeler <code>weight</code> ; il n’y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction <code>Graph()</code>.</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.from_pandas_edgelist(liens,                     <span class="co"># data.frame des liens</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                            source <span class="op">=</span> <span class="st">"Origine"</span>,        <span class="co"># nom de la colonne origine</span></span>
@@ -326,7 +327,6 @@ attribut des sommets :  ['P19_POP', 'SUPERF', 'SUP_QUALI', 'NOM', 'MARS']</code>
 <p><img src="C1_importer_files/figure-html/cell-8-output-2.png" width="691" height="499"></p>
 </div>
 </div>
-<p><em>Je ne suis pas capable à ce stade d’expliquer la syntaxe des lignes permettant d’accéder aux attributs.</em></p>
 
 
 

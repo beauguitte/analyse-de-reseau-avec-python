@@ -124,6 +124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -210,9 +211,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Sommaire</h2>
    
   <ul>
-  <li><a href="#extraire-les-composantes-connexes" id="toc-extraire-les-composantes-connexes" class="nav-link active" data-scroll-target="#extraire-les-composantes-connexes"><span class="toc-section-number">2.0.1</span>  Extraire les composantes connexes</a></li>
-  <li><a href="#filtrage" id="toc-filtrage" class="nav-link" data-scroll-target="#filtrage"><span class="toc-section-number">2.0.2</span>  Filtrage</a></li>
-  <li><a href="#agrégation" id="toc-agrégation" class="nav-link" data-scroll-target="#agrégation"><span class="toc-section-number">2.0.3</span>  Agrégation</a></li>
+  <li><a href="#extraire-les-composantes-connexes" id="toc-extraire-les-composantes-connexes" class="nav-link active" data-scroll-target="#extraire-les-composantes-connexes"><span class="toc-section-number">2.1</span>  Extraire les composantes connexes</a></li>
+  <li><a href="#filtrage" id="toc-filtrage" class="nav-link" data-scroll-target="#filtrage"><span class="toc-section-number">2.2</span>  Filtrage</a></li>
+  <li><a href="#agrégation" id="toc-agrégation" class="nav-link" data-scroll-target="#agrégation"><span class="toc-section-number">2.3</span>  Agrégation</a></li>
   </ul>
 </nav>
     </div>
@@ -235,8 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="extraire-les-composantes-connexes" class="level3" data-number="2.0.1">
-<h3 data-number="2.0.1" class="anchored" data-anchor-id="extraire-les-composantes-connexes"><span class="header-section-number">2.0.1</span> Extraire les composantes connexes</h3>
+<section id="extraire-les-composantes-connexes" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="extraire-les-composantes-connexes"><span class="header-section-number">2.1</span> Extraire les composantes connexes</h2>
 <p>La visualisation montre un réseau non connexe. Le morceau de code qui suit décrit les différentes composantes du réseau et extrait la principale composante connexe. Le réseau étant orienté, on cherche une connexité faible (<code>weakly_connected_components</code>) ; si le réseau était non orienté, on utiliserait la fonction <code>connected_components</code>.</p>
 <p>La logique est souvent similaire : on crée une liste correspondant au résultat ordonné d’une mesure puis on sélectionne des éléments de cette liste. Le numéro 0 entre crochets correspond au premier élément (Python numérote les éléments de 0 à <strong>n</strong> et non de 1 à <strong>n</strong>).</p>
 <div class="cell" data-execution_count="2">
@@ -253,128 +254,161 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>       reverse<span class="op">=</span><span class="va">True</span>)])</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection de la composante connexe principale</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>G0 <span class="op">=</span> G.subgraph(CC[<span class="dv">0</span>])</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'une version non orientée</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>G0u <span class="op">=</span> nx.to_undirected(G0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>G0 <span class="op">=</span> G.subgraph(CC[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nombre de composantes 4
 Nombre de sommets par composantes [106, 3, 3, 2]</code></pre>
 </div>
 </div>
-<p>Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée, : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l’intensité du lien <em>ij</em> dans la version non orientée semble correspondre à l’intensité du lien <em>ij</em> dans la version orientée.</p>
+<p>Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l’intensité du lien <em>ij</em> dans la version non orientée correspond à l’intensité du lien <em>ij</em> dans la version orientée.</p>
 <!-- Il est possible d'avoir des intensités négatives - ce qui n'est pas le cas ici. nx.is_negatively_weighted(G0u)  #False -->
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nx.is_weighted(G0u)             <span class="co">#True</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, G0[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, G0[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, G0u[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># afficher le poids entre i et j dans les deux cas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'une version non orientée</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>G0u <span class="op">=</span> nx.to_undirected(G0)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nx.is_weighted(G0u)             <span class="co">#True</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, G0[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, G0[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, G0u[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>lien ij : 135
 lien ji : 499
 lien ij non orienté :  135</code></pre>
 </div>
 </div>
-</section>
-<section id="filtrage" class="level3" data-number="2.0.2">
-<h3 data-number="2.0.2" class="anchored" data-anchor-id="filtrage"><span class="header-section-number">2.0.2</span> Filtrage</h3>
-<p>Les données sont importées, la plus grande composante connexe a été extraite. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux optiions sont possibles : supprimer liens ou sommets selon un critère donné (<code>remove_edges_from()</code>, <code>remove_nodes_from</code>) ; sélectionner liens ou sommets selon un critère donné (<code>subgraph()</code>).</p>
-<p>Si je souhaite travailler uniquement sur le cas marseillais :</p>
+<p>Obtenir une valuation des liens dans le réseau non orienté correspondant à la somme des intensités <span class="math inline">\(ij + ji\)</span> nécessite quelques étapes supplémentaires détaillées dans les lignes ci-dessous.</p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrage des sommets (1)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection des sommets satisfaisant la condition</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Mars = [n for n,v in G.nodes(data=True) if v['MARS'] == True]  </span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># créer une copie sans aucun lien</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.create_empty_copy(G, with_data<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.to_undirected(GU)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'un sous-graphe</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars = G.subgraph(Mars)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># éviter message "Frozen graph can't be modified"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.Graph(GU)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#nx.draw_kamada_kawai(Gmars, with_labels=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># récupérer liens avec intensité nulle</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>GU.add_edges_from(G.edges(), weight<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># pour chaque lien ij + ji</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v, d <span class="kw">in</span> G.edges(data<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    GU[u][v][<span class="st">'weight'</span>] <span class="op">+=</span> d[<span class="st">'weight'</span>]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># contrôle</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#a attributs liens et sommets</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">list</span>(GU.edges(data<span class="op">=</span><span class="va">True</span>))[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].keys())</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">list</span>(GU.nodes(data<span class="op">=</span><span class="va">True</span>))[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].keys())</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># propriétés du réseau</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>nx.is_directed(GU)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>nx.is_connected(GU)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, G[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, G[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, GU[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lien ij : 135
+lien ji : 499
+lien ij non orienté :  634</code></pre>
+</div>
+</div>
+</section>
+<section id="filtrage" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="filtrage"><span class="header-section-number">2.2</span> Filtrage</h2>
+<p>Les données sont importées, la plus grande composante connexe a été extraite. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (<code>remove_edges_from()</code>, <code>remove_nodes_from</code>) ; sélectionner liens ou sommets selon un critère donné (<code>subgraph()</code>).</p>
+<p>Si je souhaite travailler uniquement sur le cas marseillais<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> :</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrage des sommets (1)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection des sommets satisfaisant la condition</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Mars = [n for n,v in G.nodes(data=True) if v['MARS'] == True]  </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'un sous-graphe</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars = G.subgraph(Mars)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#nx.draw_kamada_kawai(Gmars, with_labels=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>On obtient le même résultat avec l’opération consistant à supprimer les sommets des communes hors Marseille :</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrage des sommets (2)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection des sommets hors Marseille</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#nonmars = [n for n,v in G.nodes(data=True) if v['MARS'] == False] </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># copier le réseau de départ</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars2 = G</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># supprimer les communes hors Marseille</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars2.remove_nodes_from(nonmars)</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#nx.draw_kamada_kawai(Gmars2,</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                     with_labels=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrage des sommets (2)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection des sommets hors Marseille</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#nonmars = [n for n,v in G.nodes(data=True) if v['MARS'] == False] </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># copier le réseau de départ</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars2 = G</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># supprimer les communes hors Marseille</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Gmars2.remove_nodes_from(nonmars)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#nx.draw_kamada_kawai(Gmars2,</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                     with_labels=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Si je souhaite travailler uniquement sur les flux les plus importants :</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrer les liens</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># paramètres statistiques</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>liens.describe()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fixer un seuil (ici la médiane)</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>seuil <span class="op">=</span> <span class="dv">212</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># identifier les liens sous ce seuil, récupérer les identifiants</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>long_edges <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> e: e[<span class="dv">2</span>] <span class="op">&lt;</span> seuil, (e <span class="cf">for</span> e <span class="kw">in</span> G.edges.data(<span class="st">'weight'</span>))))</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>le_ids <span class="op">=</span> <span class="bu">list</span>(e[:<span class="dv">2</span>] <span class="cf">for</span> e <span class="kw">in</span> long_edges)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># créer une copie du réseau de départ</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>Gsup <span class="op">=</span> G</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># supprimer les liens identifiés</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>Gsup.remove_edges_from(le_ids)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ordre, taille et visualisation</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets : "</span>, nx.number_of_nodes(Gsup))</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de liens : "</span>, nx.number_of_edges(Gsup))</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>nx.draw_kamada_kawai(Gsup, with_labels<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrer les liens</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># paramètres statistiques</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>liens.describe()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fixer un seuil (ici la médiane)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>seuil <span class="op">=</span> <span class="dv">212</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># identifier les liens sous ce seuil, récupérer les identifiants</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>long_edges <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> e: e[<span class="dv">2</span>] <span class="op">&lt;</span> seuil, (e <span class="cf">for</span> e <span class="kw">in</span> G.edges.data(<span class="st">'weight'</span>))))</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>le_ids <span class="op">=</span> <span class="bu">list</span>(e[:<span class="dv">2</span>] <span class="cf">for</span> e <span class="kw">in</span> long_edges)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># créer une copie du réseau de départ</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>Gsup <span class="op">=</span> G</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># supprimer les liens identifiés</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>Gsup.remove_edges_from(le_ids)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ordre, taille et visualisation</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets : "</span>, nx.number_of_nodes(Gsup))</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de liens : "</span>, nx.number_of_edges(Gsup))</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>nx.draw_kamada_kawai(Gsup, with_labels<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nb de sommets :  114
 Nb de liens :  159</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="C2_filtrer_files/figure-html/cell-7-output-2.png" width="691" height="499"></p>
+<p><img src="C2_filtrer_files/figure-html/cell-8-output-2.png" width="691" height="499"></p>
 </div>
 </div>
 <p>Le fait de ne conserver que les liens entraîne la suppression des sommets devenant isolés. Le nombre de liens a très logiquement été divisé par deux dans la mesure où le seuil choisi ici est la médiane.</p>
 <p>Si dans un réseau donné, j’ai des sommets isolés que je souhaite éliminer, j’utilise la fonction <code>remove_nodes_from</code>.</p>
 <p>Soit un réseau aléatoire de 20 sommets contenant des isolés.</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># générer un réseau aléatoire avec 2 isolés</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rg <span class="op">=</span> nx.gnp_random_graph(<span class="dv">20</span>, <span class="fl">0.05</span>, seed <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets (isolés compris) : "</span>, nx.number_of_nodes(rg))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># liste des sommets avec un degré nul</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>isoles <span class="op">=</span> [node <span class="cf">for</span> node,degree <span class="kw">in</span> <span class="bu">dict</span>(rg.degree()).items() <span class="cf">if</span> degree <span class="op">&lt;</span> <span class="dv">1</span>]</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># suppression des sommets concernés</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>rg.remove_nodes_from(isoles)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets  (isolés exclus) : "</span>, nx.number_of_nodes(rg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># générer un réseau aléatoire avec 2 isolés</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rg <span class="op">=</span> nx.gnp_random_graph(<span class="dv">20</span>, <span class="fl">0.05</span>, seed <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets (isolés compris) : "</span>, nx.number_of_nodes(rg))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># liste des sommets avec un degré nul</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>isoles <span class="op">=</span> [node <span class="cf">for</span> node,degree <span class="kw">in</span> <span class="bu">dict</span>(rg.degree()).items() <span class="cf">if</span> degree <span class="op">&lt;</span> <span class="dv">1</span>]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># suppression des sommets concernés</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>rg.remove_nodes_from(isoles)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nb de sommets  (isolés exclus) : "</span>, nx.number_of_nodes(rg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nb de sommets (isolés compris) :  20
 Nb de sommets  (isolés exclus) :  18</code></pre>
 </div>
 </div>
 </section>
-<section id="agrégation" class="level3" data-number="2.0.3">
-<h3 data-number="2.0.3" class="anchored" data-anchor-id="agrégation"><span class="header-section-number">2.0.3</span> Agrégation</h3>
+<section id="agrégation" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="agrégation"><span class="header-section-number">2.3</span> Agrégation</h2>
 <p>Il peut être intéressant d’agréger différents sommets. La fonction <code>contracted_nodes</code> prend en argument le réseau étudié et les deux sommets à fusionner, l’option <code>self_loops</code> permet de contrôler la création d’une boucle et l’option <code>copy</code> permet de créer un nouveau réseau sans écraser le premier.</p>
 <p>Si je veux fusionner deux arrondissements marseillais, j’utilise le script suivant. Les lignes suivantes permettent de lister les liens entrants et sortants du sommet résultat de la fusion et de vérifier la présence (ici souhaitée) de la boucle.</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>GA <span class="op">=</span> nx.contracted_nodes(G, <span class="st">'13215'</span>, <span class="st">'13216'</span>, self_loops<span class="op">=</span><span class="va">True</span>, copy<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>GA.in_edges(<span class="st">'13215'</span>)   <span class="co"># liste des liens entrants</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>GA.out_edges(<span class="st">'13215'</span>)  <span class="co"># liste des liens sortants</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>GA <span class="op">=</span> nx.contracted_nodes(G, <span class="st">'13215'</span>, <span class="st">'13216'</span>, self_loops<span class="op">=</span><span class="va">True</span>, copy<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>GA.in_edges(<span class="st">'13215'</span>)   <span class="co"># liste des liens entrants</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>GA.out_edges(<span class="st">'13215'</span>)  <span class="co"># liste des liens sortants</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>OutEdgeDataView([('13215', '13001'), ('13215', '13071'), ('13215', '13213'), ('13215', '13214'), ('13215', '13215')])</code></pre>
 </div>
 </div>
-<p>Autre fonction d’agrégation, <code>snap_aggregation</code> agrége l’ensemble des sommets voisins partageant un même modalité. Le script ci-dessous crée un réseau où un sommet agrégé correspond à l’un des cas de figures suivants :</p>
+<p>Autre fonction d’agrégation, <code>snap_aggregation</code> agrège l’ensemble des sommets voisins partageant une même modalité. Le script ci-dessous crée un réseau où un sommet agrégé correspond à l’un des cas de figures suivants :</p>
 <ul>
 <li>communes hors Marseille liées entre elles et non liées à un arrondissement marseillais ;</li>
 <li>communes hors Marseille liées entre elles et liées à un arrondissement marseillais ;</li>
@@ -382,15 +416,21 @@ Nb de sommets  (isolés exclus) :  18</code></pre>
 <li>arrondissements marseillais liés entre eux et liés à des communes extérieures.</li>
 </ul>
 <p>Dans la mesure où il ne semble pas aisément possible de savoir quels sommets agrégés forment les super sommets (en tout cas, je n’ai pas encore trouvé l’information), peut-être est-il plus prudent d’effectuer ce type de manipulations en amont, sur le tableau de données initial.</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># node_attributes = ('MARS',)</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># GA = nx.snap_aggregation(G, node_attributes = node_attributes)  </span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print("Nb de sommets : ", nx.number_of_nodes(GA))</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print("Nb de liens : ", nx.number_of_edges(GA))</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># nx.draw_kamada_kawai(GA, with_labels=False)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># node_attributes = ('MARS',)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># GA = nx.snap_aggregation(G, node_attributes = node_attributes)  </span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print("Nb de sommets : ", nx.number_of_nodes(GA))</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print("Nb de liens : ", nx.number_of_edges(GA))</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># nx.draw_kamada_kawai(GA, with_labels=False)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Les codes des deux chunks correspondant à la sélection ne fonctionnent pas dans mon environnement R mais fonctionnent avec Spyder, ce qui explique qu’ils soient en mode commmentaire ici.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

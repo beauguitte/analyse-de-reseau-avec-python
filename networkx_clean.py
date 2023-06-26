@@ -77,8 +77,6 @@ G0 = G.subgraph(CC[0])
 # création d'une version non orientée
 G0u = nx.to_undirected(G0)
 
-# intensité des liens - à remonter
-nx.is_weighted(G0u)             #True
 
 # gestion des intensités après transformation
 print("lien ij :", G0["13001"]["13201"]['weight'])

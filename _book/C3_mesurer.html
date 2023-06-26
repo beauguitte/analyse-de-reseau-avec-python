@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -61,11 +124,11 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
 <body class="nav-sidebar floating">
-
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -136,11 +199,6 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Table des matières</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">Bibliographie</a>
   </div>
 </li>
@@ -177,11 +235,124 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Les mesures sont testées sur deux réseaux, l’un orienté (<code>GD</code>) et l’autre non (<code>GU</code>), correspondant à la plus grande composante connexe. Lorsque la valuation et l’orientation des liens peuvent être prises en compte, les options utiles sont signalées. Par contre, le cas des liens multiples et des boucles n’est pas abordé.</p>
 <section id="mesures-globales" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="mesures-globales"><span class="header-section-number">3.1</span> Mesures globales</h2>
+<p>Dans les pages précédentes, on a déjà vu comment afficher l’ordre et la taille du réseau. La densité s’obtient avec la fonction <code>density</code>, le diamètre avec la fonction <code>diameter</code>. Lorsque les liens sont porteurs d’une intensité, il est possible de calculer une version pondérée du diamètre (intensité minimale entre les sommets les plus éloignés). Cela a un sens si la valuation peut être interprétée comme une distance (ce qui n’est pas le cas ici).</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ordre et taille</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de sommets (ordre) : "</span>, nx.number_of_nodes(GD), <span class="st">" sommets"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de liens - orienté (taille) : "</span>, nx.number_of_edges(GD), <span class="st">" liens"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de sommets (ordre) : "</span>, nx.number_of_nodes(GU), <span class="st">" sommets"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de liens - non orienté (taille) : "</span>, nx.number_of_edges(GU), <span class="st">" liens"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># densité et diamètre</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"densité (orienté) : "</span>, <span class="bu">round</span>(nx.density(GD), <span class="dv">2</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"densité (non orienté) :"</span>, <span class="bu">round</span>(nx.density(GU), <span class="dv">2</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Diamètre (non orienté et connexe) : "</span>, nx.diameter(GU))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Diamètre (non orienté, valué) : "</span>, nx.diameter(GU, weight <span class="op">=</span> <span class="st">"weight"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nombre de sommets (ordre) :  106  sommets
+nombre de liens - orienté (taille) :  312  liens
+nombre de sommets (ordre) :  106  sommets
+nombre de liens - non orienté (taille) :  250  liens
+densité (orienté) :  0.03
+densité (non orienté) : 0.04
+Diamètre (non orienté et connexe) :  8</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Diamètre (non orienté, valué) :  2004</code></pre>
+</div>
+</div>
+<p>L’indice de Wiener, issu de l’étude des réseaux biologiques, correspond à la somme des plus courts chemins entre toutes les paires de sommets. Le réseau orienté n’étant pas fortement connexe, le résultat est une distance infinie (<code>inf</code>). Il est possible de prendre en compte la valuation des liens et de chercher la somme des plus courtes distances entre sommets.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># indice de wiener (somme des pcc)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (orienté) : "</span>, nx.wiener_index(GD))     <span class="co"># distance topologique</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (non orienté) : "</span>, nx.wiener_index(GU)) <span class="co"># distance topologique</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (non orienté, valué) : "</span>, nx.wiener_index(GU, <span class="st">'weight'</span>))  <span class="co"># somme des intensités</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Indice de Wiener (orienté) :  inf
+Indice de Wiener (non orienté) :  15228.0
+Indice de Wiener (non orienté, valué) :  3800738.0</code></pre>
+</div>
+</div>
+<p>Mesures dirextement issues de la théorie des graphes, rayon et barycentre (appelé aussi point médian) correspondent respectivement à la distance la plus grande entre deux sommets quelconques d’un graphe (excentricité minimale - cf <em>infra</em> les mesures locales) et à l’ensemble de sommets minimisant la fonction <span class="math inline">\(\sum_{u \in V(G)} d_G(u, v)\)</span>, <span class="math inline">\(d_G(u, v)\)</span> étant la distance (topologique ou valuée) entre deux sommets <span class="math inline">\(u\)</span> et <span class="math inline">\(v\)</span> de <span class="math inline">\(G\)</span>.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rayon : "</span>, nx.radius(GU))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># barycentre</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"barycentre : "</span>, nx.barycenter(GU))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"barycentre (valué) : "</span>, nx.barycenter(GU, weight<span class="op">=</span><span class="st">'weight'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rayon :  4
+barycentre :  ['13001']
+barycentre (valué) :  ['13001']</code></pre>
+</div>
+</div>
+<p>La liste du ou des sommets centraux s’obtient avec <code>center</code>, la liste des sommets périphériques avec <code>periphery</code>. Les premiers correspondent aux sommets ayant une excentricité minimale, les seconds aux sommets ayant une excentricité maximale.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sommets centraux : "</span>, nx.center(GU))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sommets périphériques : "</span>, nx.periphery(GU))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sommets centraux :  ['13001']
+Sommets périphériques :  ['13083', '13076']</code></pre>
+</div>
+</div>
+<p>Il est possible de connaître l’ensemble des isthmes et des points d’articulation présents dans un réseau.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># isthmes et points d'articulation (réseau connexe)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre d'isthmes</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb isthmes : "</span>, <span class="bu">len</span>(<span class="bu">list</span>(nx.bridges(GU))))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># liste des isthmes</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"isthmes : "</span>,<span class="bu">list</span>(nx.bridges(GU)))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre de points d'articulation</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb points d'articulation : "</span>, <span class="bu">len</span>(<span class="bu">list</span>(nx.articulation_points(GU))))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># liste des points d'articulation</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"points d'articulation : "</span>, <span class="bu">list</span>(nx.articulation_points(GU)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nb isthmes :  32
+isthmes :  [('13001', '13004'), ('13001', '13015'), ('13001', '13019'), ('13001', '13025'), ('13001', '13032'), ('13001', '13095'), ('13001', '13107'), ('13001', '13109'), ('13001', '13110'), ('13001', '13111'), ('13001', '13113'), ('13213', '13075'), ('13103', '13035'), ('13103', '13044'), ('13103', '13049'), ('13004', '13078'), ('13004', '13038'), ('13004', '13108'), ('13097', '13068'), ('13005', '13031'), ('13028', '13023'), ('13020', '13046'), ('13046', '13073'), ('13046', '13101'), ('13024', '13050'), ('13054', '13088'), ('13056', '13104'), ('13045', '13083'), ('13045', '13108'), ('13108', '13094'), ('13076', '13067'), ('13067', '13105')]
+nb points d'articulation :  15
+points d'articulation :  ['13046', '13028', '13005', '13054', '13103', '13050', '13067', '13105', '13056', '13213', '13004', '13097', '13045', '13108', '13001']</code></pre>
+</div>
+</div>
+<p>Mesure plus récente et liée davantage aux études des physiciennes sur les réseaux, l’assortativité est mesurée par défaut en fonction du degré. Elle varie entre -1 (réseau dissassortatif) et 1 (réseau assortatif). Dans les lignes ci-dessous, les quatre assortativités possibles dans un réseau orienté sont calculées en fonction du degré.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assortativité (degré par défaut)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># orienté</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité in-in : "</span>, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"in"</span>, y<span class="op">=</span><span class="st">'in'</span>),<span class="dv">3</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité in-out : "</span>, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"in"</span>, y<span class="op">=</span><span class="st">'out'</span>),<span class="dv">3</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité out-in : "</span>, </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"out"</span>, y<span class="op">=</span><span class="st">'in'</span>),<span class="dv">3</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité out-out : "</span>, </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"out"</span>, y<span class="op">=</span><span class="st">'out'</span>),<span class="dv">3</span>))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># non orienté</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité globale (non orienté) : "</span>, </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GU),<span class="dv">3</span>))</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co"># selon un critère autre que le degré (erreur...)</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>assortativité in-in :  -0.105
+assortativité in-out :  0.262
+assortativité out-in :  -0.198
+assortativité out-out :  0.485
+assortativité globale (non orienté) :  -0.234</code></pre>
+</div>
+</div>
 </section>
 <section id="mesures-locales" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="mesures-locales"><span class="header-section-number">3.2</span> Mesures locales</h2>
+<p>Degré : <code>degree</code> et <code>degree_centrality</code>, <code>ou_degree</code> et <code>in_degree</code>.</p>
 
 
 </section>

@@ -93,8 +93,8 @@ print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
 Gcc = sorted(nx.connected_components(GU), key=len, reverse=True)
 
 # version non orientée
-G0 = GU.subgraph(Gcc[0])
-nx.is_directed(G0)
+GU = GU.subgraph(Gcc[0])
+nx.is_directed(GU)
 
 # attribut conservés dans la version non orientée 
 list(list(G0.edges(data=True))[0][-1].keys())
@@ -159,7 +159,7 @@ print("assortativité globale (non orienté) : ",
       round(nx.degree_assortativity_coefficient(GU),3))
 
 # selon un critère autre que le degré
-print(round(nx.numeric_assortativity_coefficient(G, "MARS"),3))
+print(round(nx.numeric_assortativity_coefficient(GU, "MARS"),3))
 
 #################
 # Mesures locales
