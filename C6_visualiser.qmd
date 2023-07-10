@@ -17,3 +17,5 @@ CC = sorted(nx.weakly_connected_components(G),key=len,reverse=True)
 G0 = G.subgraph(CC[0])
 G0u = nx.to_undirected(G0)
 ```
+
+<!-- https://towardsdatascience.com/python-interactive-network-visualization-using-networkx-plotly-and-dash-e44749161ed7 -->

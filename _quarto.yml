@@ -8,7 +8,7 @@ book:
   email: laurent.beauguitte@cnrs.fr
   affiliations:
       - name: Géographie-cités, CNRS
-  lang: fr    
+  lang: fr
   number-sections: true
   crossref:
     chapters: true
@@ -23,7 +23,7 @@ book:
     - C5_flot.qmd
     - C6_visualiser.qmd
     - conclusion.qmd
-#    - summary.qmd
+#   - summary.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -41,4 +41,3 @@ format:
     documentclass: scrreprt
 
 editor: visual
-

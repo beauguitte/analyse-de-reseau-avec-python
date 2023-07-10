@@ -29,7 +29,6 @@ import numpy as np                 # statistiques
 import matplotlib.pyplot as plt    # visualisation
 ```
 
-
 ```{python}
 
 sommets = pd.read_csv("data/som_d13.csv", sep = ";")
@@ -58,7 +57,7 @@ liens[['Arrivee']] = liens[['Arrivee']].astype('string')
 
 La syntaxe pour créer un réseau orienté à partir d'une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s'il existe une valuation des liens et si le graphe est orienté. 
 
-Pour que le réseau soit considéré comme valué, la colonne des intensités doit s'appeler `weight` ; il n'y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction `Graph()`.
+Pour que le réseau soit considéré comme valué, la colonne des intensités doit s'appeler `weight` ; il n'y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction `Graph()` et non `Digraph()`.
 
 ```{python}
 G = nx.from_pandas_edgelist(liens,                     # data.frame des liens
@@ -98,5 +97,5 @@ print("attribut des liens : ", list(list(G.edges(data=True))[0][-1].keys()))
 print("attribut des sommets : ", list(list(G.nodes(data=True))[0][-1].keys()))
 
 # visualisation basique
-nx.draw(G, with_labels=False)
+nx.draw_networkx(G, with_labels=False)
 ```

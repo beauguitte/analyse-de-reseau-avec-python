@@ -47,6 +47,35 @@
             "publisher": "Groupe fmr",
             "title": "L’analyse de réseau en sciences sociales. Petit guide pratique",
             "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Hagberg",
+                    "given": "Aric A."
+                },
+                {
+                    "family": "Schult",
+                    "given": "Daniel A."
+                },
+                {
+                    "family": "Swart",
+                    "given": "Pieter J."
+                }
+            ],
+            "container-title": "Proceedings of the 7th python in science conference",
+            "id": "networkx08",
+            "issued": {
+                "date-parts": [
+                    [
+                        2008
+                    ]
+                ]
+            },
+            "page": "11-15",
+            "publisher-place": "Pasadena, CA USA",
+            "title": "Exploring network structure, dynamics, and function using NetworkX",
+            "type": "paper-conference"
         }
     ],
     "project_biblios": [

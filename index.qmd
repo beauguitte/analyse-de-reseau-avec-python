@@ -10,29 +10,35 @@ Ce tutoriel s'adresse aux personnes :
 
 [^index-1]: Je n'utilise pas l'écriture épicène, j'écris le plus souvent au féminin et utilise l'accord de proximité.
 
-Je débute en Python donc le code que je propose n'est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne...
-
-Le principal module d'analyse de réseau en Python est `NetworkX` (@networkx08). Le module `igraph`, couramment utilisé pour l'analyse de réseau avec R, est également utilisable en Python mais semble moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.
+Le principal module d'analyse de réseau en Python est `NetworkX` (@networkx08). Le module `igraph`, couramment utilisé pour l'analyse de réseau avec R, est également utilisable en Python mais semble beaucoup moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.
 
 Ce document ne prétend pas être exhaustif mais vise à présenter les points suivants :
 
--   importer ses données (sommets et liens avec attributs)
--   manipuler un graphe ;
--   analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;
--   visualiser son réseau ;
--   atouts et limites du module `NetworkX`.
+- importer ses données (sommets et liens avec attributs)
+- manipuler un graphe ;
+- analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;
+- visualiser son réseau ;
+- atouts et limites du module `NetworkX`.
 
-Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?...) à venir.
+Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?...) à venir. Le code proposé n'est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne...
 
 ## Installer Python
 
+Si vous n'avez jamais utilisé Python, le plus simple est sans doute d'installer la distribution [Anaconda](https://www.anaconda.com/). C'est un peu une usine à gaz : ça installe plein de logiciels dont on n'a pas nécessairement besoin et avec des versions qui ne sont pas toujours les plus récentes mais au moins ça marche. Une fois Anaconda installée, inutile de le lancer : c'est lourd, lent et inutile. Il est plus rapide de lancer le `Anaconda Power Shell Prompt` puis, dans l'invite de commande, de taper `spyder`. L'IDE Spyder, assez similaire à RStudio, permet de créer ses scripts en Python dans un environnement agréable (rubrique d'aide, autocomplétion, feneêtre graphique, liste des objets importés ou créés, etc.).
+
+Il est possible d'installer une version plus légère d'Anaconda, [Miniconda](https://docs.conda.io/en/latest/miniconda.html). Il est également possible d'installer Python et Spyder de façon autonome. Les règlages pour que les logiciels fonctionnent les uins avec les autres peuvent être un peu plus longs. Idem si vous souhaitez utiliser Python dans un environnement RStudio - ce qui est le cas de ce tutoriel rédifgé en Quarto.
+
+Dernier conseil : n'hésitez pas à tout désintaller quand ça bloque avant de réinstaller les briques une par une en feuilletant bien la documentation...
+
 ## Documentation et installation du module
 
-La page du module **NetworkX, Network Analysis with Python**, <https://networkx.org/>, permet d'accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l'on va vouloir réaliser une opération précise, surtout si on n'est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir [stackoverflow](https://stackoverflow.com) est presque obligatoire.
+La page du module **NetworkX, Network Analysis with Python**, <https://networkx.org/>, permet d'accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l'on va vouloir réaliser une opération précise, surtout si on n'est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir [stackoverflow](https://stackoverflow.com) est presque obligatoire. Sur stackoverflow, faites attention à la date des sujets : certaines solutions proposées peuvent être obsolètes.
 
 ```{python}
 # installer le module
 # pip install networkx
+# si distribution ana ou miniconda
+# conda install package-name
 
 # charger les modules utiles
 import pandas as pd                # manipulation de tableaux
@@ -48,3 +54,5 @@ import matplotlib.pyplot as plt    # visualisation
 ```
 
 Le nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est "deprecated and will be removed".
+
+<!-- contrôler le networkx.py en toute fin - homogeneiser nom des objets -->

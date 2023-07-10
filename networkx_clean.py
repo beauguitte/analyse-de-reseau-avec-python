@@ -57,12 +57,12 @@ print("attribut des liens : ", list(list(G.edges(data=True))[0][-1].keys()))
 print("attribut des sommets : ", list(list(G.nodes(data=True))[0][-1].keys()))
 
 # visualisation basique
-nx.draw(G, with_labels=False)
+nx.draw_networkx(G, with_labels=False)
 
 # liste ordonnée des composantes connexes
 CC = sorted(nx.weakly_connected_components(G),
-            key=len,                            # clé de tri - len = longueur
-            reverse=True)                   s    # ordre décroissant
+            key=len,                           # clé de tri - len = longueur
+            reverse=True)                      # ordre décroissant
 print("Nombre de composantes", len(CC))
 
 # nombre de sommets par composantes
@@ -77,7 +77,6 @@ G0 = G.subgraph(CC[0])
 # création d'une version non orientée
 G0u = nx.to_undirected(G0)
 
-
 # gestion des intensités après transformation
 print("lien ij :", G0["13001"]["13201"]['weight'])
 print("lien ji :", G0["13201"]["13001"]['weight'])
@@ -91,8 +90,9 @@ Mars = [n for n,v in G.nodes(data=True) if v['MARS'] == True]
 Gmars = G.subgraph(Mars)
 
 # visualisation
-nx.draw_kamada_kawai(Gmars,
-                     with_labels=True)
+nx.draw_networkx(Gmars,
+                 pos = nx.kamada_kawai_layout(G0),
+                 with_labels=True)
 
 # filtrage des sommets (2)
 # sélection des sommets hors Marseille
@@ -105,8 +105,9 @@ Gmars2 = G
 Gmars2.remove_nodes_from(nonmars)
 
 # visualisation
-nx.draw_kamada_kawai(Gmars2,
-                     with_labels=True)
+nx.draw_networkx(Gmars2,
+                 pos = nx.kamada_kawai_layout(Gmars2),
+                 with_labels=True)
 
 # filtrer les liens
 # paramètres statistiques
@@ -129,7 +130,9 @@ Gsup.remove_edges_from(le_ids)
 print("Nb de sommets : ", nx.number_of_nodes(Gsup))
 print("Nb de liens : ", nx.number_of_edges(Gsup))
 
-nx.draw_kamada_kawai(Gsup, with_labels=True)
+nx.draw_networkx(Gsup, 
+                 pos = nx.kamada_kawai_layout(Gsup),
+                 with_labels=True)
 
 # générer un réseau aléatoire avec 2 isolés
 rg = nx.gnp_random_graph(20, 0.05, seed = 1)
@@ -154,9 +157,9 @@ node_attributes = ('MARS',)
 GA = nx.snap_aggregation(G, node_attributes = node_attributes)  
 print("Nb de sommets : ", nx.number_of_nodes(GA))
 print("Nb de liens : ", nx.number_of_edges(GA))
-nx.draw_kamada_kawai(GA, with_labels=False)
-
-
+nx.draw_networkx(GA, 
+                 pos = nx.kamada_kawai_layout(GA),
+                 with_labels=False)
 
 # mesures portant sur le réseau dans son ensemble
 # densité
@@ -166,18 +169,25 @@ print("densité (non orienté) :", round(nx.density(G0u), 2))
 # calcul du diamètre
 print("diamètre de la CC principale (orientation des liens non prise en compte) : ", nx.diameter(G0u))
 
-# diamètre pondéré
+# diamètre pondéré (marche plus ?!!)
 print("diamètre pondéré : ", nx.diameter(G0u, weight = 'weight'))
 
 # rayon
 # rayon du graphe
 print("rayon de la CC principale (non orientée) : ", nx.radius(G0u))
 
+# barycentre
+print("barycentre : ", nx.barycenter(G0u))
+
 # transitivité
 print("Transitivité globale (orienté) : ", round(nx.transitivity(G0), 2))
 print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(G0), 2))
 print("Transitivité globale (non orienté) : ", round(nx.transitivity(G0u), 2))
 print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(G0u), 2))
+
+# rich-club coefficient
+print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=False))
+print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=True, seed = 42))
 
 # visualiser la distribution des degrés
 # degré total - échelle log - log
@@ -211,13 +221,14 @@ G0.out_degree()
 #degré pondéré entrant
 G0.in_degree(weight = "weight")
 
+# degrés entrant et sortant normalisés
+nx.in_degree_centrality(G0)
+nx.out_degree_centrality(G0)
+
 #degré moyen des sommets voisins (simple et pondéré)
 nx.average_neighbor_degree(G0)
 nx.average_neighbor_degree(G, weight="weight")
 
-# degrés entrant et sortant normalisés
-nx.in_degree_centrality(G0)
-nx.out_degree_centrality(G0)
 
 # ajouter un attribut - marche pas
 #deg = nx.degree(G0u)
