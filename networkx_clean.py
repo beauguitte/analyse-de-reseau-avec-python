@@ -185,36 +185,12 @@ print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(G0), 2)
 print("Transitivité globale (non orienté) : ", round(nx.transitivity(G0u), 2))
 print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(G0u), 2))
 
+# coefficient de clustering moyen (orienté, non orienté)
+print("CC moyen :", nx.average_clustering(G0u))
+
 # rich-club coefficient
 print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=False))
 print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=True, seed = 42))
-
-# visualiser la distribution des degrés
-degree_sequence = sorted((d for n, d in G0u.degree()), reverse=True)
-dmax = max(degree_sequence)
-#plt.figure("Distribution des degrés", figsize=(8, 8))
-plt.plot(degree_sequence, "b-", marker="o")
-#set_title("Degree Rank Plot")
-
-# degré total - échelle log - log
-degree_freq = nx.degree_histogram(G0)
-degrees = range(len(degree_freq))
-plt.loglog(degrees, degree_freq,'go-') 
-plt.xlabel('Degré')
-plt.ylabel('Fréquence')
-
-# autre option qui permet de différencier in et out
-degree_in = sorted((d for n, d in G0.in_degree()), reverse=True)
-plt.bar(*np.unique(degree_in, return_counts=True))
-plt.title("Degrés entrants")
-plt.xlabel("Degré")
-plt.ylabel("Fréquence")
-
-degree_out = sorted((d for n, d in G0.out_degree()), reverse=True)
-plt.bar(*np.unique(degree_out, return_counts=True))
-plt.title("Degrés sortants")
-plt.xlabel("Degré")
-plt.ylabel("Fréquence")
 
 # mesures portant sur les sommets ou les liens
 # degré
@@ -231,15 +207,41 @@ G0.in_degree(weight = "weight")
 nx.in_degree_centrality(G0)
 nx.out_degree_centrality(G0)
 
+# transformer une meure en attribut 
+deg = nx.degree(G0u)
+nx.set_node_attributes(G0u, 'degree', deg)
+print("attribut des sommets : ", list(list(G0u.nodes(data=True))[0][-1].keys()))
+
+# visualiser la distribution des degrés
+degree_sequence = sorted((d for n, d in G0u.degree()), reverse=True)
+dmax = max(degree_sequence)
+#plt.figure("Distribution des degrés", figsize=(8, 8))
+plt.plot(degree_sequence, "b-", marker="o")
+#set_title("Degree Rank Plot")
+
+# distribution degré - échelle log - log
+degree_freq = nx.degree_histogram(G0)
+degrees = range(len(degree_freq))
+plt.loglog(degrees, degree_freq,'go-') 
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
+
+# distribution sous forme d'histogramme
+degree_in = sorted((d for n, d in G0.in_degree()), reverse=True)
+plt.bar(*np.unique(degree_in, return_counts=True))
+plt.title("Degrés entrants")
+plt.xlabel("Degré")
+plt.ylabel("Fréquence")
+
+degree_out = sorted((d for n, d in G0.out_degree()), reverse=True)
+plt.bar(*np.unique(degree_out, return_counts=True))
+plt.title("Degrés sortants")
+plt.xlabel("Degré")
+plt.ylabel("Fréquence")
+
 #degré moyen des sommets voisins (simple et pondéré)
 nx.average_neighbor_degree(G0)
 nx.average_neighbor_degree(G, weight="weight")
-
-
-# ajouter un attribut - marche pas
-#deg = nx.degree(G0u)
-#nx.set_node_attributes(G0u, 'degree', deg)
-#print("attribut des sommets : ", list(list(G0u.nodes(data=True))[0][-1].keys()))
 
 # intermédiarité
 nx.betweenness_centrality(G0)
@@ -249,6 +251,10 @@ nx.edge_betweenness_centrality(G0)
 
 # proximité
 nx.closeness_centrality(G0)
+
+# triangles
+nx.triangles(G0u)
+
 
 # cliques
 print("Nombre de `cliques' : ", sum(1 for c in nx.find_cliques(G0u)))
