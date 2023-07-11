@@ -55,7 +55,7 @@ liens[['Arrivee']] = liens[['Arrivee']].astype('string')
 
 ```
 
-La syntaxe pour créer un réseau orienté à partir d'une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s'il existe une valuation des liens et si le graphe est orienté. 
+La syntaxe pour créer un réseau orienté à partir d'une liste de liens est relativement simple. On précise quelle est la colonne des origines, celle des destinations, s'il existe une valuation des liens et si le graphe est orienté.
 
 Pour que le réseau soit considéré comme valué, la colonne des intensités doit s'appeler `weight` ; il n'y a pas de contrainte particulière concernant les noms de colonnes correspondant aux sommets. Si le réseau est non orienté, on utilise la fonction `Graph()` et non `Digraph()`.
 
@@ -76,7 +76,7 @@ nx.set_node_attributes(G, nodes_attr)
 
 #contrôle
 G.nodes("MARS")
-``` 
+```
 
 Plusieurs moyens permettent de contrôler que l'importation s'est bien déroulée :
 

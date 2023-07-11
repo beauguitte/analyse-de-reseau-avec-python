@@ -120,7 +120,7 @@ print("assortativité globale (non orienté) : ",
 #print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 ```
 
-Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction...  `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.)
+Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.)
 
 ```{python}
 # rich-club coefficient
@@ -130,8 +130,6 @@ print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=True, 
 <!-- transitivity-->
 
 Les mesures "globales" fondées sur des mesures "locales" (degré moyen par exemple) sont abordées dans la section suivante.
-
-
 
 ## Mesures locales
 
@@ -147,7 +145,7 @@ print(GD.out_degree())
 
 # degré entrant pondéré
 print(GD.in_degree(weight = "weight"))
-``` 
+```
 
 Ajouter `_centrality` à la fonction utilisée permet d'obtenir les valeurs normalisées.
 
@@ -157,6 +155,7 @@ print(nx.degree_centrality(GD))
 ```
 
 <!-- distribution degré, degré moyen, degré moyen des voisins -->
+
 <!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
 
 Closeness
@@ -165,6 +164,7 @@ Betweenness
 
 Transitivity
 
+```{=html}
 <!-- 
 # intermédiarité
 nx.betweenness_centrality(GD)
@@ -174,7 +174,8 @@ nx.edge_betweenness_centrality(GD)
 
 # proximité
 nx.closeness_centrality(GD) -->
-
-
+```
+```{=html}
 <!-- distance entre deux sommets : resistance_distance(G, nodeA, nodeB, weight=None, invert_weight=True) 
 si weight, distance; sinon, plus court chemin -->
+```

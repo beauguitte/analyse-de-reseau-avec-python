@@ -190,6 +190,12 @@ print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=False
 print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=True, seed = 42))
 
 # visualiser la distribution des degrés
+degree_sequence = sorted((d for n, d in G0u.degree()), reverse=True)
+dmax = max(degree_sequence)
+#plt.figure("Distribution des degrés", figsize=(8, 8))
+plt.plot(degree_sequence, "b-", marker="o")
+#set_title("Degree Rank Plot")
+
 # degré total - échelle log - log
 degree_freq = nx.degree_histogram(G0)
 degrees = range(len(degree_freq))
