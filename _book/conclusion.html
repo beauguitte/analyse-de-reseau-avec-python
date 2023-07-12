@@ -20,6 +20,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -109,12 +128,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></a>
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></a>
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -160,13 +179,29 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Pour aller plus loin en analyse de réseau (avec Python ou tout autre logiciel), commencer par la liste <a href="https://github.com/briatte/awesome-network-analysis">Awesome Network Analysis</a> maintenue par François Briatte est un bon réflexe. La partie Python mériterait peut-être un coup de plumeau, notamment pour les modules conseillés - c’est sûr ma to-do-list de l’été…</p>
 <section id="avec-networkx" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="avec-networkx"><span class="header-section-number">6.1</span> Avec NetworkX</h2>
+<p>Le <a href="https://networkx.org/documentation/stable/index.html">site officiel</a> est touffu (euphémisme). Nombre de fonctions sont obsolètes et la documentation n’est pas toujours d’une grande clarté. On trouve quelques tutoriels sur l’analyse de réseaux avec <code>NetworkX</code> en ligne, j’ai notamment utilisé des morceaux de <strong>Programming Historian</strong> (<span class="citation" data-cites="ladd17">Ladd et al. (<a href="#ref-ladd17" role="doc-biblioref">2017</a>)</span>) et d’un cours de l’IUT de Reims (<span class="citation" data-cites="blanchard18">Blanchard (<a href="#ref-blanchard18" role="doc-biblioref">2018</a>)</span>).</p>
 </section>
 <section id="avec-python" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="avec-python"><span class="header-section-number">6.2</span> Avec Python</h2>
+<p>C’est fou le nombre de livres payants proposant des initiations à des logiciels libres et gratuits. Les livres anglophones sont généralement disponibles sur libgen. Pour les livres francophones, vous pouvez 1. voir auprès de votre bibliothèque universitaire favorite ou 2. contactez directement l’auteur et l’autrice pour demander gentiment s’il n’y a pas une version pdf disponible quelque part.</p>
+<p>Pour s’initier, <a href="https://openclassrooms.com/fr/courses/6204541-initiez-vous-a-python-pour-lanalyse-de-donnees">Openclassrooms</a> propose des cours plutôt corrects. Ce n’est pas pensé pour des utilisatrices en sciences sociales et on peut allégrement sauter certaines étapes mais ça reste utile.</p>
+<p>Orienté sciences sociales mais en anglais, le <a href="https://melaniewalsh.github.io/Intro-Cultural-Analytics/welcome.html">site de Melanie Walsh</a> est très chaudement recommandé.</p>
+<p>L’excellent site <strong>Programming Historian</strong> propose <a href="https://programminghistorian.org/en/lessons/?topic=python">28 leçons sur Python</a>, toutes disponibles en anglais et certaines traduites en espagnol, français et/ou portugais.</p>
+<p>Le site <a href="https://python-graph-gallery.com/">Python Graph Gallery</a>, copié sur <a href="https://r-graph-gallery.com/">The R Graph Gallery</a>, permet de récupérer le code pour générer de belles figures. Ça reste cependant moins complet - et parfois moins joli - que ce qu’on peut faire avec R.</p>
+<hr>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-blanchard18" class="csl-entry" role="doc-biblioentry">
+Blanchard, F. (2018). Analyse des réseaux sociaux en python. <a href="https://iut-info.univ-reims.fr/users/blanchard/ISN20181218/index.html">https://iut-info.univ-reims.fr/users/blanchard/ISN20181218/index.html</a>
+</div>
+<div id="ref-ladd17" class="csl-entry" role="doc-biblioentry">
+Ladd, J. R., Otis, J., Warren, C. N. and Weingart, S. (2017). Exploring and analyzing network data with python. <em>Programming Historian</em>. https://doi.org/<a href="https://doi.org/10.46430/phen0064">https://doi.org/10.46430/phen0064</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

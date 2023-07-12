@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse de réseau avec Python et NetworkX - 4&nbsp; Partitions</title>
+<title>Analyse de réseau avec Python et NetworkX - 4&nbsp; Partitionner</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -173,12 +173,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></a>
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></a>
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -211,7 +211,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></h1>
 </div>
 
 
@@ -237,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>Nombre de `cliques' :  86
 Nombre de sommets dans la plus grande clique :  10
 Composition de la plus grande clique 
- ['13001', '13213', '13201', '13206', '13212', '13205', '13209', '13210', '13208', '13211']</code></pre>
+ ['13001', '13213', '13201', '13206', '13205', '13209', '13212', '13208', '13211', '13210']</code></pre>
 </div>
 </div>
 <p>Nombre de variations des <strong>k-cores</strong> sont proposées (k-shell, k-crust, k-corona…), elles seront abordées dans une version ultérieure de ce tutoriel.</p>
@@ -250,21 +250,21 @@ Composition de la plus grande clique
 <div class="cell-output cell-output-stdout">
 <pre><code>[8, 7, 6, 5, 4, 3, 2, 1]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="33">
-<pre><code>['13204',
- '13201',
- '13001',
- '13203',
- '13212',
- '13210',
- '13211',
- '13205',
- '13209',
- '13208',
- '13206',
- '13005',
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>['13205',
  '13213',
- '13214']</code></pre>
+ '13214',
+ '13211',
+ '13201',
+ '13206',
+ '13001',
+ '13209',
+ '13203',
+ '13005',
+ '13212',
+ '13208',
+ '13204',
+ '13210']</code></pre>
 </div>
 </div>
 </section>
@@ -326,8 +326,8 @@ modularité (greedy mod.) :  0.51</code></pre>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edges(GU, </span>
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                       pos, </span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                       alpha<span class="op">=</span><span class="fl">0.5</span>)  <span class="co"># transparence</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
-<pre><code>&lt;matplotlib.collections.LineCollection at 0x1fd2b63f040&gt;</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;matplotlib.collections.LineCollection at 0x19739473880&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="C4_partitions_files/figure-html/cell-6-output-2.png" width="540" height="389"></p>
@@ -439,7 +439,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./C3_mesurer.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

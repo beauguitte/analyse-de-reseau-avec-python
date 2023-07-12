@@ -30,16 +30,16 @@
   {
     "objectID": "C4_partitions.html#blockmodel",
     "href": "C4_partitions.html#blockmodel",
-    "title": "4  Partitions",
+    "title": "4  Partitionner",
     "section": "4.2 Blockmodel",
     "text": "4.2 Blockmodel\nNetworkX ne semble pas proposer de méthodes de blockmodeling. La documentation fournit un script créant une partition des sommets créée par une CAH sur la matrice d’adjacence."
   },
   {
     "objectID": "C4_partitions.html#détection-de-communautés",
     "href": "C4_partitions.html#détection-de-communautés",
-    "title": "4  Partitions",
+    "title": "4  Partitionner",
     "section": "4.3 Détection de communautés",
-    "text": "4.3 Détection de communautés\nPlusieurs méthodes de détection de communautés sont implémentées dans le sous-module community. Seule la mesure de la modularité semble disponible pour évaluer la qualité de la partition obtenue.\n\n# détection de communautés\nlouv = nx.community.louvain_communities(GU, seed=123)\nprint(\"nb de communautés (louvain) :\", len(louv))\nlouv[1]\n\n#mesure de la modularité\nprint(\"modularité (louvain) : \", round(nx.community.modularity(GU, louv),2))\n\n# algorithme maximisant la modularité\ngreed = nx.community.greedy_modularity_communities(GD)\nprint(\"nb de communautés (greedy mod.) :\", len(greed))\nprint(\"modularité (greedy mod.) : \", round(nx.community.modularity(GD, greed),2))\n\nnb de communautés (louvain) : 7\nmodularité (louvain) :  0.5\nnb de communautés (greedy mod.) : 6\nmodularité (greedy mod.) :  0.51\n\n\nLes lignes qui suivent anticipent sur la section suivante et indiquent comment visualiser les communautés détectées. La première étape est de créer un dictionnaire attribuant à chaque sommet la communauté d’appartenance détectée avec l’algorithme utilisé.\n\n# création d'un dictionnaire vide\nlouvain_dict = {} \n\n# boucle qui remplit le dictionnaire\nfor i,c in enumerate(louv): \n    for CODGEO in c: \n        louvain_dict[CODGEO] = i\n        \n# ligne optionnelle pour ajouter cet attribut \n# nx.set_node_attributes(GD, louvain_dict, 'louvain')\n\n# choix de l'algorithme de placement des sommets\npos = nx.spring_layout(GU)\n\n# importation d'une palette de couleurs \n# nb de couleurs égal au nombre de classes + 1 (Python commence à 0)\ncmap = plt.get_cmap('Paired', max(louvain_dict.values()) + 1)\n\n# visualisation des sommets\nnx.draw_networkx_nodes(GU,   # sommets à visualiser\n                       pos,  # placement\n                       louvain_dict.keys(),  # identifiants\n                       node_size=40,         # taille \n                       cmap=cmap,            # palette de couleur\n                       node_color=list(louvain_dict.values())) # affecter une couleur différente pour chaque classe\nnx.draw_networkx_edges(GU, \n                       pos, \n                       alpha=0.5)  # transparence\n\n<matplotlib.collections.LineCollection at 0x1fd2b63f040>"
+    "text": "4.3 Détection de communautés\nPlusieurs méthodes de détection de communautés sont implémentées dans le sous-module community. Seule la mesure de la modularité semble disponible pour évaluer la qualité de la partition obtenue.\n\n# détection de communautés\nlouv = nx.community.louvain_communities(GU, seed=123)\nprint(\"nb de communautés (louvain) :\", len(louv))\nlouv[1]\n\n#mesure de la modularité\nprint(\"modularité (louvain) : \", round(nx.community.modularity(GU, louv),2))\n\n# algorithme maximisant la modularité\ngreed = nx.community.greedy_modularity_communities(GD)\nprint(\"nb de communautés (greedy mod.) :\", len(greed))\nprint(\"modularité (greedy mod.) : \", round(nx.community.modularity(GD, greed),2))\n\nnb de communautés (louvain) : 7\nmodularité (louvain) :  0.5\nnb de communautés (greedy mod.) : 6\nmodularité (greedy mod.) :  0.51\n\n\nLes lignes qui suivent anticipent sur la section suivante et indiquent comment visualiser les communautés détectées. La première étape est de créer un dictionnaire attribuant à chaque sommet la communauté d’appartenance détectée avec l’algorithme utilisé.\n\n# création d'un dictionnaire vide\nlouvain_dict = {} \n\n# boucle qui remplit le dictionnaire\nfor i,c in enumerate(louv): \n    for CODGEO in c: \n        louvain_dict[CODGEO] = i\n        \n# ligne optionnelle pour ajouter cet attribut \n# nx.set_node_attributes(GD, louvain_dict, 'louvain')\n\n# choix de l'algorithme de placement des sommets\npos = nx.spring_layout(GU)\n\n# importation d'une palette de couleurs \n# nb de couleurs égal au nombre de classes + 1 (Python commence à 0)\ncmap = plt.get_cmap('Paired', max(louvain_dict.values()) + 1)\n\n# visualisation des sommets\nnx.draw_networkx_nodes(GU,   # sommets à visualiser\n                       pos,  # placement\n                       louvain_dict.keys(),  # identifiants\n                       node_size=40,         # taille \n                       cmap=cmap,            # palette de couleur\n                       node_color=list(louvain_dict.values())) # affecter une couleur différente pour chaque classe\nnx.draw_networkx_edges(GU, \n                       pos, \n                       alpha=0.5)  # transparence\n\n<matplotlib.collections.LineCollection at 0x19739473880>"
   },
   {
     "objectID": "C3_mesurer.html#mesures-locales",
@@ -53,7 +53,7 @@
     "href": "conclusion.html#avec-python",
     "title": "6  Pour aller plus loin",
     "section": "6.2 Avec Python",
-    "text": "6.2 Avec Python"
+    "text": "6.2 Avec Python\nC’est fou le nombre de livres payants proposant des initiations à des logiciels libres et gratuits. Les livres anglophones sont généralement disponibles sur libgen. Pour les livres francophones, vous pouvez 1. voir auprès de votre bibliothèque universitaire favorite ou 2. contactez directement l’auteur et l’autrice pour demander gentiment s’il n’y a pas une version pdf disponible quelque part.\nPour s’initier, Openclassrooms propose des cours plutôt corrects. Ce n’est pas pensé pour des utilisatrices en sciences sociales et on peut allégrement sauter certaines étapes mais ça reste utile.\nOrienté sciences sociales mais en anglais, le site de Melanie Walsh est très chaudement recommandé.\nL’excellent site Programming Historian propose 28 leçons sur Python, toutes disponibles en anglais et certaines traduites en espagnol, français et/ou portugais.\nLe site Python Graph Gallery, copié sur The R Graph Gallery, permet de récupérer le code pour générer de belles figures. Ça reste cependant moins complet - et parfois moins joli - que ce qu’on peut faire avec R.\n\n\n\n\n\nBlanchard, F. (2018). Analyse des réseaux sociaux en python. https://iut-info.univ-reims.fr/users/blanchard/ISN20181218/index.html\n\n\nLadd, J. R., Otis, J., Warren, C. N. and Weingart, S. (2017). Exploring and analyzing network data with python. Programming Historian. https://doi.org/https://doi.org/10.46430/phen0064"
   },
   {
     "objectID": "C1_importer.html",
@@ -100,8 +100,22 @@
   {
     "objectID": "C4_partitions.html",
     "href": "C4_partitions.html",
-    "title": "4  Partitions",
+    "title": "4  Partitionner",
     "section": "",
-    "text": "La page de la documentation consacrée aux cliques propose x fonctions dont plusieurs sont obsolotètes. Par défaut, NetworkX renvoit tous les ous-graphes complets d’ordre 1 à n, n correspondant au sous-graphe maximal complet et donc à la clique au sens strict du terme.\n\n# cliques d'ordre 1 à n\nprint(\"Nombre de `cliques' : \", sum(1 for c in nx.find_cliques(GU)))\nprint(\"Nombre de sommets dans la plus grande clique : \", max(len(c) for c in nx.find_cliques(GU)))\nprint(\"Composition de la plus grande clique \\n\", max(nx.find_cliques(GU), key=len))\n\nNombre de `cliques' :  86\nNombre de sommets dans la plus grande clique :  10\nComposition de la plus grande clique \n ['13001', '13213', '13201', '13206', '13212', '13205', '13209', '13210', '13208', '13211']\n\n\nNombre de variations des k-cores sont proposées (k-shell, k-crust, k-corona…), elles seront abordées dans une version ultérieure de ce tutoriel.\n\n# ordre des k-cores\nprint(list(nx.k_components(GU)))\n\n# composition du 8-core\nlist(nx.k_core(GU, k = 8))\n\n[8, 7, 6, 5, 4, 3, 2, 1]\n\n\n['13204',\n '13201',\n '13001',\n '13203',\n '13212',\n '13210',\n '13211',\n '13205',\n '13209',\n '13208',\n '13206',\n '13005',\n '13213',\n '13214']"
+    "text": "La page de la documentation consacrée aux cliques propose x fonctions dont plusieurs sont obsolotètes. Par défaut, NetworkX renvoit tous les ous-graphes complets d’ordre 1 à n, n correspondant au sous-graphe maximal complet et donc à la clique au sens strict du terme.\n\n# cliques d'ordre 1 à n\nprint(\"Nombre de `cliques' : \", sum(1 for c in nx.find_cliques(GU)))\nprint(\"Nombre de sommets dans la plus grande clique : \", max(len(c) for c in nx.find_cliques(GU)))\nprint(\"Composition de la plus grande clique \\n\", max(nx.find_cliques(GU), key=len))\n\nNombre de `cliques' :  86\nNombre de sommets dans la plus grande clique :  10\nComposition de la plus grande clique \n ['13001', '13213', '13201', '13206', '13205', '13209', '13212', '13208', '13211', '13210']\n\n\nNombre de variations des k-cores sont proposées (k-shell, k-crust, k-corona…), elles seront abordées dans une version ultérieure de ce tutoriel.\n\n# ordre des k-cores\nprint(list(nx.k_components(GU)))\n\n# composition du 8-core\nlist(nx.k_core(GU, k = 8))\n\n[8, 7, 6, 5, 4, 3, 2, 1]\n\n\n['13205',\n '13213',\n '13214',\n '13211',\n '13201',\n '13206',\n '13001',\n '13209',\n '13203',\n '13005',\n '13212',\n '13208',\n '13204',\n '13210']"
+  },
+  {
+    "objectID": "conclusion.html",
+    "href": "conclusion.html",
+    "title": "6  Pour aller plus loin",
+    "section": "",
+    "text": "Pour aller plus loin en analyse de réseau (avec Python ou tout autre logiciel), commencer par la liste Awesome Network Analysis maintenue par François Briatte est un bon réflexe. La partie Python mériterait peut-être un coup de plumeau, notamment pour les modules conseillés - c’est sûr ma to-do-list de l’été…"
+  },
+  {
+    "objectID": "conclusion.html#avec-networkx",
+    "href": "conclusion.html#avec-networkx",
+    "title": "6  Pour aller plus loin",
+    "section": "6.1 Avec NetworkX",
+    "text": "6.1 Avec NetworkX\nLe site officiel est touffu (euphémisme). Nombre de fonctions sont obsolètes et la documentation n’est pas toujours d’une grande clarté. On trouve quelques tutoriels sur l’analyse de réseaux avec NetworkX en ligne, j’ai notamment utilisé des morceaux de Programming Historian (Ladd et al. (2017)) et d’un cours de l’IUT de Reims (Blanchard (2018))."
   }
 ]

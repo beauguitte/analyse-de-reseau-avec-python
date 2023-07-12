@@ -55,4 +55,6 @@ import matplotlib.pyplot as plt    # visualisation
 
 Le nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est "deprecated and will be removed".
 
+--- 
+
 <!-- contrôler le networkx.py en toute fin - homogeneiser nom des objets -->

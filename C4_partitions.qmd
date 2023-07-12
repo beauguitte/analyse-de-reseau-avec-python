@@ -1,4 +1,4 @@
-# Partitions
+# Partitionner
 
 ```{python}
 #| echo: false

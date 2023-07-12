@@ -1,4 +1,4 @@
-# Mesures
+# Mesurer
 
 Les mesures sont testées sur deux réseaux, l'un orienté (`GD`) et l'autre non (`GU`), correspondant à la plus grande composante connexe. Lorsque la valuation et l'orientation des liens peuvent être prises en compte, les options utiles sont signalées. Par contre, le cas des liens multiples et des boucles n'est pas abordé.
 

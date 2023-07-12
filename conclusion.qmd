@@ -1,5 +1,22 @@
 # Pour aller plus loin
 
+Pour aller plus loin en analyse de réseau (avec Python ou tout autre logiciel), commencer par la liste [Awesome Network Analysis](https://github.com/briatte/awesome-network-analysis) maintenue par François Briatte est un bon réflexe. La partie Python mériterait peut-être un coup de plumeau, notamment pour les modules conseillés - c'est sûr ma to-do-list de l'été...
+
 ## Avec NetworkX
 
+Le [site officiel](https://networkx.org/documentation/stable/index.html) est touffu (euphémisme). Nombre de fonctions sont obsolètes et la documentation n'est pas toujours d'une grande clarté. On trouve quelques tutoriels sur l'analyse de réseaux avec `NetworkX` en ligne,  j'ai notamment utilisé des morceaux de **Programming Historian** (@ladd17) et d'un cours de l'IUT de Reims (@blanchard18).
+
 ## Avec Python
+
+C'est fou le nombre de livres payants proposant des initiations à des logiciels libres et gratuits. Les livres anglophones sont généralement disponibles sur libgen. Pour les livres francophones, vous pouvez 1. voir auprès de votre bibliothèque universitaire favorite ou 2. contactez directement l'auteur et l'autrice pour demander gentiment s'il n'y a pas une version pdf disponible quelque part.
+
+Pour s'initier, [Openclassrooms](https://openclassrooms.com/fr/courses/6204541-initiez-vous-a-python-pour-lanalyse-de-donnees) propose des cours plutôt corrects. Ce n'est pas pensé pour des utilisatrices en sciences sociales et on peut allégrement sauter certaines étapes mais ça reste utile.
+
+Orienté sciences sociales mais en anglais, le [site de Melanie Walsh](https://melaniewalsh.github.io/Intro-Cultural-Analytics/welcome.html) est très chaudement recommandé.
+
+L'excellent site **Programming Historian** propose [28 leçons sur Python](https://programminghistorian.org/en/lessons/?topic=python), toutes disponibles en anglais et certaines traduites en espagnol, français et/ou portugais.
+
+Le site [Python Graph Gallery](https://python-graph-gallery.com/), copié sur [The R Graph Gallery](https://r-graph-gallery.com/), permet de récupérer le code pour générer de belles figures. Ça reste cependant moins complet - et parfois moins joli - que ce qu'on peut faire avec R.
+
+---
+

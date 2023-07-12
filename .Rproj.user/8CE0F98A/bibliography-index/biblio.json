@@ -21,6 +21,57 @@
             "type": "book"
         },
         {
+            "URL": "https://iut-info.univ-reims.fr/users/blanchard/ISN20181218/index.html",
+            "author": [
+                {
+                    "family": "Blanchard",
+                    "given": "Frédéric"
+                }
+            ],
+            "id": "blanchard18",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "title": "Analyse des réseaux sociaux en python",
+            "type": "article-journal"
+        },
+        {
+            "DOI": "https://doi.org/10.46430/phen0064",
+            "author": [
+                {
+                    "family": "Ladd",
+                    "given": "John R."
+                },
+                {
+                    "family": "Otis",
+                    "given": "Jessica"
+                },
+                {
+                    "family": "Warren",
+                    "given": "Christopher N."
+                },
+                {
+                    "family": "Weingart",
+                    "given": "Scott"
+                }
+            ],
+            "container-title": "Programming Historian",
+            "id": "ladd17",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017
+                    ]
+                ]
+            },
+            "title": "Exploring and analyzing network data with python",
+            "type": "article-journal"
+        },
+        {
             "author": [
                 {
                     "family": "Hagberg",
