@@ -24,5 +24,59 @@ for u, v, d in GD.edges(data=True):
     GU[u][v]['weight'] += d['weight']
 ```
 
+Différents algorithmes de placement des sommets sont disponibles, certaines étant adaptés à des types précis de réseaux (`multipartite_layout`, `bipartite_layout`, `planar_layout`).
+
+```{python}
+#graphe de Petersen
+#pour les plus curieuses : https://fr.wikipedia.org/wiki/Graphe_de_Petersen
+G = nx.petersen_graph()
+
+# algorithmes de visualisation
+nx.draw_networkx(G)
+nx.draw_networkx(G, pos = nx.random_layout(G))
+nx.draw_networkx(G, pos = nx.shell_layout(G))
+nx.draw_networkx(G, pos = nx.spectral_layout(G))
+nx.draw_networkx(G, pos = nx.spring_layout(G))
+nx.draw_networkx(G, pos = nx.spiral_layout(G))
+nx.draw_networkx(G, pos = nx.spiral_layout(G))
+```
+
+Il est évidemment possible de modifier l'apparence des sommets et des liens et, par exemple, de faire varier la taille ou la couleur en fonction d'un attribut. Il est souvent nécessaire de créer au préalable un dictionnaire permettant de faire varier le paramètre graphique voulu selon un indicateur donné, par exemple faire varier la taille des sommets selon le degré.
+
+Les deux exemples ci-dessous ne prétendent pas à l'exhaustivité mais illustrent l'utilisation de quelques paramètres graphiques d'usage courant.
+
+```{python}
+# création du dictionnaire pour les degrés
+d = dict(GU.degree)
+
+# création d'une liste des intensités
+weights = [GU[u][v]['weight'] for u,v in GU.edges]
+
+nx.draw_networkx(GU,
+          pos = nx.spring_layout(GU),  # algorithme de placement
+               node_color = 'orange',  # couleur des sommets
+               alpha = 0.8,            # transparence
+               nodelist= d.keys(),     # liste des sommets      
+               node_size = [v * 20 for v in d.values()], # taille des sommets
+               edge_cmap=plt.cm.Blues, # palette de couleurs
+               edge_color = weights,   # couleur des liens
+               with_labels=False,      # affichage des labels
+               width=4)                # épaisseur des liens
+
+# faire varier teinte et épaisseur des liens
+# diviser les intensités par 100
+weigh2 = [i/100 for i in weights]
+
+nx.draw_networkx(GU,
+               pos = nx.kamada_kawai_layout(GU),
+               node_color = 'orange', 
+               alpha = 0.8,
+               nodelist= d.keys(), 
+               node_size = [v * 20 for v in d.values()], 
+               edge_cmap=plt.cm.Blues,
+               edge_color = weights,
+               with_labels = False,
+               width=weigh2)
+```
 
 <!-- https://towardsdatascience.com/python-interactive-network-visualization-using-networkx-plotly-and-dash-e44749161ed7 -->

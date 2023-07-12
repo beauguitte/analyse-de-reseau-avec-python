@@ -398,7 +398,7 @@ nx.draw_networkx(G, pos = nx.spring_layout(G))
 nx.draw_networkx(G, pos = nx.spiral_layout(G))
 nx.draw_networkx(G, pos = nx.spiral_layout(G))
 # algorithmes réservés à certains types de réseaux
-# multipartite_layout bipartite_layout planar_layout
+
 
 # Modifier l'apparence
 
@@ -406,33 +406,39 @@ nx.draw_networkx(G, pos = nx.spiral_layout(G))
 d = dict(GU.degree)
 
 # création d'une liste des intensités
-weights = [GU[u][v]['weight'] for u,v in G0u.edges]
+weights = [GU[u][v]['weight'] for u,v in GU.edges]
 
-nx.draw_spring(GU, 
+nx.draw_networkx(GU,
+               pos = nx.spring_layout(GU),
                node_color = 'orange',                    # couleur des sommets
                alpha = 0.8,                              # transparence
-               nodelist=d.keys(),                        
+               nodelist=d.keys(),                      
                node_size = [v * 20 for v in d.values()], # taille des sommets
                edge_cmap=plt.cm.Blues,                   # palette de couleurs
-               edge_color=weights,                       # couleur des liens
+               edge_color = weights,                       # couleur des liens
+               with_labels=False,
                width=4)                                  # épaisseur des liens
 
-nx.draw_spring(GU, 
+nx.draw_networkx(GU,
+               pos = nx.kamada_kawai_layout(GU),
                node_color = 'orange', 
                alpha = 0.8,
                nodelist=d.keys(), 
                node_size = [v * 20 for v in d.values()], 
                edge_color = "blue",
+               with_labels = False,
                width = weights)
 
 # diviser les intensités par 50
-weigh2 = [i/50 for i in weights]
+weigh2 = [i/100 for i in weights]
 
-nx.draw_spring(GU, 
+nx.draw_networkx(GU,
+               pos = nx.kamada_kawai_layout(GU),
                node_color = 'orange', 
                alpha = 0.8,
                nodelist=d.keys(), 
                node_size = [v * 20 for v in d.values()], 
                edge_cmap=plt.cm.Blues,
                edge_color = weights,
+               with_labels = False,
                width=weigh2)
