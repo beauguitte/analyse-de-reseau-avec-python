@@ -1,34 +1,6 @@
 {
     "sources": [
         {
-            "DOI": "10.1093/comjnl/27.2.97",
-            "ISSN": "0010-4620",
-            "URL": "https://doi.org/10.1093/comjnl/27.2.97",
-            "author": [
-                {
-                    "family": "Knuth",
-                    "given": "Donald E."
-                }
-            ],
-            "container-title": "Comput. J.",
-            "id": "knuth84",
-            "issue": "2",
-            "issued": {
-                "date-parts": [
-                    [
-                        1984,
-                        5
-                    ]
-                ]
-            },
-            "page": "97-111",
-            "publisher": "Oxford University Press, Inc.",
-            "publisher-place": "USA",
-            "title": "Literate programming",
-            "type": "article-journal",
-            "volume": "27"
-        },
-        {
             "URL": "https://hal.science/hal-04052709",
             "author": [
                 {
@@ -63,7 +35,7 @@
                     "given": "Pieter J."
                 }
             ],
-            "container-title": "Proceedings of the 7th python in science conference",
+            "container-title": "Proceedings of the 7th Python in Science Conference",
             "id": "networkx08",
             "issued": {
                 "date-parts": [
@@ -75,7 +47,7 @@
             "page": "11-15",
             "publisher-place": "Pasadena, CA USA",
             "title": "Exploring network structure, dynamics, and function using NetworkX",
-            "type": "paper-conference"
+            "type": "article-journal"
         }
     ],
     "project_biblios": [

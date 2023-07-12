@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -30,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./C5_flot.html" rel="next">
+<link href="./C6_visualiser.html" rel="next">
 <link href="./C3_mesurer.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -120,22 +183,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C5_flot.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Flots dans les réseaux</span></a>
+  <a href="./C6_visualiser.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualiser ses données</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C6_visualiser.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Visualiser ses données</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./conclusion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Pour aller plus loin</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">Bibliographie</a>
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pour aller plus loin</span></a>
   </div>
 </li>
     </ul>
@@ -147,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sommaire</h2>
    
   <ul>
-  <li><a href="#triades-cliques-et-k-cores" id="toc-triades-cliques-et-k-cores" class="nav-link active" data-scroll-target="#triades-cliques-et-k-cores"><span class="toc-section-number">4.1</span>  Triades, cliques et k-cores</a></li>
+  <li><a href="#cliques-et-k-cores" id="toc-cliques-et-k-cores" class="nav-link active" data-scroll-target="#cliques-et-k-cores"><span class="toc-section-number">4.1</span>  Cliques et k-cores</a></li>
   <li><a href="#blockmodel" id="toc-blockmodel" class="nav-link" data-scroll-target="#blockmodel"><span class="toc-section-number">4.2</span>  Blockmodel</a></li>
   <li><a href="#détection-de-communautés" id="toc-détection-de-communautés" class="nav-link" data-scroll-target="#détection-de-communautés"><span class="toc-section-number">4.3</span>  Détection de communautés</a></li>
   </ul>
@@ -172,14 +225,114 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="triades-cliques-et-k-cores" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="triades-cliques-et-k-cores"><span class="header-section-number">4.1</span> Triades, cliques et k-cores</h2>
+<section id="cliques-et-k-cores" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="cliques-et-k-cores"><span class="header-section-number">4.1</span> Cliques et k-cores</h2>
+<p>La page de la documentation consacrée aux <a href="https://networkx.org/documentation/stable/reference/algorithms/clique.html">cliques</a> propose x fonctions dont plusieurs sont obsolotètes. Par défaut, <code>NetworkX</code> renvoit tous les ous-graphes complets d’ordre 1 à <strong>n</strong>, <strong>n</strong> correspondant au sous-graphe maximal complet et donc à la clique au sens strict du terme.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cliques d'ordre 1 à n</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nombre de `cliques' : "</span>, <span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> c <span class="kw">in</span> nx.find_cliques(GU)))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nombre de sommets dans la plus grande clique : "</span>, <span class="bu">max</span>(<span class="bu">len</span>(c) <span class="cf">for</span> c <span class="kw">in</span> nx.find_cliques(GU)))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Composition de la plus grande clique </span><span class="ch">\n</span><span class="st">"</span>, <span class="bu">max</span>(nx.find_cliques(GU), key<span class="op">=</span><span class="bu">len</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Nombre de `cliques' :  86
+Nombre de sommets dans la plus grande clique :  10
+Composition de la plus grande clique 
+ ['13001', '13213', '13201', '13206', '13212', '13205', '13209', '13210', '13208', '13211']</code></pre>
+</div>
+</div>
+<p>Nombre de variations des <strong>k-cores</strong> sont proposées (k-shell, k-crust, k-corona…), elles seront abordées dans une version ultérieure de ce tutoriel.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ordre des k-cores</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(nx.k_components(GU)))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># composition du 8-core</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(nx.k_core(GU, k <span class="op">=</span> <span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[8, 7, 6, 5, 4, 3, 2, 1]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>['13204',
+ '13201',
+ '13001',
+ '13203',
+ '13212',
+ '13210',
+ '13211',
+ '13205',
+ '13209',
+ '13208',
+ '13206',
+ '13005',
+ '13213',
+ '13214']</code></pre>
+</div>
+</div>
 </section>
 <section id="blockmodel" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="blockmodel"><span class="header-section-number">4.2</span> Blockmodel</h2>
+<p><code>NetworkX</code> ne semble pas proposer de méthodes de blockmodeling. La documentation fournit <a href="https://networkx.org/documentation/stable/auto_examples/algorithms/plot_blockmodel.html">un script</a> créant une partition des sommets créée par une CAH sur la matrice d’adjacence.</p>
+<!-- v2 :`quotient_graph`, stochastic_block_model` -->
 </section>
 <section id="détection-de-communautés" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="détection-de-communautés"><span class="header-section-number">4.3</span> Détection de communautés</h2>
+<p>Plusieurs méthodes de détection de communautés sont implémentées dans le sous-module <code>community</code>. Seule la mesure de la modularité semble disponible pour évaluer la qualité de la partition obtenue.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># détection de communautés</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>louv <span class="op">=</span> nx.community.louvain_communities(GU, seed<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb de communautés (louvain) :"</span>, <span class="bu">len</span>(louv))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>louv[<span class="dv">1</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#mesure de la modularité</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"modularité (louvain) : "</span>, <span class="bu">round</span>(nx.community.modularity(GU, louv),<span class="dv">2</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithme maximisant la modularité</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>greed <span class="op">=</span> nx.community.greedy_modularity_communities(GD)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb de communautés (greedy mod.) :"</span>, <span class="bu">len</span>(greed))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"modularité (greedy mod.) : "</span>, <span class="bu">round</span>(nx.community.modularity(GD, greed),<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nb de communautés (louvain) : 7
+modularité (louvain) :  0.5
+nb de communautés (greedy mod.) : 6
+modularité (greedy mod.) :  0.51</code></pre>
+</div>
+</div>
+<p>Les lignes qui suivent anticipent sur la section suivante et indiquent comment visualiser les communautés détectées. La première étape est de créer un dictionnaire attribuant à chaque sommet la communauté d’appartenance détectée avec l’algorithme utilisé.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'un dictionnaire vide</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>louvain_dict <span class="op">=</span> {} </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># boucle qui remplit le dictionnaire</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,c <span class="kw">in</span> <span class="bu">enumerate</span>(louv): </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> CODGEO <span class="kw">in</span> c: </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        louvain_dict[CODGEO] <span class="op">=</span> i</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ligne optionnelle pour ajouter cet attribut </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># nx.set_node_attributes(GD, louvain_dict, 'louvain')</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># choix de l'algorithme de placement des sommets</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> nx.spring_layout(GU)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># importation d'une palette de couleurs </span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># nb de couleurs égal au nombre de classes + 1 (Python commence à 0)</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> plt.get_cmap(<span class="st">'Paired'</span>, <span class="bu">max</span>(louvain_dict.values()) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation des sommets</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_nodes(GU,   <span class="co"># sommets à visualiser</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                       pos,  <span class="co"># placement</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                       louvain_dict.keys(),  <span class="co"># identifiants</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                       node_size<span class="op">=</span><span class="dv">40</span>,         <span class="co"># taille </span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                       cmap<span class="op">=</span>cmap,            <span class="co"># palette de couleur</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>                       node_color<span class="op">=</span><span class="bu">list</span>(louvain_dict.values())) <span class="co"># affecter une couleur différente pour chaque classe</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edges(GU, </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                       pos, </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                       alpha<span class="op">=</span><span class="fl">0.5</span>)  <span class="co"># transparence</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>&lt;matplotlib.collections.LineCollection at 0x1fd2b63f040&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C4_partitions_files/figure-html/cell-6-output-2.png" width="540" height="389"></p>
+</div>
+</div>
 
 
 </section>
@@ -290,8 +443,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./C5_flot.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Flots dans les réseaux</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./C6_visualiser.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualiser ses données</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

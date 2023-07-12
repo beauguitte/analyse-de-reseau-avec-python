@@ -20,11 +20,11 @@ book:
     - C2_filtrer.qmd
     - C3_mesurer.qmd
     - C4_partitions.qmd
-    - C5_flot.qmd
+#   - C5_flot.qmd
     - C6_visualiser.qmd
     - conclusion.qmd
 #   - summary.qmd
-    - references.qmd
+#    - references.qmd
 
 bibliography: references.bib
 csl: universite-de-montreal-apa.csl

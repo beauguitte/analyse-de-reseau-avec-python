@@ -307,6 +307,9 @@ nx.katz_centrality(GD)
 # triangles
 nx.triangles(GU)
 
+# triad census (réseau orienté)
+nx.triadic_census(GD)
+
 # transitivité locale
 nx.clustering(GD)
 
@@ -320,10 +323,66 @@ print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
 print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
 
 # PARTITIONS
-# cliques
+# cliques d'ordre 1 à n
 print("Nombre de `cliques' : ", sum(1 for c in nx.find_cliques(GU)))
+max(len(c) for c in nx.find_cliques(GU))
 print("Composition de la plus grande clique \n", max(nx.find_cliques(GU), key=len))
 
+# k-cores
+list(nx.k_core(GU))
+list(nx.k_components(GU))
+list(nx.k_core(GU, k = 8))
+list(nx.k_core(GU, k = 7))
+
+# blockmodel
+# https://networkx.org/documentation/stable/auto_examples/algorithms/plot_blockmodel.html
+
+# détection de communautés
+louv = nx.community.louvain_communities(GU, seed=123) # objet liste
+print("nb de communautés :", len(louv))
+louv[1]
+
+#mesure de la modularité
+print("modularité : ", round(nx.community.modularity(GU, louv),2))
+
+# algorithme maximisant la modularité
+greed = nx.community.greedy_modularity_communities(GD)
+print("nb de communautés :", len(greed))
+print("modularité : ", round(nx.community.modularity(GD, greed),2))
+
+# pour visualiser, nécessiter de passer de la liste au dictionnaire
+# https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python
+
+# création d'un dictionnaire vide
+louvain_dict = {} 
+
+# boucle qui remplit le dictionnaire
+for i,c in enumerate(louv): 
+    for CODGEO in c: 
+        louvain_dict[CODGEO] = i
+        
+# ligne optionnelle pour ajouter cet attribut 
+# nx.set_node_attributes(GD, louvain_dict, 'louvain')
+
+# choix de l'algorithme de placement des sommets
+pos = nx.spring_layout(GU)
+
+# importation d'une palette de couleurs 
+# nb de couleurs égal au nombre de classes + 1 (Python commence à 0)
+cmap = plt.get_cmap('Paired', max(louvain_dict.values()) + 1)
+
+# visualisation des sommets
+nx.draw_networkx_nodes(GU,   # sommets à visualiser
+                       pos,  # placement
+                       louvain_dict.keys(),  # identifiants
+                       node_size=40,         # taille 
+                       cmap=cmap,            # palette de couleur
+                       node_color=list(louvain_dict.values())) # affecter une couleur différente pour chaque classe
+nx.draw_networkx_edges(GU, 
+                       pos, 
+                       alpha=0.5)  # transparence
+
+# VISUALISER
 # algorithmes de visualisation
 
 #graphe de Petersen

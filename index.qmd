@@ -14,11 +14,11 @@ Le principal module d'analyse de réseau en Python est `NetworkX` (@networkx08).
 
 Ce document ne prétend pas être exhaustif mais vise à présenter les points suivants :
 
-- importer ses données (sommets et liens avec attributs)
-- manipuler un graphe ;
-- analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;
-- visualiser son réseau ;
-- atouts et limites du module `NetworkX`.
+-   importer ses données (sommets et liens avec attributs)
+-   manipuler un graphe ;
+-   analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;
+-   visualiser son réseau ;
+-   atouts et limites du module `NetworkX`.
 
 Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?...) à venir. Le code proposé n'est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne...
 

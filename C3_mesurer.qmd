@@ -32,7 +32,7 @@ for u, v, d in GD.edges(data=True):
 
 ## Mesures globales
 
-Dans les pages précédentes, on a déjà vu comment afficher l'ordre et la taille du réseau. La densité s'obtient avec la fonction `density`, le diamètre avec la fonction `diameter`. 
+Dans les pages précédentes, on a déjà vu comment afficher l'ordre et la taille du réseau. La densité s'obtient avec la fonction `density`, le diamètre avec la fonction `diameter`.
 
 ```{python}
 # ordre et taille
@@ -47,7 +47,7 @@ print("densité (non orienté) :", round(nx.density(GU), 2))
 # print("diamètre (non orienté et connexe) : ", nx.diameter(GD))
 ```
 
-Si on cherche à mesurer le diamètre sur un réseau orienté non fortement connexe, on obtient le message d'erreur suivant : "Found infinite path length because the digraph is not strongly connected". 
+Si on cherche à mesurer le diamètre sur un réseau orienté non fortement connexe, on obtient le message d'erreur suivant : "Found infinite path length because the digraph is not strongly connected".
 
 Mesures directement issues de la théorie des graphes, rayon et barycentre (appelé aussi point médian) correspondent respectivement à la distance entre le(s) sommet(s) ayant une excentricité minimale et tout autre sommet du graphe (cf *infra* les mesures locales) et à l'ensemble de sommets minimisant la fonction $\sum_{u \in V(G)} d_G(u, v)$, $d_G(u, v)$ étant la distance (topologique ou valuée) entre deux sommets $u$ et $v$ de $G$.
 
@@ -159,9 +159,9 @@ print("attribut des sommets : ", list(list(GU.nodes(data=True))[0][-1].keys()))
 
 Les lignes ci-dessous proposent différentes solutions pour visualiser la distribution des degrés :
 
-- histogramme ;
-- fréquence ;
-- fréquence avec une échelle log-log.
+-   histogramme ;
+-   fréquence ;
+-   fréquence avec une échelle log-log.
 
 <!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
 
@@ -226,8 +226,15 @@ Concernant la recherche de la transitivité, on peut connaître le nom de triang
 
 ```{python}
 #| eval: false
+# nombre de triangles
+nx.triangles(GU)
+
+# typologie MAN (réseau orienté)
+nx.triadic_census(GD) 
+
 # transitivité locale
 nx.clustering(GD)
+
 # prise en compte de l'intensité des liens
 nx.clustering(GD, weight="weight")
 ```
@@ -240,3 +247,6 @@ print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2)
 print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
 print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
 ```
+
+<!-- v2 https://networkx.org/documentation/stable/reference/algorithms/centrality.html#second-order-centrality -->
+<!-- contrainte de Burt : nx.constraint -->
