@@ -44,7 +44,7 @@ print("nombre de liens - non orienté (taille) : ", nx.number_of_edges(GU), " li
 # densité et diamètre
 print("densité (orienté) : ", round(nx.density(GD), 2))
 print("densité (non orienté) :", round(nx.density(GU), 2))
-print("diamètre (non orienté et connexe) : ", nx.diameter(GD))
+# print("diamètre (non orienté et connexe) : ", nx.diameter(GD))
 ```
 
 Si on cherche à mesurer le diamètre sur un réseau orienté non fortement connexe, on obtient le message d'erreur suivant : "Found infinite path length because the digraph is not strongly connected". 
@@ -95,7 +95,7 @@ Mesure plus récente et liée davantage aux études des physiciennes sur les ré
 
 ```{python}
 # assortativité (degré par défaut)
-# orienté
+# réseau orienté - 4 options possibles
 print("assortativité in-in : ", 
       round(nx.degree_assortativity_coefficient(GD, x="in", y='in'),3))
 
@@ -108,24 +108,22 @@ print("assortativité out-in : ",
 print("assortativité out-out : ", 
       round(nx.degree_assortativity_coefficient(GD, x="out", y='out'),3))
 
-# non orienté
+# réseau non orienté
 print("assortativité globale (non orienté) : ", 
       round(nx.degree_assortativity_coefficient(GU),3))
 
-# selon un critère autre que le degré
+# assortativité selon un critère autre que le degré
 print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 ```
 
-Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.)
+Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.).
 
 ```{python}
 # rich-club coefficient
 print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=True, seed=42))
 ```
 
-<!-- transitivity-->
-
-Les mesures "globales" fondées sur des mesures "locales" (degré moyen par exemple) sont abordées dans la section suivante.
+Les mesures "globales" fondées sur des mesures "locales" (degré ou transitivité moyenne par exemple) sont abordées dans la section suivante.
 
 ## Mesures locales
 
@@ -150,28 +148,95 @@ Ajouter `_centrality` à la fonction utilisée permet d'obtenir les valeurs norm
 print(nx.degree_centrality(GD))
 ```
 
-<!-- distribution degré, degré moyen, degré moyen des voisins -->
+Pour transformer une mesure en attribut, on commence par créer un objet correspondondant au résultat puis on utilise la fonction `set_node_attributes` si la mesure porte sur les sommets et `set_edge_attributes` si elle porte sur les liens.
+
+```{python}
+# transformer une meure en attribut 
+deg = nx.degree(GU)
+nx.set_node_attributes(GU, 'degree', deg)
+print("attribut des sommets : ", list(list(GU.nodes(data=True))[0][-1].keys()))
+```
+
+Les lignes ci-dessous proposent différentes solutions pour visualiser la distribution des degrés :
+
+- histogramme ;
+- fréquence ;
+- fréquence avec une échelle log-log.
 
 <!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
 
-Closeness
+```{python}
+# distribution sous forme d'histogramme
+degree_in = sorted((d for n, d in GD.in_degree()), reverse=True)
+plt.bar(*np.unique(degree_in, return_counts=True))
+plt.title("Degrés entrants")
+plt.xlabel("Degré")
+plt.ylabel("Fréquence")
 
-Betweenness
+# fréquence
+degree_sequence = sorted((d for n, d in GU.degree()), reverse=True)
 
-Transitivity
+# distribution des degrés
+plt.plot(degree_sequence, "r-", marker="o", linewidth=1, markersize=2)
+plt.title("Distribution des degrés")
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
 
-```{=html}
-<!-- 
+# distribution degré - échelle log - log
+plt.loglog(degree_sequence, "go-", linewidth=1, markersize=2)
+plt.title("Distribution des degrés (log - log)")
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
+```
+
+Il est possible de calculer le degré moyen des voisins à à l'aide de la fonction `average_neighbor_degree` (degré entrant, sortant, total, pondéré ou non).
+
+```{python}
+# degré moyen des sommets voisins
+nx.average_neighbor_degree(GD)
+# degré entrant moyen des voisins entrants
+nx.average_neighbor_degree(GD, source="in", target="in")
+# degré moyen pondéré des voisins
+nx.average_neighbor_degree(GD, weight="weight")
+```
+
+Les mesures de centralité autres s'obtiennent avec des fonctions aux noms attendus : `closeness`, `betweenness` (`edge_betweenness` pour l'intermédiarité des liens), `eigenvector_centrality` et `katz_centrality`.
+
+```{python}
+#| eval: false
 # intermédiarité
 nx.betweenness_centrality(GD)
-
+L`` 
 # intermédiarité des liens
 nx.edge_betweenness_centrality(GD)
 
 # proximité
-nx.closeness_centrality(GD) -->
+nx.closeness_centrality(GD)
+
+# centralité de vecteur propre
+nx.eigenvector_centrality(GD)
+
+# centralité de Katz
+nx.katz_centrality(GD)
 ```
-```{=html}
-<!-- distance entre deux sommets : resistance_distance(G, nodeA, nodeB, weight=None, invert_weight=True) 
-si weight, distance; sinon, plus court chemin -->
+
+<!-- distance entre deux sommets : resistance_distance(G, nodeA, nodeB, weight=None, invert_weight=True)  si weight, distance; sinon, plus court chemin -->
+
+Concernant la recherche de la transitivité, on peut connaître le nom de triangles (triades fermées) contenant chaque sommet avec la fonction `triangles`. La transitivité locale s'obtient avec `clustering`, la transitivité globale avec `transitivity` et la transitivité moyenne avec `average_clustering`. Il est possible de prendre en compte l'orientation des liens et/ou leur intensité.
+
+```{python}
+#| eval: false
+# transitivité locale
+nx.clustering(GD)
+# prise en compte de l'intensité des liens
+nx.clustering(GD, weight="weight")
+```
+
+```{python}
+
+# transitivité globale et moyenne
+print("Transitivité globale (orienté) : ", round(nx.transitivity(GD), 2))
+print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2))
+print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
+print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
 ```

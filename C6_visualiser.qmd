@@ -14,8 +14,15 @@ liens[['Origine']] = liens[['Origine']].astype('string')
 liens[['Arrivee']] = liens[['Arrivee']].astype('string')
 G = nx.from_pandas_edgelist(liens,source = "Origine",target = "Arrivee", edge_attr="weight",create_using=nx.DiGraph()) 
 CC = sorted(nx.weakly_connected_components(G),key=len,reverse=True) 
-G0 = G.subgraph(CC[0])
-G0u = nx.to_undirected(G0)
+GD = G.subgraph(CC[0])
+GU = nx.create_empty_copy(GD, with_data=True)
+GU = nx.to_undirected(GU)
+list(list(GU.nodes(data=True))[0][-1].keys())
+GU = nx.Graph(GU)
+GU.add_edges_from(GD.edges(), weight=0)
+for u, v, d in GD.edges(data=True):
+    GU[u][v]['weight'] += d['weight']
 ```
+
 
 <!-- https://towardsdatascience.com/python-interactive-network-visualization-using-networkx-plotly-and-dash-e44749161ed7 -->

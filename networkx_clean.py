@@ -236,15 +236,6 @@ print("assortativité globale (non orienté) : ",
 # selon un critère autre que le degré
 print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 
-# transitivité
-print("Transitivité globale (orienté) : ", round(nx.transitivity(GD), 2))
-print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2))
-print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
-print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
-
-# coefficient de clustering moyen (orienté, non orienté)
-print("CC moyen :", nx.average_clustering(G0u))
-
 # rich-club coefficient
 print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=False))
 print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=True, seed = 42))
@@ -258,87 +249,107 @@ GD.in_degree()
 GD.out_degree()
 
 #degré pondéré entrant
-G0.in_degree(weight = "weight")
+GD.in_degree(weight = "weight")
 
 # degrés entrant et sortant normalisés
-nx.in_degree_centrality(G0)
-nx.out_degree_centrality(G0)
+nx.in_degree_centrality(GD)
+nx.out_degree_centrality(GD)
 
-# transformer une meure en attribut 
-deg = nx.degree(G0u)
-nx.set_node_attributes(G0u, 'degree', deg)
-print("attribut des sommets : ", list(list(G0u.nodes(data=True))[0][-1].keys()))
+# transformer une mesure en attribut 
+deg = nx.degree(GU)
+nx.set_node_attributes(GU, 'degree', deg)
+print("attribut des sommets : ", list(list(GU.nodes(data=True))[0][-1].keys()))
 
 # visualiser la distribution des degrés
-degree_sequence = sorted((d for n, d in G0u.degree()), reverse=True)
-dmax = max(degree_sequence)
-#plt.figure("Distribution des degrés", figsize=(8, 8))
-plt.plot(degree_sequence, "b-", marker="o")
-#set_title("Degree Rank Plot")
-
-# distribution degré - échelle log - log
-degree_freq = nx.degree_histogram(G0)
-degrees = range(len(degree_freq))
-plt.loglog(degrees, degree_freq,'go-') 
-plt.xlabel('Degré')
-plt.ylabel('Fréquence')
 
 # distribution sous forme d'histogramme
-degree_in = sorted((d for n, d in G0.in_degree()), reverse=True)
+degree_in = sorted((d for n, d in GD.in_degree()), reverse=True)
 plt.bar(*np.unique(degree_in, return_counts=True))
 plt.title("Degrés entrants")
 plt.xlabel("Degré")
 plt.ylabel("Fréquence")
 
-degree_out = sorted((d for n, d in G0.out_degree()), reverse=True)
-plt.bar(*np.unique(degree_out, return_counts=True))
-plt.title("Degrés sortants")
-plt.xlabel("Degré")
-plt.ylabel("Fréquence")
+# fréquence
+degree_sequence = sorted((d for n, d in GU.degree()), reverse=True)
+
+# distribution des degrés
+plt.plot(degree_sequence, "r-", marker="o", linewidth=1, markersize=2)
+plt.title("Distribution des degrés")
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
+
+# distribution degré - échelle log - log
+plt.loglog(degree_sequence, "go-", linewidth=1, markersize=2)
+plt.title("Distribution des degrés (log - log)")
+plt.xlabel('Degré')
+plt.ylabel('Fréquence')
 
 #degré moyen des sommets voisins (simple et pondéré)
-nx.average_neighbor_degree(G0)
-nx.average_neighbor_degree(G, weight="weight")
+nx.average_neighbor_degree(GD)
+nx.average_neighbor_degree(GD, source="in", target="in")
+nx.average_neighbor_degree(GD, weight="weight")
 
 # intermédiarité
-nx.betweenness_centrality(G0)
-
+nx.betweenness_centrality(GD)
+`` 
 # intermédiarité des liens
-nx.edge_betweenness_centrality(G0)
+nx.edge_betweenness_centrality(GD)
 
 # proximité
-nx.closeness_centrality(G0)
+nx.closeness_centrality(GD)
+
+# centralité de vecteur propre
+nx.eigenvector_centrality(GD)
+
+# centralité de Katz
+nx.katz_centrality(GD)
 
 # triangles
-nx.triangles(G0u)
+nx.triangles(GU)
 
+# transitivité locale
+nx.clustering(GD)
 
+# avec prise en compte de l'intensité des liens
+nx.clustering(GD, weight="weight")
+
+# transitivité globale et moyenne
+print("Transitivité globale (orienté) : ", round(nx.transitivity(GD), 2))
+print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2))
+print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
+print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
+
+# PARTITIONS
 # cliques
-print("Nombre de `cliques' : ", sum(1 for c in nx.find_cliques(G0u)))
-print("Composition de la plus grande clique \n", max(nx.find_cliques(G0u), key=len))
+print("Nombre de `cliques' : ", sum(1 for c in nx.find_cliques(GU)))
+print("Composition de la plus grande clique \n", max(nx.find_cliques(GU), key=len))
 
-# algorithme de visualisation
+# algorithmes de visualisation
 
 #graphe de Petersen
 #pour les plus curieuses : https://fr.wikipedia.org/wiki/Graphe_de_Petersen
 G = nx.petersen_graph()
 
-#5 représentations superposées
-nx.draw(G)
-nx.draw_random(G)
-nx.draw_shell(G)
-nx.draw_spectral(G)
-nx.draw_spring(G)
+# algorithmes de visualisation
+nx.draw_networkx(G)
+nx.draw_networkx(G, pos = nx.random_layout(G))
+nx.draw_networkx(G, pos = nx.shell_layout(G))
+nx.draw_networkx(G, pos = nx.spectral_layout(G))
+nx.draw_networkx(G, pos = nx.spring_layout(G))
+nx.draw_networkx(G, pos = nx.spiral_layout(G))
+nx.draw_networkx(G, pos = nx.spiral_layout(G))
+# algorithmes réservés à certains types de réseaux
+# multipartite_layout bipartite_layout planar_layout
 
 # Modifier l'apparence
 
 # création du dictionnaire pour les degrés
-d = dict(G0u.degree)
+d = dict(GU.degree)
 
 # création d'une liste des intensités
-weights = [G0u[u][v]['weight'] for u,v in G0u.edges]
+weights = [GU[u][v]['weight'] for u,v in G0u.edges]
 
-nx.draw_spring(G0u, 
+nx.draw_spring(GU, 
                node_color = 'orange',                    # couleur des sommets
                alpha = 0.8,                              # transparence
                nodelist=d.keys(),                        
@@ -347,7 +358,7 @@ nx.draw_spring(G0u,
                edge_color=weights,                       # couleur des liens
                width=4)                                  # épaisseur des liens
 
-nx.draw_spring(G0u, 
+nx.draw_spring(GU, 
                node_color = 'orange', 
                alpha = 0.8,
                nodelist=d.keys(), 
@@ -358,7 +369,7 @@ nx.draw_spring(G0u,
 # diviser les intensités par 50
 weigh2 = [i/50 for i in weights]
 
-nx.draw_spring(G0u, 
+nx.draw_spring(GU, 
                node_color = 'orange', 
                alpha = 0.8,
                nodelist=d.keys(), 
