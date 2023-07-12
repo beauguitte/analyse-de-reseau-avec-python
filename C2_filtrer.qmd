@@ -18,7 +18,6 @@ nodes_attr = sommets.set_index('CODGEO').to_dict(orient = 'index')
 nx.set_node_attributes(G, nodes_attr)
 ```
 
-
 ## Extraire les composantes connexes
 
 La visualisation montre un réseau non connexe. Le morceau de code qui suit décrit les différentes composantes du réseau et extrait la principale composante connexe. Le réseau étant orienté, on cherche une connexité faible (`weakly_connected_components`) ; si le réseau était non orienté, on utiliserait la fonction `connected_components`.
@@ -39,42 +38,40 @@ print("Nombre de sommets par composantes",
        reverse=True)])
 
 # sélection de la composante connexe principale
-G0 = G.subgraph(CC[0])
-
+GD = G.subgraph(CC[0])
 ```
 
 Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l'intensité du lien *ij* dans la version non orientée correspond à l'intensité du lien *ij* dans la version orientée.
 
-<!-- Il est possible d'avoir des intensités négatives - ce qui n'est pas le cas ici. nx.is_negatively_weighted(G0u)  #False -->
+<!-- v2 : gestion des intensités négatives - nx.is_negatively_weighted(G) -->
 
 ```{python}
 # création d'une version non orientée
-G0u = nx.to_undirected(G0)
+GU = nx.to_undirected(GD)
 
-nx.is_weighted(G0u)             #True
+nx.is_weighted(GU)             #True
 
-print("lien ij :", G0["13001"]["13201"]['weight'])
-print("lien ji :", G0["13201"]["13001"]['weight'])
-print("lien ij non orienté : ", G0u["13001"]["13201"]['weight'])
+print("lien ij :", GD["13001"]["13201"]['weight'])
+print("lien ji :", GD["13201"]["13001"]['weight'])
+print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
 
 ```
 
 Obtenir une valuation des liens dans le réseau non orienté correspondant à la somme des intensités $ij + ji$ nécessite quelques étapes supplémentaires détaillées dans les lignes ci-dessous.
 
 ```{python}
-
 # créer une copie sans aucun lien
-GU = nx.create_empty_copy(G, with_data=True)
+GU = nx.create_empty_copy(GD, with_data=True)
 GU = nx.to_undirected(GU)
 
 # éviter message "Frozen graph can't be modified"
 GU = nx.Graph(GU)
 
 # récupérer liens avec intensité nulle
-GU.add_edges_from(G.edges(), weight=0)
+GU.add_edges_from(GD.edges(), weight=0)
 
 # pour chaque lien ij + ji
-for u, v, d in G.edges(data=True):
+for u, v, d in GD.edges(data=True):
     GU[u][v]['weight'] += d['weight']
 
 # contrôle
@@ -87,18 +84,16 @@ list(list(GU.nodes(data=True))[0][-1].keys())
 nx.is_directed(GU)
 nx.is_connected(GU)
 
-print("lien ij :", G["13001"]["13201"]['weight'])
-print("lien ji :", G["13201"]["13001"]['weight'])
+print("lien ij :", GD["13001"]["13201"]['weight'])
+print("lien ji :", GD["13201"]["13001"]['weight'])
 print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
-
 ```
 
 ## Filtrage
 
-Les données sont importées, la plus grande composante connexe a été extraite. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (`remove_edges_from()`, `remove_nodes_from`) ; sélectionner liens ou sommets selon un critère donné (`subgraph()`). 
+Les données sont importées, la plus grande composante connexe a été extraite dans deux versions, une orientée et une non orientée. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (`remove_edges_from()`, `remove_nodes_from`) ; sélectionner liens ou sommets selon un critère donné (`subgraph()`). 
 
 Si je souhaite travailler uniquement sur le cas marseillais :
-
 
 ```{python}
 # filtrage des sommets (1)
@@ -110,7 +105,7 @@ Gmars = G.subgraph(Mars)
 
 # visualisation
 nx.draw_networkx(Gmars,
-                 pos = nx.kamada_kawai_layout(G0),
+                 pos = nx.kamada_kawai_layout(Gmars),
                  with_labels=True)
 ```
 

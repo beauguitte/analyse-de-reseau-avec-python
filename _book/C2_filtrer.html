@@ -254,23 +254,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>       reverse<span class="op">=</span><span class="va">True</span>)])</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># sélection de la composante connexe principale</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>G0 <span class="op">=</span> G.subgraph(CC[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>GD <span class="op">=</span> G.subgraph(CC[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nombre de composantes 4
 Nombre de sommets par composantes [106, 3, 3, 2]</code></pre>
 </div>
 </div>
 <p>Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l’intensité du lien <em>ij</em> dans la version non orientée correspond à l’intensité du lien <em>ij</em> dans la version orientée.</p>
-<!-- Il est possible d'avoir des intensités négatives - ce qui n'est pas le cas ici. nx.is_negatively_weighted(G0u)  #False -->
+<!-- v2 : gestion des intensités négatives - nx.is_negatively_weighted(G) -->
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># création d'une version non orientée</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>G0u <span class="op">=</span> nx.to_undirected(G0)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.to_undirected(GD)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nx.is_weighted(G0u)             <span class="co">#True</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nx.is_weighted(GU)             <span class="co">#True</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, G0[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, G0[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, G0u[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, GD[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, GD[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, GU[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>lien ij : 135
 lien ji : 499
@@ -280,17 +280,17 @@ lien ij non orienté :  135</code></pre>
 <p>Obtenir une valuation des liens dans le réseau non orienté correspondant à la somme des intensités <span class="math inline">\(ij + ji\)</span> nécessite quelques étapes supplémentaires détaillées dans les lignes ci-dessous.</p>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># créer une copie sans aucun lien</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.create_empty_copy(G, with_data<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.create_empty_copy(GD, with_data<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.to_undirected(GU)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># éviter message "Frozen graph can't be modified"</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>GU <span class="op">=</span> nx.Graph(GU)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># récupérer liens avec intensité nulle</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>GU.add_edges_from(G.edges(), weight<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>GU.add_edges_from(GD.edges(), weight<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># pour chaque lien ij + ji</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v, d <span class="kw">in</span> G.edges(data<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v, d <span class="kw">in</span> GD.edges(data<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    GU[u][v][<span class="st">'weight'</span>] <span class="op">+=</span> d[<span class="st">'weight'</span>]</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># contrôle</span></span>
@@ -303,8 +303,8 @@ lien ij non orienté :  135</code></pre>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>nx.is_directed(GU)</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>nx.is_connected(GU)</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, G[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, G[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij :"</span>, GD[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ji :"</span>, GD[<span class="st">"13201"</span>][<span class="st">"13001"</span>][<span class="st">'weight'</span>])</span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lien ij non orienté : "</span>, GU[<span class="st">"13001"</span>][<span class="st">"13201"</span>][<span class="st">'weight'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>lien ij : 135
@@ -315,7 +315,7 @@ lien ij non orienté :  634</code></pre>
 </section>
 <section id="filtrage" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="filtrage"><span class="header-section-number">2.2</span> Filtrage</h2>
-<p>Les données sont importées, la plus grande composante connexe a été extraite. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (<code>remove_edges_from()</code>, <code>remove_nodes_from</code>) ; sélectionner liens ou sommets selon un critère donné (<code>subgraph()</code>).</p>
+<p>Les données sont importées, la plus grande composante connexe a été extraite dans deux versions, une orientée et une non orientée. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (<code>remove_edges_from()</code>, <code>remove_nodes_from</code>) ; sélectionner liens ou sommets selon un critère donné (<code>subgraph()</code>).</p>
 <p>Si je souhaite travailler uniquement sur le cas marseillais :</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrage des sommets (1)</span></span>
@@ -327,7 +327,7 @@ lien ij non orienté :  634</code></pre>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(Gmars,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                 pos <span class="op">=</span> nx.kamada_kawai_layout(G0),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                 pos <span class="op">=</span> nx.kamada_kawai_layout(Gmars),</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                 with_labels<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="C2_filtrer_files/figure-html/cell-6-output-1.png" width="540" height="389"></p>
@@ -415,7 +415,7 @@ Nb de sommets  (isolés exclus) :  18</code></pre>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>GA <span class="op">=</span> nx.contracted_nodes(G, <span class="st">'13215'</span>, <span class="st">'13216'</span>, self_loops<span class="op">=</span><span class="va">True</span>, copy<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>GA.in_edges(<span class="st">'13215'</span>)   <span class="co"># liste des liens entrants</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>GA.out_edges(<span class="st">'13215'</span>)  <span class="co"># liste des liens sortants</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>OutEdgeDataView([('13215', '13213'), ('13215', '13214'), ('13215', '13215')])</code></pre>
 </div>
 </div>

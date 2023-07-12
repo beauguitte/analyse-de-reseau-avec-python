@@ -2,7 +2,7 @@
 
 Les mesures sont testées sur deux réseaux, l'un orienté (`GD`) et l'autre non (`GU`), correspondant à la plus grande composante connexe. Lorsque la valuation et l'orientation des liens peuvent être prises en compte, les options utiles sont signalées. Par contre, le cas des liens multiples et des boucles n'est pas abordé.
 
-`NetworkX` propose de nombreuses mesures et méthodes issues de la théorie des graphes au sens strict (centre, rayon, etc.) et de l'analyse des flots dans les réseaux (optimisation) ; toutes ne sont pas évoquées ici et je me suis intéressé en priorité aux méthodes me semblant - peut-être à tort - les plus utilisées en sciences sociales.
+`NetworkX` propose de nombreuses mesures et méthodes issues de la théorie des graphes au sens strict (centre, barycentre, rayon, etc.) et de l'analyse des flots dans les réseaux (optimisation) ; toutes ne sont pas évoquées ici et je me suis intéressé en priorité aux méthodes me semblant - peut-être à tort - les plus utilisées en sciences sociales.
 
 ```{python}
 #| echo: false
@@ -21,21 +21,18 @@ nodes_attr = sommets.set_index('CODGEO').to_dict(orient = 'index')
 nx.set_node_attributes(G, nodes_attr)
 CC = sorted(nx.weakly_connected_components(G),key=len,reverse=True) 
 GD = G.subgraph(CC[0])
-GU = nx.create_empty_copy(G, with_data=True)
+GU = nx.create_empty_copy(GD, with_data=True)
 GU = nx.to_undirected(GU)
 list(list(GU.nodes(data=True))[0][-1].keys())
 GU = nx.Graph(GU)
-GU.add_edges_from(G.edges(), weight=0)
-for u, v, d in G.edges(data=True):
+GU.add_edges_from(GD.edges(), weight=0)
+for u, v, d in GD.edges(data=True):
     GU[u][v]['weight'] += d['weight']
-Gcc = sorted(nx.connected_components(GU), key=len, reverse=True)
-GU = GU.subgraph(Gcc[0])
-
 ```
 
 ## Mesures globales
 
-Dans les pages précédentes, on a déjà vu comment afficher l'ordre et la taille du réseau. La densité s'obtient avec la fonction `density`, le diamètre avec la fonction `diameter`. Lorsque les liens sont porteurs d'une intensité, il est possible de calculer une version pondérée du diamètre (intensité minimale entre les sommets les plus éloignés). Cela a un sens si la valuation peut être interprétée comme une distance (ce qui n'est pas le cas ici).
+Dans les pages précédentes, on a déjà vu comment afficher l'ordre et la taille du réseau. La densité s'obtient avec la fonction `density`, le diamètre avec la fonction `diameter`. 
 
 ```{python}
 # ordre et taille
@@ -47,23 +44,15 @@ print("nombre de liens - non orienté (taille) : ", nx.number_of_edges(GU), " li
 # densité et diamètre
 print("densité (orienté) : ", round(nx.density(GD), 2))
 print("densité (non orienté) :", round(nx.density(GU), 2))
-print("Diamètre (non orienté et connexe) : ", nx.diameter(GU))
-#print("Diamètre (non orienté, valué) : ", nx.diameter(GU, weight = "weight"))
+print("diamètre (non orienté et connexe) : ", nx.diameter(GD))
 ```
 
-L'indice de Wiener, issu de l'étude des réseaux biologiques, correspond à la somme des plus courts chemins entre toutes les paires de sommets. Le réseau orienté n'étant pas fortement connexe, le résultat est une distance infinie (`inf`). Il est possible de prendre en compte la valuation des liens et de chercher la somme des plus courtes distances entre sommets.
-
-```{python}
-# indice de wiener (somme des pcc)
-print("Indice de Wiener (orienté) : ", nx.wiener_index(GD))     # distance topologique
-print("Indice de Wiener (non orienté) : ", nx.wiener_index(GU)) # distance topologique
-print("Indice de Wiener (non orienté, valué) : ", nx.wiener_index(GU, 'weight'))  # somme des intensités
-
-```
+Si on cherche à mesurer le diamètre sur un réseau orienté non fortement connexe, on obtient le message d'erreur suivant : "Found infinite path length because the digraph is not strongly connected". 
 
 Mesures directement issues de la théorie des graphes, rayon et barycentre (appelé aussi point médian) correspondent respectivement à la distance entre le(s) sommet(s) ayant une excentricité minimale et tout autre sommet du graphe (cf *infra* les mesures locales) et à l'ensemble de sommets minimisant la fonction $\sum_{u \in V(G)} d_G(u, v)$, $d_G(u, v)$ étant la distance (topologique ou valuée) entre deux sommets $u$ et $v$ de $G$.
 
 ```{python}
+# rayon
 print("rayon : ", nx.radius(GU))
 
 # barycentre
@@ -78,24 +67,31 @@ print("Sommets centraux : ", nx.center(GU))
 print("Sommets périphériques : ", nx.periphery(GU))
 ```
 
+Comme toutes les mesures fondées sur la recherche de plus courts chemins (diamètre, rayon, etc.), ces fonctions supposent soit un réseau non orienté, soit un réseau orienté fortement connexe.
+
 Il est possible de connaître l'ensemble des isthmes et des points d'articulation présents dans un réseau.
 
 ```{python}
 # isthmes et points d'articulation (réseau connexe)
-# nombre d'isthmes
+# nombre et liste des isthmes
 print("nb isthmes : ", len(list(nx.bridges(GU))))
-
-# liste des isthmes
 print("isthmes : ",list(nx.bridges(GU)))
 
-# nombre de points d'articulation
+# nombre et liste des points d'articulation
 print("nb points d'articulation : ", len(list(nx.articulation_points(GU))))
-
-# liste des points d'articulation
 print("points d'articulation : ", list(nx.articulation_points(GU)))
 ```
 
-Mesure plus récente et liée davantage aux études des physiciennes sur les réseaux, l'assortativité est mesurée par défaut en fonction du degré. Elle varie entre -1 (réseau disassortatif, les sommets ayant un degré faible tendent à être voisins des sommets ayant un degré fort et inversement) et 1 (réseau assortatif, les sommets ayant un degré faible sont voisins de sommets ayant un degré faible, les sommets ayant un degré élevé sont voisins de sommets ayant un degré élevé). Dans les lignes ci-dessous, les quatre assortativités possibles dans un réseau orienté sont calculées en fonction du degré.
+L'indice de Wiener, issu de l'étude des réseaux biologiques, correspond à la somme des plus courts chemins entre toutes les paires de sommets (équivaut à l'indice de dispersion de Shimbel parfois utilisé par les géographes des transports). Le réseau orienté n'étant pas fortement connexe, le résultat est une distance infinie (`inf`). Il est possible de prendre en compte la valuation des liens et de chercher la somme des plus courtes distances entre sommets.
+
+```{python}
+# indice de wiener (somme des pcc)
+print("Indice de Wiener (orienté) : ", nx.wiener_index(GD))     # distance topologique
+print("Indice de Wiener (non orienté) : ", nx.wiener_index(GU)) # distance topologique
+print("Indice de Wiener (non orienté, valué) : ", nx.wiener_index(GU, 'weight'))  # somme des intensités
+```
+
+Mesure plus récente et liée davantage aux études des physiciennes sur les réseaux, l'assortativité est mesurée par défaut en fonction du degré. Elle varie entre -1 (réseau disassortatif, les sommets ayant un degré faible tendent à être voisins des sommets ayant un degré élevé et inversement) et 1 (réseau assortatif, les sommets ayant un degré faible sont voisins de sommets ayant un degré faible, les sommets ayant un degré élevé sont voisins de sommets ayant un degré élevé). Dans les lignes ci-dessous, les quatre assortativités possibles dans un réseau orienté sont calculées en fonction du degré.
 
 ```{python}
 # assortativité (degré par défaut)
@@ -116,8 +112,8 @@ print("assortativité out-out : ",
 print("assortativité globale (non orienté) : ", 
       round(nx.degree_assortativity_coefficient(GU),3))
 
-# selon un critère autre que le degré (erreur...)
-#print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
+# selon un critère autre que le degré
+print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 ```
 
 Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.)

@@ -72,15 +72,43 @@ print("Nombre de sommets par composantes",
        reverse=True)])
 
 # sélection de la composante connexe principale
-G0 = G.subgraph(CC[0])
+GD = G.subgraph(CC[0])
 
 # création d'une version non orientée
-G0u = nx.to_undirected(G0)
+GU = nx.to_undirected(GD)
 
 # gestion des intensités après transformation
-print("lien ij :", G0["13001"]["13201"]['weight'])
-print("lien ji :", G0["13201"]["13001"]['weight'])
-print("lien ij non orienté : ", G0u["13001"]["13201"]['weight'])
+print("lien ij :", GD["13001"]["13201"]['weight'])
+print("lien ji :", GD["13201"]["13001"]['weight'])
+print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
+
+# création d'une version non orientée où wij = wij + wji
+# créer une copie sans aucun lien
+GU = nx.create_empty_copy(GD, with_data=True)
+GU = nx.to_undirected(GU)
+
+# éviter message "Frozen graph can't be modified"
+GU = nx.Graph(GU)
+
+# récupérer liens avec intensité nulle
+GU.add_edges_from(GD.edges(), weight=0)
+
+# pour chaque lien ij + ji
+for u, v, d in GD.edges(data=True):
+    GU[u][v]['weight'] += d['weight']
+
+# contrôle
+#a attributs liens et sommets
+list(list(GU.edges(data=True))[0][-1].keys())
+list(list(GU.nodes(data=True))[0][-1].keys())
+
+# propriétés du réseau
+nx.is_directed(GU)
+nx.is_connected(GU)
+
+print("lien ij :", GD["13001"]["13201"]['weight'])
+print("lien ji :", GD["13201"]["13001"]['weight'])
+print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
 
 # filtrage des sommets (1)
 # sélection des sommets satisfaisant la condition
@@ -91,7 +119,7 @@ Gmars = G.subgraph(Mars)
 
 # visualisation
 nx.draw_networkx(Gmars,
-                 pos = nx.kamada_kawai_layout(G0),
+                 pos = nx.kamada_kawai_layout(Gmars),
                  with_labels=True)
 
 # filtrage des sommets (2)
@@ -152,53 +180,82 @@ GA = nx.contracted_nodes(G, '13215', '13216', self_loops=True, copy=True)
 GA.in_edges('13215')
 GA.out_edges('13215')
 
-#agréger selon la modalité Marseille
-node_attributes = ('MARS',)
-GA = nx.snap_aggregation(G, node_attributes = node_attributes)  
-print("Nb de sommets : ", nx.number_of_nodes(GA))
-print("Nb de liens : ", nx.number_of_edges(GA))
-nx.draw_networkx(GA, 
-                 pos = nx.kamada_kawai_layout(GA),
-                 with_labels=False)
-
+# MESURES
 # mesures portant sur le réseau dans son ensemble
 # densité
-print("densité (orienté) : ", round(nx.density(G0), 2))
-print("densité (non orienté) :", round(nx.density(G0u), 2))
+print("densité (orienté) : ", round(nx.density(GD), 2))
+print("densité (non orienté) :", round(nx.density(GU), 2))
 
 # calcul du diamètre
-print("diamètre de la CC principale (orientation des liens non prise en compte) : ", nx.diameter(G0u))
+print("diamètre de la CC principale (orientation des liens non prise en compte) : ", nx.diameter(GD))
 
-# diamètre pondéré (marche plus ?!!)
-print("diamètre pondéré : ", nx.diameter(G0u, weight = 'weight'))
-
-# rayon
 # rayon du graphe
-print("rayon de la CC principale (non orientée) : ", nx.radius(G0u))
+print("rayon de la CC principale (non orientée) : ", nx.radius(GU))
 
 # barycentre
-print("barycentre : ", nx.barycenter(G0u))
+print("barycentre : ", nx.barycenter(GU))
+print("barycentre (valué) : ", nx.barycenter(GU, weight='weight'))
+
+# sommets centraux (excentricité minimale)
+print("Sommets centraux : ", nx.center(GU))
+
+# sommets périphériques (excentricité maximale)
+print("Sommets périphériques : ", nx.periphery(GU))
+
+# nombre et liste des isthmes
+print("nb isthmes : ", len(list(nx.bridges(GU))))
+print("isthmes : ",list(nx.bridges(GU)))
+
+# nombre et liste des points d'articulation
+print("nb points d'articulation : ", len(list(nx.articulation_points(GU))))
+print("points d'articulation : ", list(nx.articulation_points(GU)))
+
+# indice de Wiener
+print("Indice de Wiener (orienté) : ", nx.wiener_index(GD))     # distance topologique
+print("Indice de Wiener (non orienté) : ", nx.wiener_index(GU)) # distance topologique
+print("Indice de Wiener (non orienté, valué) : ", nx.wiener_index(GU, 'weight'))  # somme des intensités
+
+# assortativité (degré par défaut)
+# orienté
+print("assortativité in-in : ", 
+      round(nx.degree_assortativity_coefficient(GD, x="in", y='in'),3))
+
+print("assortativité in-out : ", 
+      round(nx.degree_assortativity_coefficient(GD, x="in", y='out'),3))
+
+print("assortativité out-in : ", 
+      round(nx.degree_assortativity_coefficient(GD, x="out", y='in'),3))
+
+print("assortativité out-out : ", 
+      round(nx.degree_assortativity_coefficient(GD, x="out", y='out'),3))
+
+# non orienté
+print("assortativité globale (non orienté) : ", 
+      round(nx.degree_assortativity_coefficient(GU),3))
+
+# selon un critère autre que le degré
+print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 
 # transitivité
-print("Transitivité globale (orienté) : ", round(nx.transitivity(G0), 2))
-print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(G0), 2))
-print("Transitivité globale (non orienté) : ", round(nx.transitivity(G0u), 2))
-print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(G0u), 2))
+print("Transitivité globale (orienté) : ", round(nx.transitivity(GD), 2))
+print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2))
+print("Transitivité globale (non orienté) : ", round(nx.transitivity(GU), 2))
+print("Transitivité moyenne (non orienté) : ", round(nx.average_clustering(GU), 2))
 
 # coefficient de clustering moyen (orienté, non orienté)
 print("CC moyen :", nx.average_clustering(G0u))
 
 # rich-club coefficient
-print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=False))
-print("rich-club coefficient : ", nx.rich_club_coefficient(G0u, normalized=True, seed = 42))
+print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=False))
+print("rich-club coefficient : ", nx.rich_club_coefficient(GU, normalized=True, seed = 42))
 
 # mesures portant sur les sommets ou les liens
 # degré
-G0u.degree()
+GU.degree()
 
 #degré entrant, sortant
-G0.in_degree()
-G0.out_degree()
+GD.in_degree()
+GD.out_degree()
 
 #degré pondéré entrant
 G0.in_degree(weight = "weight")
