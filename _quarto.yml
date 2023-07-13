@@ -13,7 +13,7 @@ book:
   crossref:
     chapters: true
     fig-prefix: figure
-  date: ""
+  date: true
   chapters:
     - index.qmd
     - C1_importer.qmd
