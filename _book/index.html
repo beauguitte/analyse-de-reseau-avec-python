@@ -192,12 +192,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></a>
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></a>
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -222,6 +222,7 @@ div.csl-indent {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
   <ul class="collapse">
   <li><a href="#installer-python" id="toc-installer-python" class="nav-link" data-scroll-target="#installer-python">Installer Python</a></li>
+  <li><a href="#deux-mots-sur-python" id="toc-deux-mots-sur-python" class="nav-link" data-scroll-target="#deux-mots-sur-python">Deux mots sur Python</a></li>
   <li><a href="#documentation-et-installation-du-module" id="toc-documentation-et-installation-du-module" class="nav-link" data-scroll-target="#documentation-et-installation-du-module">Documentation et installation du module</a></li>
   </ul></li>
   </ul>
@@ -267,45 +268,60 @@ div.csl-indent {
 <li>ayant l’habitude d’un logiciel autre, que ce logiciel soit à interface graphique (Cytoscape, Gephi, Pajek, Tulip, etc.) ou non (R) ;</li>
 <li>curieuses de savoir ce qu’il est possible de faire avec Python.</li>
 </ul>
-<p>Le principal module d’analyse de réseau en Python est <code>NetworkX</code> (<span class="citation" data-cites="networkx08">Hagberg et al. (<a href="#ref-networkx08" role="doc-biblioref">2008</a>)</span>). Le module <code>igraph</code>, couramment utilisé pour l’analyse de réseau avec R, est également utilisable en Python mais semble beaucoup moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.</p>
+<p>Le principal module d’analyse de réseau en Python est <code>NetworkX</code> (<span class="citation" data-cites="networkx08">Hagberg et al. (<a href="#ref-networkx08" role="doc-biblioref">2008</a>)</span>). Le module <code>igraph</code>, couramment utilisé pour l’analyse de réseau avec R, est également disponible en Python mais semble beaucoup moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.</p>
 <p>Ce document ne prétend pas être exhaustif mais vise à présenter les points suivants :</p>
 <ul>
 <li>importer ses données (sommets et liens avec attributs)</li>
 <li>manipuler un graphe ;</li>
 <li>analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;</li>
-<li>visualiser son réseau ;</li>
-<li>atouts et limites du module <code>NetworkX</code>.</li>
+<li>visualiser son réseau.</li>
 </ul>
-<p>Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?…) à venir. Le code proposé n’est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne…</p>
+<p>Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?…) à venir. Le code proposé n’est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne. Le script <code>networkx_clean.py</code></p>
 <section id="installer-python" class="level2">
 <h2 class="anchored" data-anchor-id="installer-python">Installer Python</h2>
-<p>Si vous n’avez jamais utilisé Python, le plus simple est sans doute d’installer la distribution <a href="https://www.anaconda.com/">Anaconda</a>. C’est un peu une usine à gaz : ça installe plein de logiciels dont on n’a pas nécessairement besoin et avec des versions qui ne sont pas toujours les plus récentes mais au moins ça marche. Une fois Anaconda installée, inutile de le lancer : c’est lourd, lent et inutile. Il est plus rapide de lancer le <code>Anaconda Power Shell Prompt</code> puis, dans l’invite de commande, de taper <code>spyder</code>. L’IDE Spyder, assez similaire à RStudio, permet de créer ses scripts en Python dans un environnement agréable (rubrique d’aide, autocomplétion, feneêtre graphique, liste des objets importés ou créés, etc.).</p>
-<p>Il est possible d’installer une version plus légère d’Anaconda, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. Il est également possible d’installer Python et Spyder de façon autonome. Les règlages pour que les logiciels fonctionnent les uins avec les autres peuvent être un peu plus longs. Idem si vous souhaitez utiliser Python dans un environnement RStudio - ce qui est le cas de ce tutoriel rédifgé en Quarto.</p>
+<p>Si vous n’avez jamais utilisé Python, le plus simple est sans doute d’installer la distribution <a href="https://www.anaconda.com/">Anaconda</a>. C’est un peu une usine à gaz : ça installe plein de logiciels dont on n’a pas nécessairement besoin et avec des versions qui ne sont pas toujours les plus récentes mais au moins ça marche. Une fois Anaconda installée, ne le lancez pas : c’est lourd, lent et inutile. Il est plus rapide de lancer le <code>Anaconda Power Shell Prompt</code> puis, dans l’invite de commande, de taper <code>spyder</code>. L’IDE Spyder, assez similaire à RStudio, permet de créer ses scripts en Python dans un environnement agréable (rubrique d’aide, autocomplétion, feneêtre graphique, liste des objets importés ou créés, etc.).</p>
+<p>Il est possible d’installer une version plus légère d’Anaconda, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. Il est également possible d’installer Python et Spyder de façon autonome. Les règlages pour que les logiciels fonctionnent les uns avec les autres peuvent être un peu plus longs. Idem si vous souhaitez utiliser Python dans un environnement RStudio - ce qui est le cas de ce tutoriel rédifgé en Quarto.</p>
 <p>Dernier conseil : n’hésitez pas à tout désintaller quand ça bloque avant de réinstaller les briques une par une en feuilletant bien la documentation…</p>
+</section>
+<section id="deux-mots-sur-python" class="level2">
+<h2 class="anchored" data-anchor-id="deux-mots-sur-python">Deux mots sur Python</h2>
+<p>Si vous n’avez jamais utilisé Python, les informations suivantes devraient vous permettre de tester le script .py accompagnant ce tutoriel.</p>
+<p>Python, comme R, est un logiciel modulaire. Il y a la base et des modules nécessaires pour faire telle ou telle manipulation. Comme R, certains modules sont quasi indispensables et très souvent utilisés ; l’immense majorité n’a aucun intérêt. L’ensemble des modules disponibles est accessible sur le <a href="https://pypi.org/">Pypi</a>. Un “bon” module est un module régulièrement mis à jour, avec une documentation intelligible et pour lequel on trouve des tutoriels en ligne. S’il est maintenu par plus d’une personne, c’est mieux.</p>
+<p>Deux étapes pour les modules qui ne sont pas installés par défaut : les installer sur votre disque dur, les charger pour la session. Lorsqu’on charge un module, l’usage veut qu’on lui donne un nom abrégé. Certaines abbréviations se retrouvent partout et je les utilise aussi. Pourquoi abréger les noms des modules ? Parce que pour appeler une fonction d’un module, on tape le nom du module, un point, puis le nom de la fonction.</p>
+<p>Ce qui va donner des choses comme ça :</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x  <span class="op">=</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-2-output-1.png" width="558" height="411"></p>
+</div>
+</div>
+<p>Je charge la librairie <code>matplotlib.pyplot</code> et je lui donne un nom abregé (<code>plt</code>). Je crée une suite d’entiers de 0 à 10. J’appelle la fonction <code>plot</code> du module <code>matplotlib.pyplot</code> pour visualiser x.</p>
+<p>Dans <code>Spyder</code>, pour exécuter une ou plusieurs lignes de code, le plus simple est de la ou les sélectionner puis de taper sur F9 (équivalent du Ctrl + Entrée de RStudio). Si vous avez des instructions avec des retours à la ligne (arguments séparés par des virgules ou boucle avec : et indentation), sélectionnez l’ensemble des lignes avant d’exécuter le code. Idem pour les figures : sélectionner tout ce qui concerne la figure (titre, étiquettes des abscisses et ordonnées, etc.).</p>
 </section>
 <section id="documentation-et-installation-du-module" class="level2">
 <h2 class="anchored" data-anchor-id="documentation-et-installation-du-module">Documentation et installation du module</h2>
 <p>La page du module <strong>NetworkX, Network Analysis with Python</strong>, <a href="https://networkx.org/" class="uri">https://networkx.org/</a>, permet d’accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l’on va vouloir réaliser une opération précise, surtout si on n’est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir <a href="https://stackoverflow.com">stackoverflow</a> est presque obligatoire. Sur stackoverflow, faites attention à la date des sujets : certaines solutions proposées peuvent être obsolètes.</p>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installer le module</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install networkx</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># si distribution ana ou miniconda</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conda install package-name</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># charger les modules utiles</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd                <span class="co"># manipulation de tableaux</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx              <span class="co"># analyse de réseau</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np                 <span class="co"># statistiques</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt    <span class="co"># visualisation</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># aide sur une fonction</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ?nom_module.nom_fonction</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>?pd.DataFrame.set_index</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>?nx.find_cliques</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installer le module</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install networkx</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># si distribution ana ou miniconda</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conda install package-name</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># charger les modules utiles</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd                <span class="co"># manipulation de tableaux</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx              <span class="co"># analyse de réseau</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np                 <span class="co"># statistiques</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt    <span class="co"># visualisation</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># aide sur une fonction</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ?nom_module.nom_fonction</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>?pd.DataFrame.set_index</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>?nx.find_cliques</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Le nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est “deprecated and will be removed”.</p>
 <hr>
-<!-- contrôler le networkx.py en toute fin - homogeneiser nom des objets -->
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">

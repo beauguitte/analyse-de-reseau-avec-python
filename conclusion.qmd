@@ -1,10 +1,6 @@
 # Pour aller plus loin
 
-Pour aller plus loin en analyse de réseau (avec Python ou tout autre logiciel), commencer par la liste [Awesome Network Analysis](https://github.com/briatte/awesome-network-analysis) maintenue par François Briatte est un bon réflexe. La partie Python mériterait peut-être un coup de plumeau, notamment pour les modules conseillés - c'est sûr ma to-do-list de l'été...
-
-## Avec NetworkX
-
-Le [site officiel](https://networkx.org/documentation/stable/index.html) est touffu (euphémisme). Nombre de fonctions sont obsolètes et la documentation n'est pas toujours d'une grande clarté. On trouve quelques tutoriels sur l'analyse de réseaux avec `NetworkX` en ligne,  j'ai notamment utilisé des morceaux de **Programming Historian** (@ladd17) et d'un cours de l'IUT de Reims (@blanchard18).
+Pour aller plus loin en analyse de réseau (avec Python ou tout autre logiciel), commencer par la liste [Awesome Network Analysis](https://github.com/briatte/awesome-network-analysis) maintenue par François Briatte est un bon réflexe. La partie Python mériterait peut-être un coup de plumeau, notamment pour les modules conseillés - c'est inscrit sur ma to-do-list de l'été mais je ne promets rien...
 
 ## Avec Python
 
@@ -12,11 +8,16 @@ C'est fou le nombre de livres payants proposant des initiations à des logiciels
 
 Pour s'initier, [Openclassrooms](https://openclassrooms.com/fr/courses/6204541-initiez-vous-a-python-pour-lanalyse-de-donnees) propose des cours plutôt corrects. Ce n'est pas pensé pour des utilisatrices en sciences sociales et on peut allégrement sauter certaines étapes mais ça reste utile.
 
-Orienté sciences sociales mais en anglais, le [site de Melanie Walsh](https://melaniewalsh.github.io/Intro-Cultural-Analytics/welcome.html) est très chaudement recommandé.
+Orienté sciences sociales, le [dépôt github](https://github.com/pyshs/) d'Émilien Schultz propose une liste de ressources utiles pour l'utilisation de Python et les supports des nombreuses formations qu'il a dispensées ces dernières années. Orienté sciences sociales mais en anglais, le [site de Melanie Walsh](https://melaniewalsh.github.io/Intro-Cultural-Analytics/welcome.html) est très chaudement recommandé.
 
-L'excellent site **Programming Historian** propose [28 leçons sur Python](https://programminghistorian.org/en/lessons/?topic=python), toutes disponibles en anglais et certaines traduites en espagnol, français et/ou portugais.
+L'excellent site **Programming Historian** propose [28 leçons sur Python](https://programminghistorian.org/en/lessons/?topic=python), toutes disponibles en anglais, certaines sont traduites en espagnol, français et/ou portugais.
 
 Le site [Python Graph Gallery](https://python-graph-gallery.com/), copié sur [The R Graph Gallery](https://r-graph-gallery.com/), permet de récupérer le code pour générer de belles figures. Ça reste cependant moins complet - et parfois moins joli - que ce qu'on peut faire avec R.
+
+## Avec NetworkX
+
+Le [site officiel](https://networkx.org/documentation/stable/index.html) est touffu (euphémisme). Nombre de fonctions sont obsolètes et la documentation n'est pas toujours d'une grande clarté. On trouve quelques tutoriels sur l'analyse de réseaux avec `NetworkX` en ligne :  j'ai notamment utilisé des morceaux de **Programming Historian** (@ladd17) et d'un cours de l'IUT de Reims (@blanchard18). Beaucoup plus complet, le datacamp accessible à [cette adresse](https://trenton3983.github.io/files/projects/2020-05-21_intro_to_network_analysis_in_python/2020-05-21_intro_to_network_analysis_in_python.html) est très complet mais commence à dater (2020), certaines parties ne fonctionnent plus très bien.
+
 
 ---
 

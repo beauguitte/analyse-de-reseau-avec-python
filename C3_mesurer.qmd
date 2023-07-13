@@ -113,10 +113,11 @@ print("assortativité globale (non orienté) : ",
       round(nx.degree_assortativity_coefficient(GU),3))
 
 # assortativité selon un critère autre que le degré
-print(round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
+print("assortativité (Marseille vs autres communes) : ", 
+      round(nx.numeric_assortativity_coefficient(GD, "MARS"),3))
 ```
 
-Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le `rich club coefficient` s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.).
+Mesure relativement proche (voir la page [wikipedia](https://en.wikipedia.org/wiki/Rich-club_coefficient)), le **rich club coefficient** s'obtient avec la fonction... `rich_club_coefficient` ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rich club coefficient des sommets de degré 1, de degré 2, etc.).
 
 ```{python}
 # rich-club coefficient
@@ -151,7 +152,7 @@ print(nx.degree_centrality(GD))
 Pour transformer une mesure en attribut, on commence par créer un objet correspondondant au résultat puis on utilise la fonction `set_node_attributes` si la mesure porte sur les sommets et `set_edge_attributes` si elle porte sur les liens.
 
 ```{python}
-# transformer une meure en attribut 
+# transformer une mesure en attribut 
 deg = nx.degree(GU)
 nx.set_node_attributes(GU, 'degree', deg)
 print("attribut des sommets : ", list(list(GU.nodes(data=True))[0][-1].keys()))
@@ -160,8 +161,8 @@ print("attribut des sommets : ", list(list(GU.nodes(data=True))[0][-1].keys()))
 Les lignes ci-dessous proposent différentes solutions pour visualiser la distribution des degrés :
 
 -   histogramme ;
--   fréquence ;
--   fréquence avec une échelle log-log.
+-   courbe ;
+-   courbe avec une échelle log-log.
 
 <!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
 
@@ -172,8 +173,10 @@ plt.bar(*np.unique(degree_in, return_counts=True))
 plt.title("Degrés entrants")
 plt.xlabel("Degré")
 plt.ylabel("Fréquence")
+```
 
-# fréquence
+```{python}
+# courbe
 degree_sequence = sorted((d for n, d in GU.degree()), reverse=True)
 
 # distribution des degrés
@@ -181,7 +184,9 @@ plt.plot(degree_sequence, "r-", marker="o", linewidth=1, markersize=2)
 plt.title("Distribution des degrés")
 plt.xlabel('Degré')
 plt.ylabel('Fréquence')
+```
 
+```{python}
 # distribution degré - échelle log - log
 plt.loglog(degree_sequence, "go-", linewidth=1, markersize=2)
 plt.title("Distribution des degrés (log - log)")
@@ -192,6 +197,7 @@ plt.ylabel('Fréquence')
 Il est possible de calculer le degré moyen des voisins à à l'aide de la fonction `average_neighbor_degree` (degré entrant, sortant, total, pondéré ou non).
 
 ```{python}
+#| eval: false
 # degré moyen des sommets voisins
 nx.average_neighbor_degree(GD)
 # degré entrant moyen des voisins entrants
@@ -240,7 +246,6 @@ nx.clustering(GD, weight="weight")
 ```
 
 ```{python}
-
 # transitivité globale et moyenne
 print("Transitivité globale (orienté) : ", round(nx.transitivity(GD), 2))
 print("Transitivité moyenne (orienté) : ", round(nx.average_clustering(GD), 2))

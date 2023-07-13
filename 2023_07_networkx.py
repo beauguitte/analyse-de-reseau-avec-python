@@ -1,5 +1,9 @@
+# Laurent Beauguitte, 2023, Analyse de réseau avec Python et NetworkX, v0
+
 # installer le module
 # pip install networkx
+# si distribution ana ou miniconda
+# conda install package-name
 
 # charger les modules utiles
 import pandas as pd                # manipulation de tableaux
@@ -34,7 +38,7 @@ liens[['Arrivee']] = liens[['Arrivee']].astype('string')
 # objet réseau
 G = nx.from_pandas_edgelist(liens,                     # data.frame des liens
                             source = "Origine",        # nom de la colonne origine
-                            target = "Arrivee",        # nom de la colonne destination
+                           target = "Arrivee",        # nom de la colonne destination
                             edge_attr="weight",        # attribut poids pour un réseau valué
                             create_using=nx.DiGraph()) # création d'un réseau orienté
 
@@ -419,15 +423,6 @@ nx.draw_networkx(GU,
                with_labels=False,
                width=4)                                  # épaisseur des liens
 
-nx.draw_networkx(GU,
-               pos = nx.kamada_kawai_layout(GU),
-               node_color = 'orange', 
-               alpha = 0.8,
-               nodelist=d.keys(), 
-               node_size = [v * 20 for v in d.values()], 
-               edge_color = "blue",
-               with_labels = False,
-               width = weights)
 
 # diviser les intensités par 50
 weigh2 = [i/100 for i in weights]
@@ -442,3 +437,20 @@ nx.draw_networkx(GU,
                edge_color = weights,
                with_labels = False,
                width=weigh2)
+
+# une fois un template choisi
+# préférer le work-flow suivante
+
+# définir les options de visualisation
+options = {
+      'node_color' : 'orange',
+      'node_size'  : 40, 
+      'edge_color' : 'blue',
+      'width' : 1,
+      'alpha' : 0.8,
+      'with_labels': False
+    }
+
+# visualiser
+nx.draw_networkx(G, **options)
+``

@@ -41,7 +41,7 @@ print("Nombre de sommets par composantes",
 GD = G.subgraph(CC[0])
 ```
 
-Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l'intensité du lien *ij* dans la version non orientée correspond à l'intensité du lien *ij* dans la version orientée.
+Une version non orientée est créée car certaines mesures imposent un réseau de ce type. La valuation des liens est conservée dans la version non orientée : par défaut, elle ne correspond pas à la somme des intensités entrantes et sortantes. Ici, l'intensité du lien **ij** dans la version non orientée correspond à l'intensité du lien **ij** dans la version orientée.
 
 <!-- v2 : gestion des intensités négatives - nx.is_negatively_weighted(G) -->
 
@@ -57,7 +57,7 @@ print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
 
 ```
 
-Obtenir une valuation des liens dans le réseau non orienté correspondant à la somme des intensités $ij + ji$ nécessite quelques étapes supplémentaires détaillées dans les lignes ci-dessous.
+Obtenir une valuation des liens dans le réseau non orienté correspondant à la somme des intensités **ij + ji** nécessite quelques étapes supplémentaires détaillées dans les lignes ci-dessous.
 
 ```{python}
 # créer une copie sans aucun lien
@@ -91,7 +91,7 @@ print("lien ij non orienté : ", GU["13001"]["13201"]['weight'])
 
 ## Filtrage
 
-Les données sont importées, la plus grande composante connexe a été extraite dans deux versions, une orientée et une non orientée. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (`remove_edges_from()`, `remove_nodes_from`) ; sélectionner liens ou sommets selon un critère donné (`subgraph()`). 
+Les données sont importées, la plus grande composante connexe a été extraite dans deux versions, une orientée et une non orientée. On peut souhaiter faire des sélections autres, que ce soit sur les sommets ou sur les liens. Deux options sont possibles : supprimer liens ou sommets selon un critère donné (`remove_edges_from()`, `remove_nodes_from`) ; sélectionner liens ou sommets selon un critère donné (`subgraph()`).
 
 Si je souhaite travailler uniquement sur le cas marseillais :
 
@@ -178,7 +178,7 @@ print("Nb de sommets  (isolés exclus) : ", nx.number_of_nodes(rg))
 
 ## Agrégation
 
-Il peut être intéressant d'agréger différents sommets. La fonction `contracted_nodes` prend en argument le réseau étudié et les deux sommets à fusionner, l'option `self_loops ` permet de contrôler la création d'une boucle et l'option `copy` permet de créer un nouveau réseau sans écraser le premier.
+Il peut être intéressant d'agréger différents sommets. La fonction `contracted_nodes` prend en argument le réseau étudié et les deux sommets à fusionner, l'option `self_loops` permet de contrôler la création d'une boucle et l'option `copy` permet de créer un nouveau réseau sans écraser le premier.
 
 Si je veux fusionner deux arrondissements marseillais, j'utilise le script suivant. Les lignes suivantes permettent de lister les liens entrants et sortants du sommet résultat de la fusion et de vérifier la présence (ici souhaitée) de la boucle.
 

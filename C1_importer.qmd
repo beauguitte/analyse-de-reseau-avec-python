@@ -86,8 +86,8 @@ Plusieurs moyens permettent de contrôler que l'importation s'est bien déroulé
 -   visualiser le réseau obtenu.
 
 ```{python}
-print("Ordre", nx.number_of_nodes(G), " sommets")
-print("Taille", nx.number_of_edges(G), " liens")
+print("Ordre : ", nx.number_of_nodes(G), "sommets")
+print("Taille : ", nx.number_of_edges(G), "liens")
 print("Réseau orienté ?", nx.is_directed(G))
 
 # attribut des liens

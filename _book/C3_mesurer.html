@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse de réseau avec Python et NetworkX - 3&nbsp; Mesures</title>
+<title>Analyse de réseau avec Python et NetworkX - 3&nbsp; Mesurer</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -134,7 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -174,12 +174,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></a>
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></a>
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -211,7 +211,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesures</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></h1>
 </div>
 
 
@@ -325,17 +325,18 @@ Indice de Wiener (non orienté, valué) :  3800738.0</code></pre>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GU),<span class="dv">3</span>))</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># assortativité selon un critère autre que le degré</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(nx.numeric_assortativity_coefficient(GD, <span class="st">"MARS"</span>),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité (Marseille vs autres communes) : "</span>, </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.numeric_assortativity_coefficient(GD, <span class="st">"MARS"</span>),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>assortativité in-in :  -0.105
 assortativité in-out :  0.262
 assortativité out-in :  -0.198
 assortativité out-out :  0.485
 assortativité globale (non orienté) :  -0.234
-0.707</code></pre>
+assortativité (Marseille vs autres communes) :  0.707</code></pre>
 </div>
 </div>
-<p>Mesure relativement proche (voir la page <a href="https://en.wikipedia.org/wiki/Rich-club_coefficient">wikipedia</a>), le <code>rich club coefficient</code> s’obtient avec la fonction… <code>rich_club_coefficient</code> ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rc coefficient des sommets de degré 1, de degré 2, etc.).</p>
+<p>Mesure relativement proche (voir la page <a href="https://en.wikipedia.org/wiki/Rich-club_coefficient">wikipedia</a>), le <strong>rich club coefficient</strong> s’obtient avec la fonction… <code>rich_club_coefficient</code> ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rich club coefficient des sommets de degré 1, de degré 2, etc.).</p>
 <div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rich-club coefficient</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rich-club coefficient : "</span>, nx.rich_club_coefficient(GU, normalized<span class="op">=</span><span class="va">True</span>, seed<span class="op">=</span><span class="dv">42</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -375,7 +376,7 @@ assortativité globale (non orienté) :  -0.234
 </div>
 <p>Pour transformer une mesure en attribut, on commence par créer un objet correspondondant au résultat puis on utilise la fonction <code>set_node_attributes</code> si la mesure porte sur les sommets et <code>set_edge_attributes</code> si elle porte sur les liens.</p>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transformer une meure en attribut </span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transformer une mesure en attribut </span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>deg <span class="op">=</span> nx.degree(GU)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(GU, <span class="st">'degree'</span>, deg)</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"attribut des sommets : "</span>, <span class="bu">list</span>(<span class="bu">list</span>(GU.nodes(data<span class="op">=</span><span class="va">True</span>))[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].keys()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -386,8 +387,8 @@ assortativité globale (non orienté) :  -0.234
 <p>Les lignes ci-dessous proposent différentes solutions pour visualiser la distribution des degrés :</p>
 <ul>
 <li>histogramme ;</li>
-<li>fréquence ;</li>
-<li>fréquence avec une échelle log-log.</li>
+<li>courbe ;</li>
+<li>courbe avec une échelle log-log.</li>
 </ul>
 
 <!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
@@ -397,184 +398,90 @@ assortativité globale (non orienté) :  -0.234
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.bar(<span class="op">*</span>np.unique(degree_in, return_counts<span class="op">=</span><span class="va">True</span>))</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Degrés entrants"</span>)</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Degré"</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Fréquence"</span>)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fréquence</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>degree_sequence <span class="op">=</span> <span class="bu">sorted</span>((d <span class="cf">for</span> n, d <span class="kw">in</span> GU.degree()), reverse<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution des degrés</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.plot(degree_sequence, <span class="st">"r-"</span>, marker<span class="op">=</span><span class="st">"o"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés"</span>)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution degré - échelle log - log</span></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>plt.loglog(degree_sequence, <span class="st">"go-"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés (log - log)"</span>)</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="C3_mesurer_files/figure-html/cell-13-output-2.png" width="592" height="453"></p>
+<p><img src="C3_mesurer_files/figure-html/cell-13-output-2.png" width="586" height="451"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># courbe</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>degree_sequence <span class="op">=</span> <span class="bu">sorted</span>((d <span class="cf">for</span> n, d <span class="kw">in</span> GU.degree()), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution des degrés</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.plot(degree_sequence, <span class="st">"r-"</span>, marker<span class="op">=</span><span class="st">"o"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C3_mesurer_files/figure-html/cell-14-output-2.png" width="586" height="451"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution degré - échelle log - log</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>plt.loglog(degree_sequence, <span class="st">"go-"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés (log - log)"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C3_mesurer_files/figure-html/cell-15-output-2.png" width="592" height="453"></p>
 </div>
 </div>
 <p>Il est possible de calculer le degré moyen des voisins à à l’aide de la fonction <code>average_neighbor_degree</code> (degré entrant, sortant, total, pondéré ou non).</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen des sommets voisins</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># degré entrant moyen des voisins entrants</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, source<span class="op">=</span><span class="st">"in"</span>, target<span class="op">=</span><span class="st">"in"</span>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen pondéré des voisins</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code>{'13001': 9.025862068965518,
- '13041': 6.0,
- '13201': 8.973326623049823,
- '13205': 8.36310223266745,
- '13208': 8.230606488011283,
- '13209': 8.473441108545035,
- '13213': 7.856919293539012,
- '13002': 11.18537859007833,
- '13206': 8.361309138042774,
- '13211': 9.179586563307494,
- '13212': 9.52385685884692,
- '13003': 1.5609756097560976,
- '13053': 2.0,
- '13103': 5.385354141656663,
- '13004': 3.0985401459854014,
- '13078': 3.0,
- '13097': 3.0,
- '13005': 6.859547606522883,
- '13028': 7.984334203655353,
- '13042': 0.0,
- '13119': 1.4437299035369775,
- '13210': 8.472777606890187,
- '13007': 9.679435483870968,
- '13014': 4.718411552346571,
- '13117': 4.865004299226139,
- '13015': 6.0,
- '13016': 4.893653516295026,
- '13086': 11.0,
- '13019': 6.0,
- '13020': 2.0,
- '13046': 2.9871794871794872,
- '13022': 2.0,
- '13023': 2.0,
- '13024': 2.0,
- '13050': 4.412811387900356,
- '13025': 6.0,
- '13026': 4.09549795361528,
- '13043': 4.446215139442231,
- '13054': 3.6324081020255066,
- '13056': 3.2449392712550607,
- '13030': 3.513888888888889,
- '13031': 11.0,
- '13032': 6.0,
- '13033': 2.756218905472637,
- '13035': 2.0,
- '13037': 3.61,
- '13038': 3.0,
- '13039': 4.014175257731959,
- '13047': 3.6373937677053823,
- '13077': 4.0,
- '13040': 4.067484662576687,
- '13044': 2.0,
- '13045': 0.5203252032520326,
- '13083': 0.0,
- '13108': 3.0,
- '13063': 4.390894819466248,
- '13048': 4.242009132420091,
- '13074': 6.0,
- '13049': 2.0,
- '13051': 2.7255813953488373,
- '13102': 4.0,
- '13104': 4.0,
- '13059': 4.759305210918114,
- '13060': 3.743732590529248,
- '13062': 2.7690058479532165,
- '13065': 1.975609756097561,
- '13068': 1.0,
- '13069': 3.135566188197767,
- '13070': 10.550387596899224,
- '13071': 4.359848484848484,
- '13072': 3.074074074074074,
- '13087': 6.0,
- '13073': 2.0,
- '13075': 16.0,
- '13076': 0.0,
- '13067': 0.0,
- '13079': 3.6096491228070176,
- '13080': 6.0,
- '13081': 4.79672131147541,
- '13082': 6.0,
- '13084': 3.5,
- '13085': 1.4150943396226414,
- '13088': 4.0,
- '13091': 4.378151260504202,
- '13092': 2.556497175141243,
- '13094': 1.0,
- '13095': 6.0,
- '13098': 4.760956175298805,
- '13101': 2.0,
- '13105': 0.8786324786324786,
- '13106': 5.336609336609337,
- '13107': 6.0,
- '13109': 6.0,
- '13110': 6.0,
- '13111': 6.0,
- '13112': 5.326530612244898,
- '13113': 6.0,
- '13114': 4.88,
- '13118': 4.4,
- '13202': 9.09049773755656,
- '13203': 7.443720121686224,
- '13204': 9.178610010803025,
- '13214': 10.215070643642072,
- '13215': 7.080076263107721,
- '13207': 7.804682686383241,
- '13216': 7.573268921095008}</code></pre>
-</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen des sommets voisins</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># degré entrant moyen des voisins entrants</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, source<span class="op">=</span><span class="st">"in"</span>, target<span class="op">=</span><span class="st">"in"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen pondéré des voisins</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Les mesures de centralité autres s’obtiennent avec des fonctions aux noms attendus : <code>closeness</code>, <code>betweenness</code> (<code>edge_betweenness</code> pour l’intermédiarité des liens), <code>eigenvector_centrality</code> et <code>katz_centrality</code>.</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>nx.betweenness_centrality(GD)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>L`` </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité des liens</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>nx.edge_betweenness_centrality(GD)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># proximité</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>nx.closeness_centrality(GD)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de vecteur propre</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>nx.eigenvector_centrality(GD)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de Katz</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>nx.katz_centrality(GD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>nx.betweenness_centrality(GD)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>L`` </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité des liens</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>nx.edge_betweenness_centrality(GD)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># proximité</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>nx.closeness_centrality(GD)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de vecteur propre</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>nx.eigenvector_centrality(GD)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de Katz</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>nx.katz_centrality(GD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!-- distance entre deux sommets : resistance_distance(G, nodeA, nodeB, weight=None, invert_weight=True)  si weight, distance; sinon, plus court chemin -->
 <p>Concernant la recherche de la transitivité, on peut connaître le nom de triangles (triades fermées) contenant chaque sommet avec la fonction <code>triangles</code>. La transitivité locale s’obtient avec <code>clustering</code>, la transitivité globale avec <code>transitivity</code> et la transitivité moyenne avec <code>average_clustering</code>. Il est possible de prendre en compte l’orientation des liens et/ou leur intensité.</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre de triangles</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>nx.triangles(GU)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># typologie MAN (réseau orienté)</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>nx.triadic_census(GD) </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité locale</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># prise en compte de l'intensité des liens</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre de triangles</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nx.triangles(GU)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># typologie MAN (réseau orienté)</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>nx.triadic_census(GD) </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité locale</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># prise en compte de l'intensité des liens</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité globale et moyenne</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GD), <span class="dv">2</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GD), <span class="dv">2</span>))</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (non orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GU), <span class="dv">2</span>))</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (non orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GU), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité globale et moyenne</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GD), <span class="dv">2</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GD), <span class="dv">2</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (non orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GU), <span class="dv">2</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (non orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GU), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Transitivité globale (orienté) :  0.62
 Transitivité moyenne (orienté) :  0.35
@@ -696,7 +603,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./C4_partitions.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitions</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
