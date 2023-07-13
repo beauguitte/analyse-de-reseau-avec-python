@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Laurent Beauguitte">
+
+<title>Analyse de réseau avec Python et NetworkX</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./C1_importer.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Analyse de réseau avec Python et NetworkX</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Analyse de réseau avec Python et NetworkX</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C1_importer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Importer ses données</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C2_filtrer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Filtrer, sélectionner</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C6_visualiser.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualiser ses données</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pour aller plus loin</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sommaire</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#installer-python" id="toc-installer-python" class="nav-link" data-scroll-target="#installer-python">Installer Python</a></li>
+  <li><a href="#deux-mots-sur-python" id="toc-deux-mots-sur-python" class="nav-link" data-scroll-target="#deux-mots-sur-python">Deux mots sur Python</a></li>
+  <li><a href="#documentation-et-installation-du-module" id="toc-documentation-et-installation-du-module" class="nav-link" data-scroll-target="#documentation-et-installation-du-module">Documentation et installation du module</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Analyse de réseau avec Python et NetworkX</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Auteur</div>
+    <div class="quarto-title-meta-contents">
+             <p>Laurent Beauguitte </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Mis en ligne le</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">01 01 2023</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1 unnumbered">
+<h1 class="unnumbered">Introduction</h1>
+<p>Ceci est un tutoriel d’introduction à l’analyse de réseau avec Python centré sur le seul module <code>NetworkX</code>. Ce module étant très riche, toutes les fonctions ne sont pas évoquées ici.</p>
+<p>Ce tutoriel s’adresse aux personnes :</p>
+<ul>
+<li>ayant une connaissance correcte de l’analyse de réseau. Si vous êtes débutante<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, je renvoie au petit guide pratique d’initiation à l’analyse de réseau <a href="https://beauguitte.github.io/analyse-de-reseau-en-shs/">disponible en ligne</a> (<span class="citation" data-cites="beauguitte23">Beauguitte (<a href="#ref-beauguitte23" role="doc-biblioref">2023</a>)</span>) ;</li>
+<li>ayant l’habitude d’un logiciel autre, que ce logiciel soit à interface graphique (Cytoscape, Gephi, Pajek, Tulip, etc.) ou non (R) ;</li>
+<li>curieuses de savoir ce qu’il est possible de faire avec Python.</li>
+</ul>
+<p>Le principal module d’analyse de réseau en Python est <code>NetworkX</code> (<span class="citation" data-cites="networkx08">Hagberg et al. (<a href="#ref-networkx08" role="doc-biblioref">2008</a>)</span>). Le module <code>igraph</code>, couramment utilisé pour l’analyse de réseau avec R, est également disponible en Python mais semble beaucoup moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.</p>
+<p>Ce document ne prétend pas être exhaustif mais vise à présenter les points suivants :</p>
+<ul>
+<li>importer ses données (sommets et liens avec attributs)</li>
+<li>manipuler un graphe ;</li>
+<li>analyser son réseau (mesures globales, mesures portant sur les sommets, cliques et communautés, etc.) ;</li>
+<li>visualiser son réseau.</li>
+</ul>
+<p>Étant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?…) à venir. Le code proposé n’est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne. Le script <code>networkx_clean.py</code></p>
+<section id="installer-python" class="level2">
+<h2 class="anchored" data-anchor-id="installer-python">Installer Python</h2>
+<p>Si vous n’avez jamais utilisé Python, le plus simple est sans doute d’installer la distribution <a href="https://www.anaconda.com/">Anaconda</a>. C’est un peu une usine à gaz : ça installe plein de logiciels dont on n’a pas nécessairement besoin et avec des versions qui ne sont pas toujours les plus récentes mais au moins ça marche. Une fois Anaconda installée, ne le lancez pas : c’est lourd, lent et inutile. Il est plus rapide de lancer le <code>Anaconda Power Shell Prompt</code> puis, dans l’invite de commande, de taper <code>spyder</code>. L’IDE Spyder, assez similaire à RStudio, permet de créer ses scripts en Python dans un environnement agréable (rubrique d’aide, autocomplétion, feneêtre graphique, liste des objets importés ou créés, etc.).</p>
+<p>Il est possible d’installer une version plus légère d’Anaconda, <a href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>. Il est également possible d’installer Python et Spyder de façon autonome. Les règlages pour que les logiciels fonctionnent les uns avec les autres peuvent être un peu plus longs. Idem si vous souhaitez utiliser Python dans un environnement RStudio - ce qui est le cas de ce tutoriel rédifgé en Quarto.</p>
+<p>Dernier conseil : n’hésitez pas à tout désintaller quand ça bloque avant de réinstaller les briques une par une en feuilletant bien la documentation…</p>
+</section>
+<section id="deux-mots-sur-python" class="level2">
+<h2 class="anchored" data-anchor-id="deux-mots-sur-python">Deux mots sur Python</h2>
+<p>Si vous n’avez jamais utilisé Python, les informations suivantes devraient vous permettre de tester le script .py accompagnant ce tutoriel.</p>
+<p>Python, comme R, est un logiciel modulaire. Il y a la base et des modules nécessaires pour faire telle ou telle manipulation. Comme R, certains modules sont quasi indispensables et très souvent utilisés ; l’immense majorité n’a aucun intérêt. L’ensemble des modules disponibles est accessible sur le <a href="https://pypi.org/">Pypi</a>. Un “bon” module est un module régulièrement mis à jour, avec une documentation intelligible et pour lequel on trouve des tutoriels en ligne. S’il est maintenu par plus d’une personne, c’est mieux.</p>
+<p>Deux étapes pour les modules qui ne sont pas installés par défaut : les installer sur votre disque dur, les charger pour la session. Lorsqu’on charge un module, l’usage veut qu’on lui donne un nom abrégé. Certaines abbréviations se retrouvent partout et je les utilise aussi. Pourquoi abréger les noms des modules ? Parce que pour appeler une fonction d’un module, on tape le nom du module, un point, puis le nom de la fonction.</p>
+<p>Ce qui va donner des choses comme ça :</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x  <span class="op">=</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-2-output-1.png" width="558" height="411"></p>
+</div>
+</div>
+<p>Je charge la librairie <code>matplotlib.pyplot</code> et je lui donne un nom abregé (<code>plt</code>). Je crée une suite d’entiers de 0 à 10. J’appelle la fonction <code>plot</code> du module <code>matplotlib.pyplot</code> pour visualiser x.</p>
+<p>Dans <code>Spyder</code>, pour exécuter une ou plusieurs lignes de code, le plus simple est de la ou les sélectionner puis de taper sur F9 (équivalent du Ctrl + Entrée de RStudio). Si vous avez des instructions avec des retours à la ligne (arguments séparés par des virgules ou boucle avec : et indentation), sélectionnez l’ensemble des lignes avant d’exécuter le code. Idem pour les figures : sélectionner tout ce qui concerne la figure (titre, étiquettes des abscisses et ordonnées, etc.).</p>
+</section>
+<section id="documentation-et-installation-du-module" class="level2">
+<h2 class="anchored" data-anchor-id="documentation-et-installation-du-module">Documentation et installation du module</h2>
+<p>La page du module <strong>NetworkX, Network Analysis with Python</strong>, <a href="https://networkx.org/" class="uri">https://networkx.org/</a>, permet d’accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l’on va vouloir réaliser une opération précise, surtout si on n’est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir <a href="https://stackoverflow.com">stackoverflow</a> est presque obligatoire. Sur stackoverflow, faites attention à la date des sujets : certaines solutions proposées peuvent être obsolètes.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># installer le module</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install networkx</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># si distribution ana ou miniconda</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conda install package-name</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># charger les modules utiles</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd                <span class="co"># manipulation de tableaux</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx              <span class="co"># analyse de réseau</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np                 <span class="co"># statistiques</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt    <span class="co"># visualisation</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># aide sur une fonction</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ?nom_module.nom_fonction</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>?pd.DataFrame.set_index</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>?nx.find_cliques</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Le nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est “deprecated and will be removed”.</p>
+<hr>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-beauguitte23" class="csl-entry" role="doc-biblioentry">
+Beauguitte, L. (2023). <em><span class="nocase">L’analyse de réseau en sciences sociales. Petit guide pratique</span></em>. Groupe fmr. <a href="https://hal.science/hal-04052709">https://hal.science/hal-04052709</a>
+</div>
+<div id="ref-networkx08" class="csl-entry" role="doc-biblioentry">
+Hagberg, A. A., Schult, D. A. and Swart, P. J. (2008). Exploring network structure, dynamics, and function using NetworkX. <em>Proceedings of the 7th Python in Science Conference</em>, 11–15.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Je n’utilise pas l’écriture épicène, j’écris le plus souvent au féminin et utilise l’accord de proximité.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./C1_importer.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Importer ses données</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
