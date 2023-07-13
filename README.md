@@ -2,7 +2,7 @@
 
 Juillet 2023
 
-[Pages](https://beauguitte.github.io/analyse-de-reseau-avec-python/)
+[Analyse de réseau avec NetworkX](https://beauguitte.github.io/analyse-de-reseau-avec-python/)
 
 Plan
 
