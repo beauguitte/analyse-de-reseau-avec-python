@@ -20,7 +20,6 @@ Plan
 
 [Pour aller plus loin](https://beauguitte.github.io/analyse-de-reseau-avec-python/conclusion.html)
 
-\n
-\n
+Script et jeu de données
 
 [Script .py et jeu de données](https://github.com/beauguitte/analyse-de-reseau-avec-python/blob/main/2023_07_networkx.zip)
