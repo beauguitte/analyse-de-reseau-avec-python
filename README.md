@@ -1,3 +1,5 @@
+En cours d'actualisation (25 octobre 2023)
+
 # Analyse de réseau avec Python et le module NetworkX
 
 Juillet 2023
