@@ -6,7 +6,7 @@ Juillet 2023
 
 Plan
 
-[Introduction](https://beauguitte.github.io/analyse-de-reseau-avec-python/)
+[Introduction](https://beauguitte.github.io/analyse-de-reseau-avec-python/index.html)
 
 [Importer ses données](https://beauguitte.github.io/analyse-de-reseau-avec-python/C1_importer.html)
 
