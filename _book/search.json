@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "",
+    "text": "Introduction\nCeci est un tutoriel d’introduction à l’analyse de réseau avec Python centré sur le seul module NetworkX. Ce module étant très riche, toutes les fonctions ne sont pas évoquées ici.\nCe tutoriel s’adresse aux personnes :\nLe principal module d’analyse de réseau en Python est NetworkX (Hagberg et al. (2008)). Le module igraph, couramment utilisé pour l’analyse de réseau avec R, est également disponible en Python mais semble beaucoup moins utilisé. Des modules plus confidentiels sont disponibles et seront évoqués dans des billets ultérieurs.\nCe document ne prétend pas être exhaustif mais vise à présenter les points suivants :\nÉtant débutant en Python, ce support est amené à être amélioré et enrichi dans les mois (années ?…) à venir. Le code proposé n’est pas nécessairement le plus efficace ni le plus court. Mais il fonctionne. Le script 2023_07_networkx.py permet de reproduire toutes les opérations décrites dans ce tutoriel."
+  },
+  {
+    "objectID": "index.html#installer-python",
+    "href": "index.html#installer-python",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "Installer Python",
+    "text": "Installer Python\nSi vous n’avez jamais utilisé Python, le plus simple est sans doute d’installer la distribution Anaconda. C’est un peu une usine à gaz : ça installe plein de logiciels dont on n’a pas nécessairement besoin et avec des versions qui ne sont pas toujours les plus récentes mais au moins ça marche. Une fois Anaconda installée, ne le lancez pas : c’est lourd, lent et inutile. Il est plus rapide de lancer le Anaconda Power Shell Prompt puis, dans l’invite de commande, de taper spyder. L’IDE Spyder, assez similaire à RStudio, permet de créer ses scripts en Python dans un environnement agréable (rubrique d’aide, autocomplétion, feneêtre graphique, liste des objets importés ou créés, etc.).\nIl est possible d’installer une version plus légère d’Anaconda, Miniconda. Il est également possible d’installer Python et Spyder de façon autonome. Les règlages pour que les logiciels fonctionnent les uns avec les autres peuvent être un peu plus longs. Idem si vous souhaitez utiliser Python dans un environnement RStudio - ce qui est le cas de ce tutoriel rédigé en Quarto.\nDernier conseil : n’hésitez pas à tout désintaller quand ça bloque avant de réinstaller les briques une par une en feuilletant bien la documentation…"
+  },
+  {
+    "objectID": "index.html#deux-mots-sur-python",
+    "href": "index.html#deux-mots-sur-python",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "Deux mots sur Python",
+    "text": "Deux mots sur Python\nSi vous n’avez jamais utilisé Python, les informations suivantes devraient vous permettre de tester le script .py accompagnant ce tutoriel.\nPython, comme R, est un logiciel modulaire. Il y a la base et des modules nécessaires pour faire telle ou telle manipulation. Comme R, certains modules sont quasi indispensables et très souvent utilisés ; l’immense majorité n’a aucun intérêt. L’ensemble des modules disponibles est accessible sur le Pypi. Un “bon” module est un module régulièrement mis à jour, avec une documentation intelligible et pour lequel on trouve des tutoriels en ligne. S’il est maintenu par plus d’une personne, c’est mieux.\nDeux étapes sont nécessaires pour les modules qui ne sont pas installés par défaut : les installer sur votre disque dur, les charger pour la session. Lorsqu’on charge un module, l’usage veut qu’on lui donne un nom abrégé. Certaines abréviations se retrouvent partout et je les utilise aussi. Pourquoi abréger les noms des modules ? Parce que pour appeler une fonction d’un module, on tape le nom du module, un point, puis le nom de la fonction.\nCe qui va donner des choses comme ça :\n\nimport matplotlib.pyplot as plt\nx  = range(0,10)\nplt.plot(x)\n\n\n\n\nJe charge la librairie matplotlib.pyplot et je lui donne un nom abrégé (plt). Je crée une suite d’entiers de 0 à 10. J’appelle la fonction plot du module matplotlib.pyplot pour visualiser x.\nDans Spyder, pour exécuter une ou plusieurs lignes de code, le plus simple est de la ou les sélectionner puis de taper sur F9 (équivalent du Ctrl + Entrée de RStudio). Si vous avez des instructions avec des retours à la ligne (arguments séparés par des virgules ou boucle avec : et indentation), sélectionnez l’ensemble des lignes avant d’exécuter le code. Idem pour les figures : sélectionner tout ce qui concerne la figure (titre, étiquettes des abscisses et ordonnées, etc.)."
+  },
+  {
+    "objectID": "index.html#documentation-et-installation-du-module",
+    "href": "index.html#documentation-et-installation-du-module",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "Documentation et installation du module",
+    "text": "Documentation et installation du module\nLa page du module NetworkX, Network Analysis with Python, https://networkx.org/, permet d’accéder à toute la documentation nécessaire pour prendre en main le module. Mais dès que l’on va vouloir réaliser une opération précise, surtout si on n’est pas familier du fonctionnement des objets dans cet environnement logiciel, parcourir stackoverflow est presque obligatoire. Sur stackoverflow, faites attention à la date des sujets : certaines solutions proposées peuvent être obsolètes.\n\n# installer le module\n# pip install networkx\n# si distribution ana ou miniconda\n# conda install package-name\n\n# charger les modules utiles\nimport pandas as pd                # manipulation de tableaux\nimport networkx as nx              # analyse de réseau\nimport numpy as np                 # statistiques\nimport matplotlib.pyplot as plt    # visualisation\n\n# aide sur une fonction\n# ?nom_module.nom_fonction\n?pd.DataFrame.set_index\n?nx.find_cliques\n\nLe nombre de fonctions disponibles est impressionnant mais on obtient régulièrement des messages indiquant que telle fonction est “deprecated and will be removed”.\n\n\n\n\n\nBeauguitte, L. (2023). L’analyse de réseau en sciences sociales. Petit guide pratique. Groupe fmr. https://hal.science/hal-04052709\n\n\nHagberg, A. A., Schult, D. A. et Swart, P. J. (2008). Exploring Network Structure, Dynamics, and Function using NetworkX. Proceedings of the 7th Python in Science Conference, 11‑15."
+  },
+  {
+    "objectID": "index.html#footnotes",
+    "href": "index.html#footnotes",
+    "title": "Analyse de réseau avec Python et NetworkX",
+    "section": "",
+    "text": "Je n’utilise pas l’écriture épicène, j’écris le plus souvent au féminin et utilise l’accord de proximité.↩︎"
+  }
+]

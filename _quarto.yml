@@ -4,15 +4,6 @@ project:
 book:
   title: "Analyse de réseau avec Python et NetworkX"
   author: "Laurent Beauguitte"
-  orcid: 0000-0001-8803-6056
-  email: laurent.beauguitte@cnrs.fr
-  affiliations:
-      - name: Géographie-cités, CNRS
-  lang: fr
-  number-sections: true
-  crossref:
-    chapters: true
-    fig-prefix: figure
   date: "07/13/2023"
   chapters:
     - index.qmd
@@ -27,6 +18,7 @@ book:
 #    - references.qmd
 
 bibliography: references.bib
+lang: fr
 csl: universite-de-montreal-apa.csl
 
 toc-title: "Sommaire"

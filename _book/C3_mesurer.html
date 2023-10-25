@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analyse de réseau avec Python et NetworkX - 3&nbsp; Mesurer</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./C4_partitions.html" rel="next">
+<link href="./C2_filtrer.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Analyse de réseau avec Python et NetworkX</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C1_importer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Importer ses données</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C2_filtrer.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Filtrer, sélectionner</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C3_mesurer.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C4_partitions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C6_visualiser.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualiser ses données</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pour aller plus loin</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sommaire</h2>
+   
+  <ul>
+  <li><a href="#mesures-globales" id="toc-mesures-globales" class="nav-link active" data-scroll-target="#mesures-globales"><span class="toc-section-number">3.1</span>  Mesures globales</a></li>
+  <li><a href="#mesures-locales" id="toc-mesures-locales" class="nav-link" data-scroll-target="#mesures-locales"><span class="toc-section-number">3.2</span>  Mesures locales</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mesurer</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Les mesures sont testées sur deux réseaux, l’un orienté (<code>GD</code>) et l’autre non (<code>GU</code>), correspondant à la plus grande composante connexe. Lorsque la valuation et l’orientation des liens peuvent être prises en compte, les options utiles sont signalées. Par contre, le cas des liens multiples et des boucles n’est pas abordé.</p>
+<p><code>NetworkX</code> propose de nombreuses mesures et méthodes issues de la théorie des graphes au sens strict (centre, barycentre, rayon, etc.) et de l’analyse des flots dans les réseaux (optimisation) ; toutes ne sont pas évoquées ici et je me suis intéressé en priorité aux méthodes me semblant - peut-être à tort - les plus utilisées en sciences sociales.</p>
+<section id="mesures-globales" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="mesures-globales"><span class="header-section-number">3.1</span> Mesures globales</h2>
+<p>Dans les pages précédentes, on a déjà vu comment afficher l’ordre et la taille du réseau. La densité s’obtient avec la fonction <code>density</code>, le diamètre avec la fonction <code>diameter</code>.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ordre et taille</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de sommets (ordre) : "</span>, nx.number_of_nodes(GD), <span class="st">" sommets"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de liens - orienté (taille) : "</span>, nx.number_of_edges(GD), <span class="st">" liens"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de sommets (ordre) : "</span>, nx.number_of_nodes(GU), <span class="st">" sommets"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nombre de liens - non orienté (taille) : "</span>, nx.number_of_edges(GU), <span class="st">" liens"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># densité et diamètre</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"densité (orienté) : "</span>, <span class="bu">round</span>(nx.density(GD), <span class="dv">2</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"densité (non orienté) :"</span>, <span class="bu">round</span>(nx.density(GU), <span class="dv">2</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># print("diamètre (non orienté et connexe) : ", nx.diameter(GD))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nombre de sommets (ordre) :  106  sommets
+nombre de liens - orienté (taille) :  312  liens
+nombre de sommets (ordre) :  106  sommets
+nombre de liens - non orienté (taille) :  250  liens
+densité (orienté) :  0.03
+densité (non orienté) : 0.04</code></pre>
+</div>
+</div>
+<p>Si on cherche à mesurer le diamètre sur un réseau orienté non fortement connexe, on obtient le message d’erreur suivant : “Found infinite path length because the digraph is not strongly connected”.</p>
+<p>Mesures directement issues de la théorie des graphes, rayon et barycentre (appelé aussi point médian) correspondent respectivement à la distance entre le(s) sommet(s) ayant une excentricité minimale et tout autre sommet du graphe (cf <em>infra</em> les mesures locales) et à l’ensemble de sommets minimisant la fonction <span class="math inline">\(\sum_{u \in V(G)} d_G(u, v)\)</span>, <span class="math inline">\(d_G(u, v)\)</span> étant la distance (topologique ou valuée) entre deux sommets <span class="math inline">\(u\)</span> et <span class="math inline">\(v\)</span> de <span class="math inline">\(G\)</span>.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rayon</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rayon : "</span>, nx.radius(GU))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># barycentre</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"barycentre : "</span>, nx.barycenter(GU))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"barycentre (valué) : "</span>, nx.barycenter(GU, weight<span class="op">=</span><span class="st">'weight'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rayon :  4
+barycentre :  ['13001']
+barycentre (valué) :  ['13001']</code></pre>
+</div>
+</div>
+<p>La liste du ou des sommets centraux s’obtient avec <code>center</code>, la liste des sommets périphériques avec <code>periphery</code>. Les premiers correspondent aux sommets ayant une excentricité minimale, les seconds aux sommets ayant une excentricité maximale.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sommets centraux : "</span>, nx.center(GU))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sommets périphériques : "</span>, nx.periphery(GU))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sommets centraux :  ['13001']
+Sommets périphériques :  ['13083', '13076']</code></pre>
+</div>
+</div>
+<p>Comme toutes les mesures fondées sur la recherche de plus courts chemins (diamètre, rayon, etc.), ces fonctions supposent soit un réseau non orienté, soit un réseau orienté fortement connexe.</p>
+<p>Il est possible de connaître l’ensemble des isthmes et des points d’articulation présents dans un réseau.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># isthmes et points d'articulation (réseau connexe)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre et liste des isthmes</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb isthmes : "</span>, <span class="bu">len</span>(<span class="bu">list</span>(nx.bridges(GU))))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"isthmes : "</span>,<span class="bu">list</span>(nx.bridges(GU)))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre et liste des points d'articulation</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"nb points d'articulation : "</span>, <span class="bu">len</span>(<span class="bu">list</span>(nx.articulation_points(GU))))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"points d'articulation : "</span>, <span class="bu">list</span>(nx.articulation_points(GU)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nb isthmes :  32
+isthmes :  [('13001', '13004'), ('13001', '13015'), ('13001', '13019'), ('13001', '13025'), ('13001', '13032'), ('13001', '13095'), ('13001', '13107'), ('13001', '13109'), ('13001', '13110'), ('13001', '13111'), ('13001', '13113'), ('13213', '13075'), ('13103', '13035'), ('13103', '13044'), ('13103', '13049'), ('13004', '13078'), ('13004', '13038'), ('13004', '13108'), ('13097', '13068'), ('13005', '13031'), ('13028', '13023'), ('13020', '13046'), ('13046', '13073'), ('13046', '13101'), ('13024', '13050'), ('13054', '13088'), ('13056', '13104'), ('13045', '13083'), ('13045', '13108'), ('13108', '13094'), ('13076', '13067'), ('13067', '13105')]
+nb points d'articulation :  15
+points d'articulation :  ['13046', '13028', '13005', '13054', '13103', '13050', '13067', '13105', '13056', '13213', '13004', '13097', '13045', '13108', '13001']</code></pre>
+</div>
+</div>
+<p>L’indice de Wiener, issu de l’étude des réseaux biologiques, correspond à la somme des plus courts chemins entre toutes les paires de sommets (équivaut à l’indice de dispersion de Shimbel parfois utilisé par les géographes des transports). Le réseau orienté n’étant pas fortement connexe, le résultat est une distance infinie (<code>inf</code>). Il est possible de prendre en compte la valuation des liens et de chercher la somme des plus courtes distances entre sommets.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># indice de wiener (somme des pcc)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (orienté) : "</span>, nx.wiener_index(GD))     <span class="co"># distance topologique</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (non orienté) : "</span>, nx.wiener_index(GU)) <span class="co"># distance topologique</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Indice de Wiener (non orienté, valué) : "</span>, nx.wiener_index(GU, <span class="st">'weight'</span>))  <span class="co"># somme des intensités</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Indice de Wiener (orienté) :  inf
+Indice de Wiener (non orienté) :  15228.0
+Indice de Wiener (non orienté, valué) :  3800738.0</code></pre>
+</div>
+</div>
+<p>Mesure plus récente et liée davantage aux études des physiciennes sur les réseaux, l’assortativité est mesurée par défaut en fonction du degré. Elle varie entre -1 (réseau disassortatif, les sommets ayant un degré faible tendent à être voisins des sommets ayant un degré élevé et inversement) et 1 (réseau assortatif, les sommets ayant un degré faible sont voisins de sommets ayant un degré faible, les sommets ayant un degré élevé sont voisins de sommets ayant un degré élevé). Dans les lignes ci-dessous, les quatre assortativités possibles dans un réseau orienté sont calculées en fonction du degré.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assortativité (degré par défaut)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># réseau orienté - 4 options possibles</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité in-in : "</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"in"</span>, y<span class="op">=</span><span class="st">'in'</span>),<span class="dv">3</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité in-out : "</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"in"</span>, y<span class="op">=</span><span class="st">'out'</span>),<span class="dv">3</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité out-in : "</span>, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"out"</span>, y<span class="op">=</span><span class="st">'in'</span>),<span class="dv">3</span>))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité out-out : "</span>, </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GD, x<span class="op">=</span><span class="st">"out"</span>, y<span class="op">=</span><span class="st">'out'</span>),<span class="dv">3</span>))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># réseau non orienté</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité globale (non orienté) : "</span>, </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.degree_assortativity_coefficient(GU),<span class="dv">3</span>))</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># assortativité selon un critère autre que le degré</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"assortativité (Marseille vs autres communes) : "</span>, </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(nx.numeric_assortativity_coefficient(GD, <span class="st">"MARS"</span>),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>assortativité in-in :  -0.105
+assortativité in-out :  0.262
+assortativité out-in :  -0.198
+assortativité out-out :  0.485
+assortativité globale (non orienté) :  -0.234
+assortativité (Marseille vs autres communes) :  0.707</code></pre>
+</div>
+</div>
+<p>Mesure relativement proche (voir la page <a href="https://en.wikipedia.org/wiki/Rich-club_coefficient">wikipedia</a>), le <strong>rich club coefficient</strong> s’obtient avec la fonction… <code>rich_club_coefficient</code> ; elle peut être utilisée uniquement sur des réseaux non orientés et ne tient pas compte des éventuelles boucles, liens multiples ou intensité des liens. La fonction renvoie une valeur par degré (rich club coefficient des sommets de degré 1, de degré 2, etc.).</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rich-club coefficient</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rich-club coefficient : "</span>, nx.rich_club_coefficient(GU, normalized<span class="op">=</span><span class="va">True</span>, seed<span class="op">=</span><span class="dv">42</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rich-club coefficient :  {0: 1.0, 1: 0.9955156950672646, 2: 1.0119047619047619, 3: 1.0546875, 4: 1.0677966101694916, 5: 1.0727272727272728, 6: 1.153846153846154, 7: 1.168831168831169, 8: 1.2222222222222223, 9: 1.303030303030303, 10: 1.320754716981132, 11: 1.25, 12: 1.2000000000000002, 13: 1.1052631578947367, 14: 1.1111111111111112, 15: 1.3333333333333335, 16: 1.5, 17: 1.0}</code></pre>
+</div>
+</div>
+<p>Les mesures “globales” fondées sur des mesures “locales” (degré ou transitivité moyenne par exemple) sont abordées dans la section suivante.</p>
+</section>
+<section id="mesures-locales" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="mesures-locales"><span class="header-section-number">3.2</span> Mesures locales</h2>
+<p>Le degré se calcule à l’aide de la fonction <code>degree</code>. Si le réseau étudié est orienté, on peut utiliser <code>in_degree</code> et <code>out_degree</code>. L’argument optionnel <code>weight</code> permet de calculer le degré pondéré par l’intensité des liens.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degré</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GD.degree())</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#degré entrant, sortant</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GD.in_degree())</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GD.out_degree())</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># degré entrant pondéré</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GD.in_degree(weight <span class="op">=</span> <span class="st">"weight"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[('13001', 72), ('13041', 6), ('13201', 24), ('13205', 23), ('13208', 20), ('13209', 22), ('13213', 33), ('13002', 8), ('13206', 23), ('13211', 16), ('13212', 16), ('13003', 2), ('13053', 2), ('13103', 16), ('13004', 8), ('13078', 2), ('13097', 4), ('13005', 19), ('13028', 7), ('13042', 2), ('13119', 3), ('13210', 17), ('13007', 2), ('13014', 2), ('13117', 11), ('13015', 1), ('13016', 3), ('13086', 2), ('13019', 1), ('13020', 1), ('13046', 5), ('13022', 3), ('13023', 1), ('13024', 1), ('13050', 3), ('13025', 1), ('13026', 4), ('13043', 7), ('13054', 11), ('13056', 10), ('13030', 2), ('13031', 1), ('13032', 1), ('13033', 2), ('13035', 1), ('13037', 4), ('13038', 1), ('13039', 3), ('13047', 9), ('13077', 4), ('13040', 3), ('13044', 1), ('13045', 2), ('13083', 1), ('13108', 3), ('13063', 5), ('13048', 2), ('13074', 3), ('13049', 1), ('13051', 3), ('13102', 3), ('13104', 2), ('13059', 2), ('13060', 3), ('13062', 2), ('13065', 2), ('13068', 1), ('13069', 3), ('13070', 2), ('13071', 8), ('13072', 2), ('13087', 3), ('13073', 1), ('13075', 2), ('13076', 1), ('13067', 2), ('13079', 2), ('13080', 2), ('13081', 2), ('13082', 2), ('13084', 2), ('13085', 2), ('13088', 1), ('13091', 2), ('13092', 2), ('13094', 1), ('13095', 1), ('13098', 2), ('13101', 1), ('13105', 3), ('13106', 3), ('13107', 1), ('13109', 1), ('13110', 1), ('13111', 1), ('13112', 3), ('13113', 1), ('13114', 2), ('13118', 2), ('13202', 7), ('13203', 16), ('13204', 15), ('13214', 14), ('13215', 13), ('13207', 10), ('13216', 4)]
+[('13001', 66), ('13041', 5), ('13201', 16), ('13205', 14), ('13208', 12), ('13209', 14), ('13213', 17), ('13002', 1), ('13206', 15), ('13211', 6), ('13212', 6), ('13003', 0), ('13053', 1), ('13103', 14), ('13004', 5), ('13078', 1), ('13097', 3), ('13005', 8), ('13028', 5), ('13042', 2), ('13119', 1), ('13210', 9), ('13007', 0), ('13014', 0), ('13117', 7), ('13015', 0), ('13016', 0), ('13086', 1), ('13019', 0), ('13020', 0), ('13046', 3), ('13022', 2), ('13023', 0), ('13024', 0), ('13050', 1), ('13025', 0), ('13026', 0), ('13043', 5), ('13054', 7), ('13056', 6), ('13030', 0), ('13031', 0), ('13032', 0), ('13033', 0), ('13035', 0), ('13037', 2), ('13038', 0), ('13039', 0), ('13047', 4), ('13077', 3), ('13040', 1), ('13044', 0), ('13045', 0), ('13083', 1), ('13108', 2), ('13063', 2), ('13048', 0), ('13074', 2), ('13049', 0), ('13051', 0), ('13102', 1), ('13104', 1), ('13059', 0), ('13060', 0), ('13062', 0), ('13065', 0), ('13068', 0), ('13069', 1), ('13070', 0), ('13071', 4), ('13072', 0), ('13087', 2), ('13073', 0), ('13075', 1), ('13076', 0), ('13067', 2), ('13079', 0), ('13080', 1), ('13081', 0), ('13082', 1), ('13084', 0), ('13085', 0), ('13088', 0), ('13091', 0), ('13092', 0), ('13094', 0), ('13095', 0), ('13098', 0), ('13101', 0), ('13105', 1), ('13106', 1), ('13107', 0), ('13109', 0), ('13110', 0), ('13111', 0), ('13112', 1), ('13113', 0), ('13114', 0), ('13118', 0), ('13202', 2), ('13203', 5), ('13204', 6), ('13214', 3), ('13215', 4), ('13207', 4), ('13216', 1)]
+[('13001', 6), ('13041', 1), ('13201', 8), ('13205', 9), ('13208', 8), ('13209', 8), ('13213', 16), ('13002', 7), ('13206', 8), ('13211', 10), ('13212', 10), ('13003', 2), ('13053', 1), ('13103', 2), ('13004', 3), ('13078', 1), ('13097', 1), ('13005', 11), ('13028', 2), ('13042', 0), ('13119', 2), ('13210', 8), ('13007', 2), ('13014', 2), ('13117', 4), ('13015', 1), ('13016', 3), ('13086', 1), ('13019', 1), ('13020', 1), ('13046', 2), ('13022', 1), ('13023', 1), ('13024', 1), ('13050', 2), ('13025', 1), ('13026', 4), ('13043', 2), ('13054', 4), ('13056', 4), ('13030', 2), ('13031', 1), ('13032', 1), ('13033', 2), ('13035', 1), ('13037', 2), ('13038', 1), ('13039', 3), ('13047', 5), ('13077', 1), ('13040', 2), ('13044', 1), ('13045', 2), ('13083', 0), ('13108', 1), ('13063', 3), ('13048', 2), ('13074', 1), ('13049', 1), ('13051', 3), ('13102', 2), ('13104', 1), ('13059', 2), ('13060', 3), ('13062', 2), ('13065', 2), ('13068', 1), ('13069', 2), ('13070', 2), ('13071', 4), ('13072', 2), ('13087', 1), ('13073', 1), ('13075', 1), ('13076', 1), ('13067', 0), ('13079', 2), ('13080', 1), ('13081', 2), ('13082', 1), ('13084', 2), ('13085', 2), ('13088', 1), ('13091', 2), ('13092', 2), ('13094', 1), ('13095', 1), ('13098', 2), ('13101', 1), ('13105', 2), ('13106', 2), ('13107', 1), ('13109', 1), ('13110', 1), ('13111', 1), ('13112', 2), ('13113', 1), ('13114', 2), ('13118', 2), ('13202', 5), ('13203', 11), ('13204', 9), ('13214', 11), ('13215', 9), ('13207', 6), ('13216', 3)]
+[('13001', 21875), ('13041', 926), ('13201', 4624), ('13205', 4649), ('13208', 2668), ('13209', 3208), ('13213', 4703), ('13002', 233), ('13206', 4730), ('13211', 1247), ('13212', 1924), ('13003', 0), ('13053', 108), ('13103', 3972), ('13004', 1127), ('13078', 173), ('13097', 367), ('13005', 1646), ('13028', 983), ('13042', 346), ('13119', 115), ('13210', 1999), ('13007', 0), ('13014', 0), ('13117', 2037), ('13015', 0), ('13016', 0), ('13086', 292), ('13019', 0), ('13020', 0), ('13046', 439), ('13022', 328), ('13023', 0), ('13024', 0), ('13050', 120), ('13025', 0), ('13026', 0), ('13043', 956), ('13054', 1433), ('13056', 1665), ('13030', 0), ('13031', 0), ('13032', 0), ('13033', 0), ('13035', 0), ('13037', 275), ('13038', 0), ('13039', 0), ('13047', 1112), ('13077', 548), ('13040', 210), ('13044', 0), ('13045', 0), ('13083', 118), ('13108', 243), ('13063', 417), ('13048', 0), ('13074', 254), ('13049', 0), ('13051', 0), ('13102', 316), ('13104', 206), ('13059', 0), ('13060', 0), ('13062', 0), ('13065', 0), ('13068', 0), ('13069', 128), ('13070', 0), ('13071', 608), ('13072', 0), ('13087', 267), ('13073', 0), ('13075', 231), ('13076', 0), ('13067', 463), ('13079', 0), ('13080', 251), ('13081', 0), ('13082', 193), ('13084', 0), ('13085', 0), ('13088', 0), ('13091', 0), ('13092', 0), ('13094', 0), ('13095', 0), ('13098', 0), ('13101', 0), ('13105', 314), ('13106', 156), ('13107', 0), ('13109', 0), ('13110', 0), ('13111', 0), ('13112', 189), ('13113', 0), ('13114', 0), ('13118', 0), ('13202', 418), ('13203', 745), ('13204', 1731), ('13214', 618), ('13215', 964), ('13207', 549), ('13216', 128)]</code></pre>
+</div>
+</div>
+<p>Ajouter <code>_centrality</code> à la fonction utilisée permet d’obtenir les valeurs normalisées.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degré normalisé</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nx.degree_centrality(GD))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'13001': 0.6857142857142857, '13041': 0.05714285714285715, '13201': 0.2285714285714286, '13205': 0.21904761904761907, '13208': 0.1904761904761905, '13209': 0.20952380952380956, '13213': 0.31428571428571433, '13002': 0.0761904761904762, '13206': 0.21904761904761907, '13211': 0.1523809523809524, '13212': 0.1523809523809524, '13003': 0.01904761904761905, '13053': 0.01904761904761905, '13103': 0.1523809523809524, '13004': 0.0761904761904762, '13078': 0.01904761904761905, '13097': 0.0380952380952381, '13005': 0.18095238095238098, '13028': 0.06666666666666668, '13042': 0.01904761904761905, '13119': 0.028571428571428574, '13210': 0.1619047619047619, '13007': 0.01904761904761905, '13014': 0.01904761904761905, '13117': 0.10476190476190478, '13015': 0.009523809523809525, '13016': 0.028571428571428574, '13086': 0.01904761904761905, '13019': 0.009523809523809525, '13020': 0.009523809523809525, '13046': 0.04761904761904762, '13022': 0.028571428571428574, '13023': 0.009523809523809525, '13024': 0.009523809523809525, '13050': 0.028571428571428574, '13025': 0.009523809523809525, '13026': 0.0380952380952381, '13043': 0.06666666666666668, '13054': 0.10476190476190478, '13056': 0.09523809523809525, '13030': 0.01904761904761905, '13031': 0.009523809523809525, '13032': 0.009523809523809525, '13033': 0.01904761904761905, '13035': 0.009523809523809525, '13037': 0.0380952380952381, '13038': 0.009523809523809525, '13039': 0.028571428571428574, '13047': 0.08571428571428572, '13077': 0.0380952380952381, '13040': 0.028571428571428574, '13044': 0.009523809523809525, '13045': 0.01904761904761905, '13083': 0.009523809523809525, '13108': 0.028571428571428574, '13063': 0.04761904761904762, '13048': 0.01904761904761905, '13074': 0.028571428571428574, '13049': 0.009523809523809525, '13051': 0.028571428571428574, '13102': 0.028571428571428574, '13104': 0.01904761904761905, '13059': 0.01904761904761905, '13060': 0.028571428571428574, '13062': 0.01904761904761905, '13065': 0.01904761904761905, '13068': 0.009523809523809525, '13069': 0.028571428571428574, '13070': 0.01904761904761905, '13071': 0.0761904761904762, '13072': 0.01904761904761905, '13087': 0.028571428571428574, '13073': 0.009523809523809525, '13075': 0.01904761904761905, '13076': 0.009523809523809525, '13067': 0.01904761904761905, '13079': 0.01904761904761905, '13080': 0.01904761904761905, '13081': 0.01904761904761905, '13082': 0.01904761904761905, '13084': 0.01904761904761905, '13085': 0.01904761904761905, '13088': 0.009523809523809525, '13091': 0.01904761904761905, '13092': 0.01904761904761905, '13094': 0.009523809523809525, '13095': 0.009523809523809525, '13098': 0.01904761904761905, '13101': 0.009523809523809525, '13105': 0.028571428571428574, '13106': 0.028571428571428574, '13107': 0.009523809523809525, '13109': 0.009523809523809525, '13110': 0.009523809523809525, '13111': 0.009523809523809525, '13112': 0.028571428571428574, '13113': 0.009523809523809525, '13114': 0.01904761904761905, '13118': 0.01904761904761905, '13202': 0.06666666666666668, '13203': 0.1523809523809524, '13204': 0.14285714285714288, '13214': 0.13333333333333336, '13215': 0.12380952380952381, '13207': 0.09523809523809525, '13216': 0.0380952380952381}</code></pre>
+</div>
+</div>
+<p>Pour transformer une mesure en attribut, on commence par créer un objet correspondondant au résultat puis on utilise la fonction <code>set_node_attributes</code> si la mesure porte sur les sommets et <code>set_edge_attributes</code> si elle porte sur les liens.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transformer une mesure en attribut </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>deg <span class="op">=</span> nx.degree(GU)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(GU, <span class="st">'degree'</span>, deg)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"attribut des sommets : "</span>, <span class="bu">list</span>(<span class="bu">list</span>(GU.nodes(data<span class="op">=</span><span class="va">True</span>))[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].keys()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>attribut des sommets :  ['P19_POP', 'SUPERF', 'SUP_QUALI', 'NOM', 'MARS', DegreeView({'13001': 66, '13041': 5, '13201': 16, '13205': 14, '13208': 13, '13209': 14, '13213': 18, '13002': 7, '13206': 16, '13211': 12, '13212': 13, '13003': 2, '13053': 2, '13103': 15, '13004': 6, '13078': 1, '13097': 3, '13005': 17, '13028': 6, '13042': 2, '13119': 3, '13210': 11, '13007': 2, '13014': 2, '13117': 9, '13015': 1, '13016': 3, '13086': 2, '13019': 1, '13020': 1, '13046': 5, '13022': 3, '13023': 1, '13024': 1, '13050': 3, '13025': 1, '13026': 4, '13043': 6, '13054': 8, '13056': 7, '13030': 2, '13031': 1, '13032': 1, '13033': 2, '13035': 1, '13037': 4, '13038': 1, '13039': 3, '13047': 7, '13077': 3, '13040': 3, '13044': 1, '13045': 2, '13083': 1, '13108': 3, '13063': 4, '13048': 2, '13074': 3, '13049': 1, '13051': 3, '13102': 2, '13104': 1, '13059': 2, '13060': 3, '13062': 2, '13065': 2, '13068': 1, '13069': 2, '13070': 2, '13071': 7, '13072': 2, '13087': 3, '13073': 1, '13075': 1, '13076': 1, '13067': 2, '13079': 2, '13080': 2, '13081': 2, '13082': 2, '13084': 2, '13085': 2, '13088': 1, '13091': 2, '13092': 2, '13094': 1, '13095': 1, '13098': 2, '13101': 1, '13105': 3, '13106': 3, '13107': 1, '13109': 1, '13110': 1, '13111': 1, '13112': 3, '13113': 1, '13114': 2, '13118': 2, '13202': 5, '13203': 11, '13204': 10, '13214': 11, '13215': 10, '13207': 6, '13216': 3})]</code></pre>
+</div>
+</div>
+<p>Les lignes ci-dessous proposent différentes solutions pour visualiser la distribution des degrés :</p>
+<ul>
+<li>histogramme ;</li>
+<li>courbe ;</li>
+<li>courbe avec une échelle log-log.</li>
+</ul>
+
+<!-- https://networkx.org/documentation/stable/auto_examples/drawing/plot_degree.html -->
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution sous forme d'histogramme</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>degree_in <span class="op">=</span> <span class="bu">sorted</span>((d <span class="cf">for</span> n, d <span class="kw">in</span> GD.in_degree()), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.bar(<span class="op">*</span>np.unique(degree_in, return_counts<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Degrés entrants"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Degré"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C3_mesurer_files/figure-html/cell-13-output-2.png" width="586" height="451"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># courbe</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>degree_sequence <span class="op">=</span> <span class="bu">sorted</span>((d <span class="cf">for</span> n, d <span class="kw">in</span> GU.degree()), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution des degrés</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.plot(degree_sequence, <span class="st">"r-"</span>, marker<span class="op">=</span><span class="st">"o"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C3_mesurer_files/figure-html/cell-14-output-2.png" width="586" height="451"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution degré - échelle log - log</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>plt.loglog(degree_sequence, <span class="st">"go-"</span>, linewidth<span class="op">=</span><span class="dv">1</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution des degrés (log - log)"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Degré'</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fréquence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>Text(0, 0.5, 'Fréquence')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="C3_mesurer_files/figure-html/cell-15-output-2.png" width="592" height="453"></p>
+</div>
+</div>
+<p>Il est possible de calculer le degré moyen des voisins à à l’aide de la fonction <code>average_neighbor_degree</code> (degré entrant, sortant, total, pondéré ou non).</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen des sommets voisins</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># degré entrant moyen des voisins entrants</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, source<span class="op">=</span><span class="st">"in"</span>, target<span class="op">=</span><span class="st">"in"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># degré moyen pondéré des voisins</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>nx.average_neighbor_degree(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Les mesures de centralité autres s’obtiennent avec des fonctions aux noms attendus : <code>closeness</code>, <code>betweenness</code> (<code>edge_betweenness</code> pour l’intermédiarité des liens), <code>eigenvector_centrality</code> et <code>katz_centrality</code>.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>nx.betweenness_centrality(GD)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>L`` </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># intermédiarité des liens</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>nx.edge_betweenness_centrality(GD)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># proximité</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>nx.closeness_centrality(GD)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de vecteur propre</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>nx.eigenvector_centrality(GD)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co"># centralité de Katz</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>nx.katz_centrality(GD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- distance entre deux sommets : resistance_distance(G, nodeA, nodeB, weight=None, invert_weight=True)  si weight, distance; sinon, plus court chemin -->
+<p>Concernant la recherche de la transitivité, on peut connaître le nom de triangles (triades fermées) contenant chaque sommet avec la fonction <code>triangles</code>. La transitivité locale s’obtient avec <code>clustering</code>, la transitivité globale avec <code>transitivity</code> et la transitivité moyenne avec <code>average_clustering</code>. Il est possible de prendre en compte l’orientation des liens et/ou leur intensité.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre de triangles</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nx.triangles(GU)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># typologie MAN (réseau orienté)</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>nx.triadic_census(GD) </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité locale</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># prise en compte de l'intensité des liens</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>nx.clustering(GD, weight<span class="op">=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transitivité globale et moyenne</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GD), <span class="dv">2</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GD), <span class="dv">2</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité globale (non orienté) : "</span>, <span class="bu">round</span>(nx.transitivity(GU), <span class="dv">2</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transitivité moyenne (non orienté) : "</span>, <span class="bu">round</span>(nx.average_clustering(GU), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Transitivité globale (orienté) :  0.62
+Transitivité moyenne (orienté) :  0.35
+Transitivité globale (non orienté) :  0.29
+Transitivité moyenne (non orienté) :  0.54</code></pre>
+</div>
+</div>
+
+<!-- v2 https://networkx.org/documentation/stable/reference/algorithms/centrality.html#second-order-centrality -->
+<!-- contrainte de Burt : nx.constraint -->
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./C2_filtrer.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Filtrer, sélectionner</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./C4_partitions.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Partitionner</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
